@@ -9,27 +9,32 @@
   <link rel="stylesheet" href="/styles.css" />
   <title>CRM AXIVA | Prospecção e vendas sem complicação</title>
   <style>
+    #para-quem {
+      padding-bottom: 28px;
+    }
+
     .insights-section {
-      padding: 84px 0;
+      padding: 24px 0 30px;
       background: #ffffff;
     }
 
     .insights-head {
-      max-width: 760px;
-      margin-bottom: 42px;
+      max-width: none;
+      margin-bottom: 28px;
     }
 
     .insights-head h2 {
-      margin: 8px 0 14px;
+      margin: 8px 0 12px;
       color: #07182d;
     }
 
     .insights-head p {
       margin: 0;
-      max-width: 680px;
+      max-width: none;
       color: #64748b;
       font-size: 1.05rem;
       line-height: 1.7;
+      white-space: nowrap;
     }
 
     .insights-grid {
@@ -74,6 +79,16 @@
       line-height: 1.55;
     }
 
+    .insights-section + .cta {
+      padding-top: 28px;
+    }
+
+    @media (max-width: 1100px) {
+      .insights-head p {
+        white-space: normal;
+      }
+    }
+
     @media (max-width: 900px) {
       .insights-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -81,12 +96,16 @@
     }
 
     @media (max-width: 620px) {
+      #para-quem {
+        padding-bottom: 22px;
+      }
+
       .insights-section {
-        padding: 58px 0;
+        padding: 18px 0 24px;
       }
 
       .insights-head {
-        margin-bottom: 28px;
+        margin-bottom: 24px;
       }
 
       .insights-grid {
@@ -101,6 +120,10 @@
 
       .insight-item::before {
         top: 25px;
+      }
+
+      .insights-section + .cta {
+        padding-top: 22px;
       }
     }
   </style>
@@ -202,7 +225,7 @@
     <section class="insights-section" id="indicadores">
       <div class="container">
         <div class="insights-head">
-          <span class="eyebrow">Indicadores e controle</span>
+          <span class="eyebrow emphasis-eyebrow">Indicadores e controle</span>
           <h2>Tenha fácil acesso ao que realmente importa no seu comercial.</h2>
           <p>Acompanhe a operação, identifique oportunidades e mantenha as principais informações de vendas sempre visíveis para tomar decisões com mais rapidez.</p>
         </div>
