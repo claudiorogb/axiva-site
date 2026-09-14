@@ -4,5 +4,14 @@
   "rewrites": [
     { "source": "/crm", "destination": "/crm/index.html" },
     { "source": "/invest", "destination": "/invest/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/crm-funil-real.svg",
+      "headers": [
+        { "key": "Content-Type", "value": "image/jpeg" },
+        { "key": "Cache-Control", "value": "public, max-age=3600" }
+      ]
+    }
   ]
 }
