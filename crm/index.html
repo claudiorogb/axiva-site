@@ -8,6 +8,102 @@
   <link rel="icon" href="/axiva-mark.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="/styles.css" />
   <title>CRM AXIVA | Prospecção e vendas sem complicação</title>
+  <style>
+    .insights-section {
+      padding: 84px 0;
+      background: #ffffff;
+    }
+
+    .insights-head {
+      max-width: 760px;
+      margin-bottom: 42px;
+    }
+
+    .insights-head h2 {
+      margin: 8px 0 14px;
+      color: #07182d;
+    }
+
+    .insights-head p {
+      margin: 0;
+      max-width: 680px;
+      color: #64748b;
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .insights-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0 42px;
+      border-top: 1px solid #dfe7ef;
+    }
+
+    .insight-item {
+      position: relative;
+      min-height: 112px;
+      padding: 24px 8px 22px 24px;
+      border-bottom: 1px solid #dfe7ef;
+    }
+
+    .insight-item::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 29px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #00a88f;
+      box-shadow: 0 0 0 5px rgba(0,168,143,.10);
+    }
+
+    .insight-item strong {
+      display: block;
+      margin-bottom: 7px;
+      color: #0b192c;
+      font-size: 1rem;
+      line-height: 1.4;
+      font-weight: 700;
+    }
+
+    .insight-item span {
+      display: block;
+      color: #64748b;
+      font-size: .92rem;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 900px) {
+      .insights-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 620px) {
+      .insights-section {
+        padding: 58px 0;
+      }
+
+      .insights-head {
+        margin-bottom: 28px;
+      }
+
+      .insights-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .insight-item {
+        min-height: auto;
+        padding: 20px 8px 20px 24px;
+      }
+
+      .insight-item::before {
+        top: 25px;
+      }
+    }
+  </style>
 </head>
 <body>
   <nav class="nav">
@@ -99,6 +195,55 @@
         <div class="solutions">
           <article class="solution-card"><h3>Menos complexidade</h3><p>Para empresários e equipes que precisam de organização comercial sem estruturas pesadas, implantações longas ou telas desnecessárias.</p></article>
           <article class="solution-card"><h3>Mais execução</h3><p>Para quem prospecta todos os dias e precisa transformar pesquisa, contato e acompanhamento em uma rotina previsível.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="insights-section" id="indicadores">
+      <div class="container">
+        <div class="insights-head">
+          <span class="eyebrow">Indicadores e controle</span>
+          <h2>Tenha fácil acesso ao que realmente importa no seu comercial.</h2>
+          <p>Acompanhe a operação, identifique oportunidades e mantenha as principais informações de vendas sempre visíveis para tomar decisões com mais rapidez.</p>
+        </div>
+
+        <div class="insights-grid">
+          <div class="insight-item">
+            <strong>Negócios em andamento</strong>
+            <span>Veja a quantidade de oportunidades ativas no seu funil comercial.</span>
+          </div>
+          <div class="insight-item">
+            <strong>Resultados das vendas</strong>
+            <span>Acompanhe vendas realizadas e evolução dos resultados comerciais.</span>
+          </div>
+          <div class="insight-item">
+            <strong>Resultado por canal de vendas</strong>
+            <span>Compare WhatsApp, redes sociais e prospecção para entender de onde vêm seus resultados.</span>
+          </div>
+          <div class="insight-item">
+            <strong>Campanhas de captação de leads</strong>
+            <span>Organize suas ações de prospecção e acompanhe campanhas em andamento.</span>
+          </div>
+          <div class="insight-item">
+            <strong>Público-alvo definido</strong>
+            <span>Estruture segmentos e critérios para direcionar melhor sua prospecção.</span>
+          </div>
+          <div class="insight-item">
+            <strong>Relatórios de vendas</strong>
+            <span>Tenha uma visão consolidada dos principais dados da operação comercial.</span>
+          </div>
+          <div class="insight-item">
+            <strong>Alertas de retornos atrasados</strong>
+            <span>Identifique contatos vencidos e oportunidades que precisam de atenção.</span>
+          </div>
+          <div class="insight-item">
+            <strong>Base comercial centralizada</strong>
+            <span>Mantenha leads, clientes, histórico e negociações organizados em um único ambiente.</span>
+          </div>
+          <div class="insight-item">
+            <strong>Desempenho por vendedor</strong>
+            <span>Acompanhe a atuação comercial individual e os resultados da equipe.</span>
+          </div>
         </div>
       </div>
     </section>
