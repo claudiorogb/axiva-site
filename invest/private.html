@@ -6,7 +6,7 @@
 <title>AXIVA Invest — Área exclusiva</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="/axiva-mark.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/invest/private.css">
+<link rel="stylesheet" href="/invest/private.css?v=2">
 </head>
 <body>
 <div id="loginView" class="login-view">
@@ -15,7 +15,7 @@
     <div class="login-card">
       <div class="login-kicker">ACESSO RESTRITO</div>
       <h1>Entre na sua conta</h1>
-      <p>Use o e-mail cadastrado na sua assinatura e sua senha.</p>
+      <p>Use o e-mail previamente autorizado pela AXIVA e sua senha.</p>
       <form id="loginForm">
         <label>E-mail<input id="email" type="email" autocomplete="email" required></label>
         <label>Senha<input id="password" type="password" autocomplete="current-password" minlength="8" required></label>
@@ -37,6 +37,7 @@
       <button class="nav-item" data-page="analysis">Analisador</button>
       <button class="nav-item" data-page="strategies">Estratégias</button>
       <button class="nav-item" data-page="method">Metodologia</button>
+      <button id="adminNav" class="nav-item hidden" data-page="admin">Administração</button>
     </nav>
     <div class="side-bottom"><span id="userEmail"></span><button id="logoutBtn">Sair</button></div>
   </aside>
@@ -49,12 +50,52 @@
       <div id="selectionTableWrap" class="table-wrap hidden"></div>
     </section>
 
-    <section id="analysisPage" class="page"><div class="placeholder"><h2>Analisador</h2><p>O analisador privado será conectado aos mesmos fundamentos, exibindo também Preço-alvo e Graham para assinantes.</p></div></section>
-    <section id="strategiesPage" class="page"><div class="placeholder"><h2>Estratégias</h2><p>Aqui ficarão as estratégias salvas, atualização semanal automática e o histórico de entradas e saídas.</p></div></section>
-    <section id="methodPage" class="page"><div class="placeholder"><h2>Metodologia</h2><p>Área exclusiva com a metodologia detalhada, critérios e interpretação dos indicadores.</p></div></section>
+    <section id="analysisPage" class="page">
+      <div class="intro"><div><h2>Monte aqui seu filtro fundamentalista.</h2><p>Defina o peso de cada indicador e encontre empresas compatíveis com os parâmetros escolhidos.</p></div><div class="legend">Dados completos</div></div>
+      <div class="tool-card">
+        <div class="analysis-controls">
+          <label class="ticker-search">Empresa / ticker<input id="privateTicker" type="text" placeholder="Ex.: ITUB4"></label>
+          <div id="privateSliders" class="private-slider-grid"></div>
+          <div class="tool-actions"><button id="privateAnalyzeBtn">Analisar</button><button id="privateResetBtn" class="secondary">Limpar filtros</button></div>
+        </div>
+        <div id="analysisStatus" class="status">Carregando base fundamentalista...</div>
+        <div id="analysisResults" class="table-wrap hidden"></div>
+      </div>
+    </section>
+
+    <section id="strategiesPage" class="page">
+      <div class="intro"><div><h2>Estratégias</h2><p>Acompanhe as estratégias definidas pela AXIVA e as empresas que atendem aos critérios em cada atualização.</p></div><div class="legend">Revisão semanal</div></div>
+      <div id="strategiesStatus" class="status">Carregando estratégias...</div>
+      <div id="strategiesContent" class="hidden"></div>
+    </section>
+
+    <section id="methodPage" class="page">
+      <div class="intro"><div><h2>Metodologia AXIVA</h2><p>Critérios utilizados na avaliação, qualidade e formação do preço-alvo.</p></div></div>
+      <div class="method-grid">
+        <article class="info-card"><span>01</span><h3>Preço-alvo por múltiplos</h3><p>Calculamos dois valores: LPA atual × P/L médio de 5 anos e VPA atual × P/VP médio de 5 anos.</p></article>
+        <article class="info-card"><span>02</span><h3>Preço-alvo AXIVA</h3><p>O preço-alvo é a média aritmética dos dois valores. Se um deles não for válido ou for zero, usamos apenas o outro valor válido.</p></article>
+        <article class="info-card"><span>03</span><h3>Qualidade dos fundamentos</h3><p>A nota considera rentabilidade, margens, crescimento, endividamento, liquidez e travas mínimas, adaptadas ao tipo de empresa.</p></article>
+        <article class="info-card"><span>04</span><h3>Atualização</h3><p>As cotações são atualizadas automaticamente durante o mercado. Os fundamentos e as estratégias são revisados com a atualização semanal da base fundamentalista.</p></article>
+      </div>
+      <div class="method-note"><strong>Importante</strong><p>Preço-alvo não é previsão de cotação futura e a Seleção de Ações não constitui recomendação de compra ou venda.</p></div>
+    </section>
+
+    <section id="adminPage" class="page">
+      <div class="intro"><div><h2>Administração de usuários</h2><p>Somente e-mails cadastrados aqui podem criar o primeiro acesso à área exclusiva.</p></div><div class="legend">Administrador</div></div>
+      <div class="admin-layout">
+        <form id="adminUserForm" class="admin-card">
+          <h3>Liberar novo acesso</h3>
+          <label>E-mail<input id="adminEmail" type="email" required placeholder="cliente@email.com"></label>
+          <div class="admin-fields"><label>Perfil<select id="adminRole"><option value="subscriber">Assinante</option><option value="admin">Administrador</option></select></label><label>Plano<select id="adminPlan"><option value="mensal">Mensal</option><option value="trimestral">Trimestral</option><option value="semestral">Semestral</option><option value="anual">Anual</option><option value="admin">Admin</option></select></label></div>
+          <label>Validade do acesso <span>(opcional)</span><input id="adminEnds" type="date"></label>
+          <button type="submit">Liberar acesso</button>
+          <div id="adminMessage" class="message"></div>
+        </form>
+        <div class="admin-card admin-list-card"><div class="admin-list-head"><h3>Usuários e acessos</h3><button id="refreshUsersBtn" class="secondary">Atualizar</button></div><div id="adminUsersStatus" class="status">Carregando usuários...</div><div id="adminUsers"></div></div>
+      </div>
+    </section>
   </main>
 </div>
-
-<script type="module" src="/invest/private.js"></script>
+<script type="module" src="/invest/private.js?v=3"></script>
 </body>
 </html>
