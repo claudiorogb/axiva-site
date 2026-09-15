@@ -42,8 +42,9 @@ async function loadPrivateArea(){
   try{
     const me=await callPrivate('me')
     userEmail.textContent=me.user?.email||''
+    const role=me.access?.role||'subscriber'
     const plan=me.access?.plan||'assinante'
-    accessChip.textContent=`Acesso ativo • ${plan}`
+    accessChip.textContent=role==='admin'?'Administrador':`Acesso ativo • ${plan}`
     showApp()
     await loadSelection()
   }catch(e){
@@ -75,6 +76,22 @@ loginForm.addEventListener('submit',async e=>{
   const {error}=await supabase.auth.signInWithPassword({email:emailInput.value.trim(),password:passwordInput.value})
   if(error){loginMessage.textContent='E-mail ou senha inválidos.';return}
   loginMessage.textContent='';await loadPrivateArea()
+})
+
+document.getElementById('firstAccessBtn').addEventListener('click',async()=>{
+  const email=emailInput.value.trim()
+  const password=passwordInput.value
+  if(!email){loginMessage.textContent='Informe o e-mail autorizado para criar seu primeiro acesso.';return}
+  if(!password || password.length<8){loginMessage.textContent='Crie uma senha com pelo menos 8 caracteres.';return}
+  loginMessage.textContent='Criando seu acesso...'
+  const {data,error}=await supabase.auth.signUp({email,password,options:{emailRedirectTo:`${location.origin}/invest/private`}})
+  if(error){
+    if(/already registered|already exists|user already/i.test(error.message||''))loginMessage.textContent='Esse e-mail já possui uma conta. Use Entrar ou Esqueci minha senha.'
+    else loginMessage.textContent='Não foi possível criar o primeiro acesso agora.'
+    return
+  }
+  if(data.session){loginMessage.textContent='';await loadPrivateArea();return}
+  loginMessage.textContent='Conta criada. Verifique seu e-mail para confirmar o acesso e depois entre normalmente.'
 })
 
 document.getElementById('forgotBtn').addEventListener('click',async()=>{
