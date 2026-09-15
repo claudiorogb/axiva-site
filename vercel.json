@@ -4,8 +4,7 @@
   "rewrites": [
     { "source": "/crm", "destination": "/crm/index.html" },
     { "source": "/crm/o-que-e-crm", "destination": "/crm/o-que-e-crm/index.html" },
-    { "source": "/invest", "destination": "/invest/index.html" },
-    { "source": "/invest-v2", "destination": "/invest/v2.html" }
+    { "source": "/invest", "destination": "/invest/index.html" }
   ],
   "headers": [
     {
