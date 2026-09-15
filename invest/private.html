@@ -6,7 +6,7 @@
 <title>AXIVA Invest — Área exclusiva</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="/axiva-mark.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/invest/private.css?v=2">
+<link rel="stylesheet" href="/invest/private.css?v=3">
 </head>
 <body>
 <div id="loginView" class="login-view">
@@ -64,7 +64,20 @@
     </section>
 
     <section id="strategiesPage" class="page">
-      <div class="intro"><div><h2>Estratégias</h2><p>Acompanhe as estratégias definidas pela AXIVA e as empresas que atendem aos critérios em cada atualização.</p></div><div class="legend">Revisão semanal</div></div>
+      <div class="intro"><div><h2>Estratégias</h2><p>Crie suas próprias regras fundamentalistas e acompanhe quais empresas atendem aos critérios atuais.</p></div><div class="legend">Disponível para todos os assinantes</div></div>
+      <div class="strategy-builder-card">
+        <div class="strategy-builder-head"><div><span class="eyebrow">MINHA ESTRATÉGIA</span><h3>Criar nova estratégia</h3><p>Escolha um nome e defina os critérios. A estratégia fica vinculada somente à sua conta.</p></div></div>
+        <form id="userStrategyForm">
+          <label class="strategy-name-label">Nome da estratégia<input id="strategyName" type="text" minlength="2" maxlength="80" required placeholder="Ex.: Valor e rentabilidade"></label>
+          <div id="strategySliders" class="private-slider-grid"></div>
+          <div class="tool-actions"><button type="submit">Salvar estratégia</button><button id="strategyResetBtn" type="button" class="secondary">Limpar</button></div>
+          <div id="strategyMessage" class="message"></div>
+        </form>
+      </div>
+      <div class="strategy-section-title"><h3>Minhas estratégias</h3><span>Resultados recalculados com os fundamentos atuais</span></div>
+      <div id="userStrategiesStatus" class="status">Carregando suas estratégias...</div>
+      <div id="userStrategiesContent"></div>
+      <div class="strategy-section-title axiva-strategy-title"><h3>Estratégias AXIVA</h3><span>Estratégias institucionais acompanhadas semanalmente</span></div>
       <div id="strategiesStatus" class="status">Carregando estratégias...</div>
       <div id="strategiesContent" class="hidden"></div>
     </section>
@@ -97,5 +110,6 @@
   </main>
 </div>
 <script type="module" src="/invest/private.js?v=3"></script>
+<script type="module" src="/invest/user-strategies.js?v=1"></script>
 </body>
 </html>
