@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AXIVA Invest — Área exclusiva</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="/axiva-mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/invest/private.css">
+</head>
+<body>
+<div id="loginView" class="login-view">
+  <div class="login-shell">
+    <div class="login-brand"><img src="/axiva-mark.svg" alt="AXIVA"><div><strong>AXIVA Invest</strong><span>Área exclusiva para assinantes</span></div></div>
+    <div class="login-card">
+      <div class="login-kicker">ACESSO RESTRITO</div>
+      <h1>Entre na sua conta</h1>
+      <p>Use o e-mail cadastrado na sua assinatura e sua senha.</p>
+      <form id="loginForm">
+        <label>E-mail<input id="email" type="email" autocomplete="email" required></label>
+        <label>Senha<input id="password" type="password" autocomplete="current-password" required></label>
+        <button id="loginBtn" type="submit">Entrar</button>
+      </form>
+      <button id="forgotBtn" class="link-btn" type="button">Esqueci minha senha</button>
+      <div id="loginMessage" class="message" aria-live="polite"></div>
+    </div>
+    <a class="back-link" href="/invest-v2">← Voltar para AXIVA Invest</a>
+  </div>
+</div>
+
+<div id="appView" class="app-view hidden">
+  <aside class="sidebar">
+    <div class="side-brand"><img src="/axiva-mark.svg" alt="AXIVA"><div><strong>AXIVA Invest</strong><span>Área exclusiva</span></div></div>
+    <nav>
+      <button class="nav-item active" data-page="selection">Seleção de Ações</button>
+      <button class="nav-item" data-page="analysis">Analisador</button>
+      <button class="nav-item" data-page="strategies">Estratégias</button>
+      <button class="nav-item" data-page="method">Metodologia</button>
+    </nav>
+    <div class="side-bottom"><span id="userEmail"></span><button id="logoutBtn">Sair</button></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><span class="eyebrow">AXIVA INVEST</span><h1 id="pageTitle">Seleção de Ações</h1></div><div class="access-chip" id="accessChip">Assinatura ativa</div></header>
+
+    <section id="selectionPage" class="page active">
+      <div class="intro"><div><h2>Seleção de Ações</h2><p>Até 20 empresas que melhor atendem aos critérios da metodologia AXIVA na atualização atual.</p></div><div class="legend">Fundamentos + valuation</div></div>
+      <div id="selectionStatus" class="status">Carregando dados...</div>
+      <div id="selectionTableWrap" class="table-wrap hidden"></div>
+    </section>
+
+    <section id="analysisPage" class="page"><div class="placeholder"><h2>Analisador</h2><p>O analisador privado será conectado aos mesmos fundamentos, exibindo também Preço-alvo e Graham para assinantes.</p></div></section>
+    <section id="strategiesPage" class="page"><div class="placeholder"><h2>Estratégias</h2><p>Aqui ficarão as estratégias salvas, atualização semanal automática e o histórico de entradas e saídas.</p></div></section>
+    <section id="methodPage" class="page"><div class="placeholder"><h2>Metodologia</h2><p>Área exclusiva com a metodologia detalhada, critérios e interpretação dos indicadores.</p></div></section>
+  </main>
+</div>
+
+<script type="module" src="/invest/private.js"></script>
+</body>
+</html>
