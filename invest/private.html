@@ -18,9 +18,10 @@
       <p>Use o e-mail cadastrado na sua assinatura e sua senha.</p>
       <form id="loginForm">
         <label>E-mail<input id="email" type="email" autocomplete="email" required></label>
-        <label>Senha<input id="password" type="password" autocomplete="current-password" required></label>
+        <label>Senha<input id="password" type="password" autocomplete="current-password" minlength="8" required></label>
         <button id="loginBtn" type="submit">Entrar</button>
       </form>
+      <button id="firstAccessBtn" class="link-btn" type="button">Criar primeiro acesso</button>
       <button id="forgotBtn" class="link-btn" type="button">Esqueci minha senha</button>
       <div id="loginMessage" class="message" aria-live="polite"></div>
     </div>
