@@ -1,0 +1,53 @@
+name: Ajustar contraste e espacamento AXIVA
+on:
+  push:
+    branches: [feature/contrast-footer-20260916]
+    paths: [.github/workflows/fix-legal-contrast-footer.yml]
+permissions:
+  contents: write
+jobs:
+  adjust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Ajustar somente estilos, sem alterar os textos aprovados
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          for name in ('privacidade/index.html', 'termos/index.html'):
+              p = Path(name)
+              s = p.read_text(encoding='utf-8')
+              changes = {
+                  '.legal-layout h2 { font-size: 1.42rem; margin: 36px 0 12px; color: #0b192c; }': '.legal-layout h2 { font-size: 1.42rem; margin: 36px 0 12px; color: #ffffff; }',
+                  '.legal-layout p, .legal-layout li { color: #475569; line-height: 1.8; }': '.legal-layout p, .legal-layout li { color: #e2eaf4; line-height: 1.8; }',
+                  '.legal-layout a { color: #047d73; text-decoration: underline; }': '.legal-layout a { color: #66f0df; text-decoration: underline; text-underline-offset: 3px; }',
+                  '.legal-layout .updated { color: #64748b; margin-bottom: 32px; }': '.legal-layout .updated { color: #c6d5e7; margin-bottom: 32px; }',
+                  '.legal-footer-links { display: flex; gap: 18px; flex-wrap: wrap; }': '.legal-footer-links { display: flex; gap: 22px; flex-wrap: wrap; align-items: center; }\n    .legal-layout strong { color: #ffffff; }\n    .legal-layout code { color: #e2eaf4; overflow-wrap: anywhere; }',
+              }
+              for old, new in changes.items():
+                  assert s.count(old) == 1, f'{name}: estilo esperado ausente ou duplicado: {old}'
+                  s = s.replace(old, new, 1)
+              p.write_text(s, encoding='utf-8')
+          css = Path('styles.css')
+          s = css.read_text(encoding='utf-8')
+          marker = '/* AXIVA footer links spacing fix 2026-09-16 */'
+          assert marker not in s
+          s += '\n' + marker + '\n.footer-links { display: flex; align-items: center; column-gap: 24px; row-gap: 12px; flex-wrap: wrap; }\n.footer-links a { display: inline-block; }\n@media(max-width:620px){.footer-links{align-items:flex-start;}}\n'
+          css.write_text(s, encoding='utf-8')
+          root = Path('index.html').read_text(encoding='utf-8')
+          assert '<div class="footer-links"><a href="/privacidade">' in root
+          for page in ('privacidade/index.html', 'termos/index.html'):
+              content = Path(page).read_text(encoding='utf-8')
+              assert '#0b192c' not in content and '#475569' not in content
+              assert 'color: #ffffff;' in content and 'color: #e2eaf4;' in content
+          print('OK: contraste nas duas páginas e espaçamento no rodapé; textos preservados')
+          PY
+      - name: Salvar alteração validada
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add privacidade/index.html termos/index.html styles.css
+          git commit -m "Melhorar contraste legal e espacamento do rodape"
+          git push
