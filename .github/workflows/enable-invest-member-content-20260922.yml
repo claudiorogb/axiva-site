@@ -1,0 +1,36 @@
+name: Integrar conteúdo da área exclusiva Invest
+on:
+  push:
+    paths:
+      - '.github/workflows/enable-invest-member-content-20260922.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  enable-content:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ativar páginas informativas antes do script de navegação
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          page=Path('invest/private.html')
+          html=page.read_text()
+          anchor='<script type="module" src="/invest/private.js?v=5"></script>'
+          assert html.count(anchor)==1, 'Âncora de navegação não identificada de forma única'
+          assert 'member-content.js' not in html, 'Conteúdo já integrado'
+          html=html.replace(anchor, '<script src="/invest/member-content.js?v=1"></script>\n'+anchor, 1)
+          page.write_text(html)
+          content=Path('invest/member-content.js').read_text()
+          assert all(x in content for x in ('methodPage','faqPage','important-infoPage','Como funciona nossa seleção de Ações','Perguntas frequentes','Informações importantes'))
+          print('OK: três páginas presentes; carregamento antes do controlador de navegação')
+          PY
+          node --check invest/member-content.js
+          node --check invest/private.js
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add invest/private.html
+          git commit -m 'Ativar metodologia completa, FAQ e informações importantes na área exclusiva'
+          git push
