@@ -22,13 +22,11 @@ jobs:
           assert html.count(old)==1, 'Cabecalho da selecao diferente do esperado'
           html=html.replace(old,new,1)
           old='<div class="intro"><div><p>Até 20 empresas que melhor atendem aos critérios da metodologia AXIVA na atualização atual.</p></div><div class="legend">Fundamentos + valuation</div></div>'
-          new='''<div class="intro selection-intro"><div><p class="selection-subtitle">Conforme a metodologia de qualidade + desconto.</p><p class="selection-explanation">Segundo nossa metodologia, as empresas são selecionadas pela combinação entre qualidade dos fundamentos e desconto em relação ao preço atual.<br>Consulte a página <a href="#metodo" id="selectionMethodLink">Método</a> para entender os critérios utilizados.</p></div><div class="legend">Fundamentos + valuation</div></div>'''
+          new='<div class="intro selection-intro"><div><p class="selection-subtitle">Conforme a metodologia de qualidade + desconto.</p><p class="selection-explanation">Segundo nossa metodologia, as empresas são selecionadas pela combinação entre qualidade dos fundamentos e desconto em relação ao preço atual.<br>Consulte a página <a href="#metodo" id="selectionMethodLink">Método</a> para entender os critérios utilizados.</p></div><div class="legend">Fundamentos + valuation</div></div>'
           assert html.count(old)==1, 'Introducao da selecao diferente do esperado'
           html=html.replace(old,new,1)
           old='      <div id="selectionTableWrap" class="table-wrap hidden"></div>\n    </section>'
-          new='''      <div id="selectionTableWrap" class="table-wrap hidden"></div>
-      <footer class="selection-disclaimer">*Este site possui caráter exclusivamente informativo e não constitui recomendação, indicação ou oferta de compra ou venda de ações. As decisões de investimento são de responsabilidade exclusiva do investidor.</footer>
-    </section>'''
+          new='      <div id="selectionTableWrap" class="table-wrap hidden"></div>\n      <footer class="selection-disclaimer">*Este site possui caráter exclusivamente informativo e não constitui recomendação, indicação ou oferta de compra ou venda de ações. As decisões de investimento são de responsabilidade exclusiva do investidor.</footer>\n    </section>'
           assert html.count(old)==1, 'Final da secao de selecao diferente do esperado'
           html=html.replace(old,new,1)
           for old,new in [('/invest/private.css?v=6','/invest/private.css?v=7'),('/invest/private.js?v=5','/invest/private.js?v=6')]:
