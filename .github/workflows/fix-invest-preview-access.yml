@@ -1,0 +1,42 @@
+name: Corrigir acesso exclusivo na preview AXIVA Invest
+on:
+  push:
+    paths:
+      - .github/workflows/fix-invest-preview-access.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fix-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Corrigir ambos os botões sem alterar outras páginas
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('invest/v2.html')
+          html = p.read_text(encoding='utf-8')
+          old = 'https://sites.google.com/view/rankingacoes/empresas?pli=1&authuser=0'
+          expected = html.count(old)
+          if expected != 2:
+              raise SystemExit(f'Esperados 2 links antigos, encontrados {expected}; nenhuma alteração realizada')
+          html = html.replace(old, '/invest/private.html')
+          p.write_text(html, encoding='utf-8')
+          assert old not in p.read_text(encoding='utf-8')
+          assert p.read_text(encoding='utf-8').count('href="/invest/private.html"') == 2
+          assert Path('invest/private.html').exists()
+          assert Path('invest/private.js').exists()
+          print('Dois botões corrigidos e área exclusiva presente.')
+          PY
+      - name: Salvar correção na branch preview
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add invest/v2.html
+          if ! git diff --cached --quiet; then
+            git commit -m 'Direcionar área exclusiva preview para login AXIVA Invest'
+            git push
+          fi
