@@ -1,0 +1,29 @@
+name: Atualizar cache da administração AXIVA Invest
+on:
+  push:
+    paths:
+      - '.github/workflows/bump-invest-admin-plan-assets.yml'
+permissions:
+  contents: write
+jobs:
+  cache-bust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Atualizar versões dos recursos da área exclusiva
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('invest/private.html')
+          text=p.read_text()
+          assert text.count('/invest/private.js?v=4')==1
+          assert text.count('/invest/private.css?v=4')==1
+          text=text.replace('/invest/private.js?v=4','/invest/private.js?v=5').replace('/invest/private.css?v=4','/invest/private.css?v=5')
+          p.write_text(text)
+          PY
+          git diff --check
+          git add invest/private.html
+          git commit -m 'Invalidar cache para exibir a edição de planos'
+          git push
