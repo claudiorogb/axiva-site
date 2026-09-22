@@ -4,6 +4,8 @@ const SUPABASE_URL='https://zbtijblvkzkeposvkfob.supabase.co'
 const SUPABASE_KEY='sb_publishable_1hWexWrd_y-m36-DaXF5Hw_p33Ginm_'
 const PRIVATE_API=`${SUPABASE_URL}/functions/v1/invest-private-data`
 const FIRST_ACCESS_API=`${SUPABASE_URL}/functions/v1/invest-first-access-check`
+// Guardar o tipo do link antes de o cliente Auth limpar o fragmento da URL.
+let recoveryMode=new URLSearchParams(location.hash.slice(1)).get('type')==='recovery' || new URLSearchParams(location.search).get('type')==='recovery'
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}})
 
 const $=id=>document.getElementById(id)
@@ -20,8 +22,31 @@ const pct=v=>v==null?'—':(Number(v)*100).toLocaleString('pt-BR',{minimumFracti
 const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))
 const n=v=>{const x=Number(v);return Number.isFinite(x)?x:null}
 
-function showLogin(msg=''){loginView.classList.remove('hidden');appView.classList.add('hidden');loginMessage.textContent=msg}
-function showApp(){loginView.classList.add('hidden');appView.classList.remove('hidden')}
+function showLogin(msg=''){loginView.classList.remove('hidden');appView.classList.add('hidden');$('resetView').classList.add('hidden');loginMessage.textContent=msg}
+function showApp(){if(recoveryMode){showResetView();return}loginView.classList.add('hidden');$('resetView').classList.add('hidden');appView.classList.remove('hidden')}
+function showResetView(){loginView.classList.add('hidden');appView.classList.add('hidden');$('resetView').classList.remove('hidden')}
+// O link de recuperação cria uma sessão temporária; não significa que a senha já foi alterada.
+supabase.auth.onAuthStateChange((event)=>{if(event==='PASSWORD_RECOVERY'){recoveryMode=true;showResetView()}})
+$('resetForm').addEventListener('submit',async e=>{
+  e.preventDefault()
+  const pass=$('newPassword').value,confirmPass=$('confirmPassword').value
+  const message=$('resetMessage'),btn=$('resetSubmit')
+  if(pass.length<8){message.textContent='Use uma senha com pelo menos 8 caracteres.';return}
+  if(pass!==confirmPass){message.textContent='As senhas informadas não são iguais.';return}
+  btn.disabled=true;message.textContent='Salvando sua nova senha...'
+  try{
+    const {data:{session}}=await supabase.auth.getSession()
+    if(!session){message.textContent='O link expirou. Solicite uma nova recuperação de senha.';return}
+    const {error}=await supabase.auth.updateUser({password:pass})
+    if(error){message.textContent='Não foi possível alterar a senha. Confira os requisitos ou solicite um novo link.';return}
+    await supabase.auth.signOut()
+    recoveryMode=false
+    $('resetForm').reset()
+    history.replaceState(null,'',location.pathname)
+    showLogin('Senha alterada com sucesso. Entre usando sua nova senha.')
+  }catch(e){message.textContent='Não foi possível alterar a senha agora. Tente novamente.'}
+  finally{btn.disabled=false}
+})
 
 async function callPrivate(section,options={}){
   const {data:{session}}=await supabase.auth.getSession()
@@ -175,4 +200,4 @@ document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click'
 }))
 
 const {data:{session}}=await supabase.auth.getSession()
-if(session)await loadPrivateArea();else showLogin()
+if(recoveryMode){if(session)showResetView();else showLogin('Link inválido ou expirado. Solicite uma nova recuperação de senha.')}else if(session)await loadPrivateArea();else showLogin()
