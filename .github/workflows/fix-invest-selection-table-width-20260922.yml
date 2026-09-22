@@ -1,0 +1,36 @@
+name: Corrigir largura da tabela de ações da área exclusiva
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-invest-selection-table-width-20260922.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fix-selection-width:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ajustar largura da tabela sem alterar dados ou visual móvel
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          css = Path('invest/private.css')
+          styles = css.read_text()
+          marker = '/* Seleção de Ações: preencher a largura até Qualidade no desktop */'
+          assert marker not in styles
+          assert '.private-table{width:max-content}' in styles
+          styles += '\n' + marker + '\n@media (min-width:701px){#selectionTableWrap .private-table{width:100%;min-width:1180px}#selectionTableWrap .private-row{width:100%}}\n'
+          css.write_text(styles)
+          html = Path('invest/private.html')
+          page = html.read_text()
+          assert page.count('/invest/private.css?v=5') == 1
+          html.write_text(page.replace('/invest/private.css?v=5','/invest/private.css?v=6',1))
+          print('OK: tabela da seleção ocupa a largura do contêiner, CSS atualizado e layout móvel preservado')
+          PY
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add invest/private.css invest/private.html
+          git commit -m 'Alinhar tabela da seleção até a coluna Qualidade'
+          git push
