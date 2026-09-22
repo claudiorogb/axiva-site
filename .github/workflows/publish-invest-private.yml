@@ -1,0 +1,53 @@
+name: Publicar area exclusiva AXIVA Invest
+on:
+  push:
+    paths:
+      - .github/workflows/publish-invest-private.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Integrar area exclusiva da versao de testes
+        run: |
+          git fetch origin invest-v2-preview
+          for file in private.html private.css private.js user-strategies.js; do
+            git show "origin/invest-v2-preview:invest/$file" > "invest/$file"
+          done
+          python3 - <<'PY'
+          from pathlib import Path
+          page = Path('invest/v2.html')
+          html = page.read_text(encoding='utf-8')
+          old = 'https://sites.google.com/view/rankingacoes/empresas?pli=1&authuser=0'
+          assert html.count(old) == 2, f'Esperados 2 links antigos; encontrados {html.count(old)}'
+          html = html.replace(old, '/invest/private.html')
+          page.write_text(html, encoding='utf-8')
+          private = Path('invest/private.html')
+          content = private.read_text(encoding='utf-8')
+          assert 'href="/invest-v2"' in content
+          private.write_text(content.replace('href="/invest-v2"', 'href="/invest/"'), encoding='utf-8')
+          PY
+      - name: Conferir links e arquivos
+        run: |
+          test -s invest/private.html
+          test -s invest/private.css
+          test -s invest/private.js
+          test -s invest/user-strategies.js
+          grep -q '/invest/private.html' invest/v2.html
+          ! grep -q 'sites.google.com/view/rankingacoes' invest/v2.html
+          grep -q 'invest-private-data' invest/private.js
+      - name: Publicar apenas alteracoes de investimentos
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add invest/v2.html invest/private.html invest/private.css invest/private.js invest/user-strategies.js
+          if ! git diff --cached --quiet; then
+            git commit -m 'Corrigir acesso exclusivo e publicar area de assinantes AXIVA Invest'
+            git push origin HEAD:main
+          fi
