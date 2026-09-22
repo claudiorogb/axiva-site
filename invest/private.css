@@ -67,3 +67,8 @@
 
 /* Textos da selecao de acoes - 2026-09-22 */
 #selectionPage .selection-intro{align-items:start}#selectionPage .selection-subtitle{font-size:16px;font-weight:700;color:#405a73;margin:0 0 14px}#selectionPage .selection-explanation{font-size:14px;line-height:1.65;color:#526b82;margin:0;max-width:980px}#selectionPage .selection-explanation a{color:#087f86;text-decoration:underline;font-weight:800}#selectionPage .selection-disclaimer{margin-top:18px;color:#61758b;font-size:12px;line-height:1.6;padding:0 4px 18px}
+
+/* Ajustes de espaço e título de estratégias 2026-09-22 */
+#strategiesPage .strategy-create-title{color:#087c78}
+#strategiesPage .strategy-builder-card .private-slider-grid{gap:18px;margin-bottom:22px}
+#strategiesPage .strategy-builder-card .tool-actions{gap:14px;flex-wrap:wrap;margin-top:8px}

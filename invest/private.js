@@ -68,7 +68,7 @@ async function loadPrivateArea(){
     userEmail.textContent=me.user?.email||''
     currentRole=me.access?.role||'subscriber'
     const plan=me.access?.plan||'assinante'
-    accessChip.textContent=currentRole==='admin'?'Administrador':`Acesso ativo • ${plan}`
+    accessChip.textContent=currentRole==='admin'?'Administrador':`Acesso ativo • ${plan==='annual'?'anual':plan}`
     $('adminNav').classList.toggle('hidden',currentRole!=='admin')
     showApp()
     await Promise.all([loadSelection(),loadAnalysisData(),loadStrategies()])

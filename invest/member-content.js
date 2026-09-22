@@ -121,7 +121,11 @@
   }
   const style = document.createElement('style');
   style.textContent = `
-    body:has(#methodPage.active) #pageTitle, body:has(#important-infoPage.active) #pageTitle {display:none}
+    body:has(#methodPage.active) #pageTitle, body:has(#important-infoPage.active) #pageTitle, body:has(#faqPage.active) #pageTitle {display:none}
+    #important-infoPage .member-intro, #faqPage .member-intro {background:#f0fdfc;border:1px solid #c6e8e5;border-radius:16px;padding:20px 24px;margin-bottom:18px;min-width:0}
+    #important-infoPage .member-intro h2, #faqPage .member-intro h2 {margin:0 0 10px}
+    #important-infoPage .member-intro p, #faqPage .member-intro p {max-width:none;margin:0}
+    @media(max-width:700px){#important-infoPage .member-intro, #faqPage .member-intro {padding:17px 16px}}
     .member-content {display:grid;gap:16px;max-width:100%}
     .member-intro {display:block}.member-intro h2 {font-size:clamp(24px,2vw,30px);margin:0 0 12px}
     #methodPage .method-highlight {background:#f0fdfc;border:1px solid #c6e8e5;border-radius:16px;padding:18px 22px;margin:16px 0 0;max-width:100%;box-shadow:0 4px 14px rgba(7,24,45,.03)}
