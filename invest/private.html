@@ -6,7 +6,7 @@
 <title>AXIVA Invest — Área exclusiva</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="/axiva-mark.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/invest/private.css?v=6">
+<link rel="stylesheet" href="/invest/private.css?v=7">
 </head>
 <body>
 <div id="loginView" class="login-view">
@@ -60,12 +60,13 @@
     <div class="side-bottom"><span id="userEmail"></span><button id="logoutBtn">Sair</button></div>
   </aside>
   <main class="main">
-    <header class="topbar"><div><span class="eyebrow"></span><h1 id="pageTitle">Seleção de Ações</h1></div><div class="access-chip" id="accessChip">Assinatura ativa</div></header>
+    <header class="topbar"><div><span class="eyebrow"></span><h1 id="pageTitle">AÇÕES SELECIONADAS</h1></div><div class="access-chip" id="accessChip">Assinatura ativa</div></header>
 
     <section id="selectionPage" class="page active">
-      <div class="intro"><div><p>Até 20 empresas que melhor atendem aos critérios da metodologia AXIVA na atualização atual.</p></div><div class="legend">Fundamentos + valuation</div></div>
+      <div class="intro selection-intro"><div><p class="selection-subtitle">Conforme a metodologia de qualidade + desconto.</p><p class="selection-explanation">Segundo nossa metodologia, as empresas são selecionadas pela combinação entre qualidade dos fundamentos e desconto em relação ao preço atual.<br>Consulte a página <a href="#metodo" id="selectionMethodLink">Método</a> para entender os critérios utilizados.</p></div><div class="legend">Fundamentos + valuation</div></div>
       <div id="selectionStatus" class="status">Carregando dados...</div>
       <div id="selectionTableWrap" class="table-wrap hidden"></div>
+      <footer class="selection-disclaimer">*Este site possui caráter exclusivamente informativo e não constitui recomendação, indicação ou oferta de compra ou venda de ações. As decisões de investimento são de responsabilidade exclusiva do investidor.</footer>
     </section>
 
     <section id="analysisPage" class="page">
@@ -128,7 +129,7 @@
   </main>
 </div>
 <script src="/invest/member-content.js?v=2"></script>
-<script type="module" src="/invest/private.js?v=5"></script>
+<script type="module" src="/invest/private.js?v=6"></script>
 <script type="module" src="/invest/user-strategies.js?v=1"></script>
 </body>
 </html>

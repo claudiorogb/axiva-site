@@ -64,3 +64,6 @@
 
 /* Seleção de Ações: preencher a largura até Qualidade no desktop */
 @media (min-width:701px){#selectionTableWrap .private-table{width:100%;min-width:1180px}#selectionTableWrap .private-row{width:100%}}
+
+/* Textos da selecao de acoes - 2026-09-22 */
+#selectionPage .selection-intro{align-items:start}#selectionPage .selection-subtitle{font-size:16px;font-weight:700;color:#405a73;margin:0 0 14px}#selectionPage .selection-explanation{font-size:14px;line-height:1.65;color:#526b82;margin:0;max-width:980px}#selectionPage .selection-explanation a{color:#087f86;text-decoration:underline;font-weight:800}#selectionPage .selection-disclaimer{margin-top:18px;color:#61758b;font-size:12px;line-height:1.6;padding:0 4px 18px}

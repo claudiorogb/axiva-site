@@ -222,11 +222,13 @@ $('privateTicker').addEventListener('keydown',e=>{if(e.key==='Enter')applyPrivat
 $('refreshUsersBtn').addEventListener('click',loadAdminUsers)
 $('adminUserForm').addEventListener('submit',async e=>{e.preventDefault();const email=$('adminEmail').value.trim().toLowerCase(),role=$('adminRole').value,plan=$('adminPlan').value,ends=$('adminEnds').value;$('adminMessage').textContent='Liberando acesso...';try{await callPrivate('admin-users',{method:'POST',body:{action:'add',email,role,plan,ends_at:ends?`${ends}T23:59:59`:null}});$('adminMessage').textContent='Acesso liberado. O usuário já pode criar o primeiro acesso com este e-mail.';$('adminUserForm').reset();await loadAdminUsers()}catch(e){$('adminMessage').textContent='Não foi possível liberar o acesso.'}})
 
+$('selectionMethodLink').addEventListener('click',e=>{e.preventDefault();document.querySelector('.nav-item[data-page="method"]')?.click()})
+
 document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click',async()=>{
   if(btn.id==='adminNav'&&currentRole!=='admin')return
   document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));btn.classList.add('active')
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(btn.dataset.page+'Page')?.classList.add('active')
-  $('pageTitle').textContent=btn.textContent.trim()
+  $('pageTitle').textContent=btn.dataset.page==='selection'?'AÇÕES SELECIONADAS':btn.textContent.trim()
   if(btn.dataset.page==='admin')await loadAdminUsers()
   if(btn.dataset.page==='strategies'&&!strategiesLoaded)await loadStrategies()
 }))
