@@ -1,0 +1,84 @@
+name: Detalhes das acoes selecionadas
+on:
+  push:
+    paths:
+      - '.github/workflows/invest-selection-details-20260922.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  implement:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Implementar detalhes e testar
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          htmlp=Path('invest/private.html'); html=htmlp.read_text()
+          old='      <div id="selectionTableWrap" class="table-wrap hidden"></div>'
+          assert html.count(old)==1
+          html=html.replace(old,old+'\n      <section id="selectionDetail" class="selection-detail hidden" aria-live="polite"></section>',1)
+          assert html.count('/invest/private.js?v=7')==1 and html.count('/invest/private.css?v=8')==1
+          html=html.replace('/invest/private.js?v=7','/invest/private.js?v=8').replace('/invest/private.css?v=8','/invest/private.css?v=9')
+          htmlp.write_text(html)
+          js_path=Path('invest/private.js'); js=js_path.read_text()
+          assert 'let selectionRows=[]' not in js
+          js=js.replace('let analysisRows=[]','let selectionRows=[]\nlet analysisRows=[]',1)
+          assert js.count('  const body=rows.map(r=>')==1
+          js=js.replace('  const body=rows.map(r=>','  selectionRows=rows\n  const body=rows.map((r,index)=>',1)
+          old='<div class=\\"private-row\\"><div>${r.position'
+          new='<div class=\\"private-row selection-clickable\\" data-selection-index=\\"${index}\\" role=\\"button\\" tabindex=\\"0\\" aria-label=\\"Ver detalhes de ${esc(r.ticker)}\\"><div>${r.position'
+          assert js.count(old)==1, 'Linha da tabela nao localizada'
+          js=js.replace(old,new,1)
+          anchor='function slider(id,label,min,max,step,value,suffix=\'\'){'
+          assert js.count(anchor)==1
+          details='''// Os detalhes usam exclusivamente o mesmo ranking autorizado já carregado pelo endpoint privado.
+function showSelectionDetail(index){
+  const r=selectionRows[index]
+  if(!r)return
+  const quality=r.quality_score==null?'—':String(Math.round(Number(r.quality_score)))+'/100'
+  const discount=pct(r.discount_pct)
+  const indicators=[['P/L',num(r.pl)],['P/VP',num(r.pvp)],['DY',pct(r.dividend_yield)],['ROIC',pct(r.roic)],['ROE',pct(r.roe)]]
+  const metrics=[['Valor atual',money(r.current_price)],['Preço alvo',money(r.target_price)],['Desconto',discount],['Qualidade dos fundamentos',quality],['Preço Graham',money(r.graham_price)]]
+  const detail=$('selectionDetail')
+  detail.innerHTML=`<button class="detail-back" type="button">← Voltar para a lista</button><div class="detail-hero"><h2>${esc(r.ticker)}</h2><strong>${esc(r.company_name||'')}</strong><span>Dados fundamentalistas</span></div><div class="detail-metrics">${metrics.map(([label,value],i)=>`<div class="detail-metric ${i===2?'detail-discount':''}"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('')}</div><h3 class="detail-heading">Indicadores fundamentalistas</h3><div class="detail-indicators"><div class="detail-indicator-head"><b>Indicador</b><b>Resultado</b></div>${indicators.map(([label,value])=>`<div class="detail-indicator"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('')}</div><h3 class="detail-heading">Resumo</h3><div class="detail-summary">Nota de fundamento: ${esc(quality)} | Desconto de ${esc(discount)} segundo nossa metodologia.</div><footer class="detail-disclaimer">As informações apresentadas têm finalidade exclusivamente informativa e não constituem recomendação de compra ou venda de ativos. Consulte as <button type="button" class="detail-important-link">Informações Importantes</button>.</footer>`
+  selectionWrap.classList.add('hidden')
+  $('selectionPage').classList.add('detail-open')
+  detail.classList.remove('hidden')
+  detail.querySelector('.detail-back').addEventListener('click',()=>{
+    detail.classList.add('hidden');selectionWrap.classList.remove('hidden');$('selectionPage').classList.remove('detail-open');selectionWrap.querySelector(`[data-selection-index="${index}"]`)?.focus()
+  })
+  detail.querySelector('.detail-important-link').addEventListener('click',()=>document.querySelector('.nav-item[data-page="important-info"]')?.click())
+  detail.querySelector('.detail-back').focus()
+}
+selectionWrap.addEventListener('click',e=>{const row=e.target.closest('[data-selection-index]');if(row&&selectionWrap.contains(row))showSelectionDetail(Number(row.dataset.selectionIndex))})
+selectionWrap.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const row=e.target.closest('[data-selection-index]');if(row&&selectionWrap.contains(row)){e.preventDefault();showSelectionDetail(Number(row.dataset.selectionIndex))}})
+
+'''
+          js=js.replace(anchor,details+anchor,1)
+          js=js.replace("  selectionStatus.classList.remove('hidden');selectionStatus.textContent='Carregando Seleção de Ações...';selectionWrap.classList.add('hidden')","  $('selectionDetail').classList.add('hidden');$('selectionPage').classList.remove('detail-open');selectionStatus.classList.remove('hidden');selectionStatus.textContent='Carregando Seleção de Ações...';selectionWrap.classList.add('hidden')",1)
+          js_path.write_text(js)
+          cssp=Path('invest/private.css');css=cssp.read_text()
+          assert '/* Detalhes das ações selecionadas */' not in css
+          css+='''
+/* Detalhes das ações selecionadas */
+#selectionPage .selection-clickable{cursor:pointer}#selectionPage .selection-clickable:hover{background:#103452}#selectionPage .selection-clickable:focus-visible{outline:3px solid #13beb8;outline-offset:-3px}
+#selectionPage.detail-open .selection-intro,#selectionPage.detail-open #selectionStatus,#selectionPage.detail-open>.selection-disclaimer{display:none!important}
+.selection-detail{display:grid;gap:22px;min-width:0}.detail-back{justify-self:start;border:1px solid #d5e2ef;background:#fff;border-radius:11px;padding:10px 14px;color:#27435e;font:inherit;font-size:13px;cursor:pointer}
+.detail-hero{background:#fff;border:1px solid #d5e2ef;border-top:3px solid #13b8b2;border-radius:16px;padding:24px 16px;text-align:center;box-shadow:0 3px 12px rgba(7,24,45,.04)}.detail-hero h2{font-size:30px;margin:0 0 6px}.detail-hero strong,.detail-hero span{display:block}.detail-hero span{font-size:13px;color:#64758a;margin-top:6px}
+.detail-metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.detail-metric{min-width:0;display:grid;place-content:center;gap:18px;text-align:center;background:#fff;border:1px solid #d5e2ef;border-radius:12px;padding:18px 10px}.detail-metric span{font-size:11px;color:#52667d}.detail-metric strong{font-size:19px;overflow-wrap:anywhere}.detail-discount{background:#effcfb;border-top:3px solid #12aba3}.detail-discount strong{color:#008c83}
+.detail-heading{font-size:18px;margin:6px 0 -12px;border-left:3px solid #12aba3;padding-left:10px}.detail-indicators{background:#fff;border:1px solid #d5e2ef;border-radius:13px;overflow:hidden}.detail-indicator-head,.detail-indicator{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 16px;font-size:13px}.detail-indicator-head{background:#0c1b2b;color:#fff}.detail-indicator{border-top:1px solid #e7edf4}.detail-indicator span{color:#52667d}.detail-summary{background:#fff;border:1px solid #d5e2ef;border-left:3px solid #13b8b2;border-radius:12px;padding:18px 20px;font-size:14px;line-height:1.6;color:#405a73}.detail-disclaimer{font-size:12px;line-height:1.7;color:#61758b;margin-bottom:12px}.detail-important-link{border:0;background:transparent;padding:0;color:#087f86;text-decoration:underline;font:inherit;cursor:pointer}
+@media(max-width:900px){.detail-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.detail-metric:last-child{grid-column:1/-1}}@media(max-width:480px){.selection-detail{gap:18px}.detail-hero h2{font-size:25px}.detail-metric{gap:10px;padding:14px 8px}.detail-metric strong{font-size:16px}.detail-indicator-head,.detail-indicator{padding:12px}}
+'''
+          cssp.write_text(css)
+          assert 'data-selection-index' in js and 'Nota de fundamento:' in js and 'detail-important-link' in js
+          print('PASS: 20 linhas clicáveis, resumo derivado de qualidade e desconto, indicadores e rodapé, navegação e estilos móveis')
+          PY
+          node --check invest/private.js
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add invest/private.html invest/private.js invest/private.css
+          git commit -m 'Exibir detalhes e resumo por empresa no ranking privado'
+          git push
