@@ -1,0 +1,31 @@
+name: Remover círculos dos números na metodologia Invest
+on:
+  push:
+    paths:
+      - '.github/workflows/invest-remove-step-circles-20260922.yml'
+permissions:
+  contents: write
+jobs:
+  update-style:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ajustar somente os números da metodologia
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('invest/v2.css')
+          css = path.read_text(encoding='utf-8')
+          assert '.step-num{' in css, 'Classe dos números não encontrada'
+          marker = '/* Metodologia: números sem círculos — 2026-09-22 */'
+          assert marker not in css, 'Ajuste já aplicado'
+          css += '\n' + marker + '\n#metodologia .step-num{width:auto;height:auto;min-width:0;min-height:0;border:0;border-radius:0;background:none;display:block;place-items:normal;line-height:1.4;text-align:left;padding:0;color:#74ebe3}\n'
+          path.write_text(css,encoding='utf-8')
+          print('PASS: removidas bordas e formas circulares; números preservados')
+          PY
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add invest/v2.css
+          git commit -m 'Exibir apenas os números na metodologia Invest'
+          git push
