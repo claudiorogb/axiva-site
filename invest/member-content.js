@@ -7,8 +7,10 @@
   method.innerHTML = `
     <div class="intro member-intro"><div>
       <h2>Como funciona nossa seleção de Ações</h2>
-      <p>Desenvolvemos essa seleção para identificar empresas que combinam bons fundamentos financeiros com preço de mercado atrativo em relação ao preço alvo estimado por nossa metodologia.</p>
-      <p>O objetivo é evitar que uma empresa apareça bem posicionada apenas porque sua cotação está abaixo do preço estimado, quando seus fundamentos não apresentam bons números.</p>
+      <div class="method-highlight">
+        <p>Desenvolvemos essa seleção para identificar empresas que combinam bons fundamentos financeiros com preço de mercado atrativo em relação ao preço alvo estimado por nossa metodologia.</p>
+        <p>O objetivo é evitar que uma empresa apareça bem posicionada apenas porque sua cotação está abaixo do preço estimado, quando seus fundamentos não apresentam bons números.</p>
+      </div>
     </div></div>
     <div class="member-content">
       <section class="member-block"><h3>1. Fundamentos</h3>
@@ -119,10 +121,14 @@
   }
   const style = document.createElement('style');
   style.textContent = `
-    body:has(#methodPage.active) #pageTitle {display:none}
+    body:has(#methodPage.active) #pageTitle, body:has(#important-infoPage.active) #pageTitle {display:none}
     .member-content {display:grid;gap:16px;max-width:100%}
     .member-intro {display:block}.member-intro h2 {font-size:clamp(24px,2vw,30px);margin:0 0 12px}
-    .member-intro p {font-size:15px;line-height:1.75;max-width:1050px;margin:0 0 12px}
+    #methodPage .method-highlight {background:#f0fdfc;border:1px solid #c6e8e5;border-radius:16px;padding:18px 22px;margin:16px 0 0;max-width:100%;box-shadow:0 4px 14px rgba(7,24,45,.03)}
+    #methodPage .method-highlight p {max-width:none;margin:0 0 12px;color:#405c70;line-height:1.75}
+    #methodPage .method-highlight p:last-child {margin-bottom:0}
+    @media(max-width:700px){#methodPage .method-highlight {padding:16px}}
+        .member-intro p {font-size:15px;line-height:1.75;max-width:1050px;margin:0 0 12px}
     .member-block {background:#fff;border:1px solid #dbe4ed;border-radius:18px;padding:24px 28px;box-shadow:0 10px 28px rgba(7,24,45,.05);min-width:0}
     .member-block h3 {font-size:21px;line-height:1.3;margin:0 0 14px;color:#07182d}
     .member-block h4 {font-size:16px;margin:18px 0 10px;color:#07182d}
