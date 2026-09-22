@@ -32,6 +32,8 @@
     .trial-price small { font-size: 1rem; font-weight: 500; letter-spacing: 0; }
     .trial-per-user { display: block; color: #64748b; margin: 0 0 24px; }
     .trial-card .btn { display: inline-flex; justify-content: center; min-width: 210px; }
+    .crm-hero .hero-screenshot { min-height: 0; width: 100%; display: flex; align-items: center; justify-content: center; }
+    .crm-hero .hero-screenshot img { display: block; width: 100%; max-width: 657px; height: auto; aspect-ratio: 657 / 438; object-fit: contain; border: 1px solid #dfe7ef; border-radius: 16px; background: #fff; box-shadow: 0 18px 45px rgba(0,0,0,.24); }
     @media (max-width: 1100px) { .insights-head p { white-space: normal; } }
     @media (max-width: 900px) { .insights-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     @media (max-width: 620px) {
@@ -72,28 +74,7 @@
             <a class="btn btn-primary" href="#recursos">Conhecer recursos</a>
           </div>
         </div>
-        <div class="visual" aria-hidden="true">
-          <div class="glow"></div>
-          <div class="mockup">
-            <div class="mockup-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-            <div class="mockup-body">
-              <div class="mock-side"><div></div><div></div><div></div><div></div><div></div></div>
-              <div class="mock-main">
-                <div class="metric-row">
-                  <div class="metric"><strong>126</strong><span>novos leads</span></div>
-                  <div class="metric"><strong>37</strong><span>contatados</span></div>
-                  <div class="metric"><strong>R$ 42 mil</strong><span>em propostas</span></div>
-                </div>
-                <div class="pipeline">
-                  <div class="stage"><h4>Novo</h4><div class="lead-card">Buffet Horizonte</div><div class="lead-card">Grupo Aurora</div></div>
-                  <div class="stage"><h4>Respondeu</h4><div class="lead-card">Eventos Prime</div><div class="lead-card">Alpha Foods</div></div>
-                  <div class="stage"><h4>Interessado</h4><div class="lead-card">Corporativo Sul</div></div>
-                  <div class="stage"><h4>Proposta</h4><div class="lead-card">Cliente Vértice</div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div class="visual hero-screenshot"><img src="/crm/hero-kanban.svg" width="657" height="438" alt="Captura real do funil de vendas AXIVA CRM, com as colunas Proposta, Negociação e Ganho" /></div>
       </div>
     </section>
     <section class="section alt" id="como-funciona">
