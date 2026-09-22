@@ -1,0 +1,75 @@
+name: Ajustes visuais AXIVA Invest 22 setembro
+on:
+  push:
+    paths:
+      - '.github/workflows/axiva-ui-fixes-20260922-1752.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apply-ui-fixes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Aplicar alterações pontuais e verificar integridade
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          def change(path, old, new):
+              p=Path(path); data=p.read_text(encoding='utf-8')
+              assert data.count(old)==1, f'{path}: esperado exatamente uma ocorrência de {old[:90]!r}; encontradas {data.count(old)}'
+              p.write_text(data.replace(old,new,1),encoding='utf-8')
+
+          # Acesso Invest aponta à área exclusiva; acesso ao CRM e links comerciais são preservados.
+          change('index.html', '<a class="btn btn-primary" href="/invest/">Acessar AXIVA Invest</a>', '<a class="btn btn-primary" href="https://axiva.com.br/invest/private">Acessar AXIVA Invest</a>')
+          change('index.html', '''          <div class="hero-actions">
+            <a class="btn btn-primary" href="/invest/">Ver AXIVA Invest</a>
+            <a class="btn btn-primary" href="/crm/">Ver CRM AXIVA</a>
+          </div>
+''', '')
+
+          # Texto repetido, rótulo e respiro da área de estratégias.
+          change('invest/private.html', '<div class="intro"><div><h2>Estratégias</h2><p>Crie suas próprias regras fundamentalistas e acompanhe quais empresas atendem aos critérios atuais.</div></div>', '<div class="intro"><div><p>Crie suas próprias regras fundamentalistas e acompanhe quais empresas atendem aos critérios atuais.</p></div></div>')
+          change('invest/private.html', '<span class="eyebrow">MINHA ESTRATÉGIA</span><h3>Criar nova estratégia</h3>', '<h3 class="strategy-create-title">Criar nova estratégia</h3>')
+          change('invest/private.html', '/invest/member-content.js?v=2', '/invest/member-content.js?v=3')
+          change('invest/private.html', '/invest/private.css?v=7', '/invest/private.css?v=8')
+          change('invest/private.html', '/invest/private.js?v=6', '/invest/private.js?v=7')
+          change('invest/private.js', "accessChip.textContent=currentRole==='admin'?'Administrador':`Acesso ativo • ${plan}`", "accessChip.textContent=currentRole==='admin'?'Administrador':`Acesso ativo • ${plan==='annual'?'anual':plan}`")
+
+          # Destaque verde para introduções das páginas FAQ e Informações importantes.
+          content=Path('invest/member-content.js')
+          text=content.read_text(encoding='utf-8')
+          old='body:has(#methodPage.active) #pageTitle, body:has(#important-infoPage.active) #pageTitle {display:none}'
+          new='body:has(#methodPage.active) #pageTitle, body:has(#important-infoPage.active) #pageTitle, body:has(#faqPage.active) #pageTitle {display:none}'
+          assert text.count(old)==1
+          text=text.replace(old,new,1)
+          anchor='    .member-content {display:grid;gap:16px;max-width:100%}'
+          assert text.count(anchor)==1
+          banner='''    #important-infoPage .member-intro, #faqPage .member-intro {background:#f0fdfc;border:1px solid #c6e8e5;border-radius:16px;padding:20px 24px;margin-bottom:18px;min-width:0}
+    #important-infoPage .member-intro h2, #faqPage .member-intro h2 {margin:0 0 10px}
+    #important-infoPage .member-intro p, #faqPage .member-intro p {max-width:none;margin:0}
+    @media(max-width:700px){#important-infoPage .member-intro, #faqPage .member-intro {padding:17px 16px}}
+'''
+          text=text.replace(anchor,banner+anchor,1)
+          content.write_text(text,encoding='utf-8')
+
+          css=Path('invest/private.css')
+          data=css.read_text(encoding='utf-8')
+          marker='/* Ajustes de espaço e título de estratégias 2026-09-22 */'
+          assert marker not in data
+          data+='\n'+marker+'\n#strategiesPage .strategy-create-title{color:#087c78}\n#strategiesPage .strategy-builder-card .private-slider-grid{gap:18px;margin-bottom:22px}\n#strategiesPage .strategy-builder-card .tool-actions{gap:14px;flex-wrap:wrap;margin-top:8px}\n'
+          css.write_text(data,encoding='utf-8')
+
+          assert 'href="https://axiva.com.br/invest/private"' in Path('index.html').read_text()
+          assert 'Ver AXIVA Invest</a>' not in Path('index.html').read_text()
+          assert 'member-content.js?v=3' in Path('invest/private.html').read_text()
+          print('OK: acesso Invest, remoção de 2 botões, estratégias, plano anual, espaçamento e balões verdes')
+          PY
+          node --check invest/private.js
+          node --check invest/member-content.js
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html invest/private.html invest/private.js invest/private.css invest/member-content.js
+          git commit -m 'Ajustar acessos, estratégias e destaques FAQ Invest'
+          git push
