@@ -1,0 +1,55 @@
+name: Compactar cartoes do detalhe Invest
+on:
+  push:
+    paths:
+      - '.github/workflows/compact-invest-detail-cards-20260922.yml'
+permissions:
+  contents: write
+jobs:
+  compact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reduzir altura dos cartoes e validar
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          css_path = Path('invest/private.css')
+          css = css_path.read_text(encoding='utf-8')
+          marker = '/* Cartoes compactos do detalhe Invest 2026-09-22 */'
+          assert marker not in css, 'Compactacao ja aplicada'
+          assert '.detail-hero{' in css and '.detail-metric{' in css, 'Seletores do detalhe ausentes'
+          css += '''\n\n/* Cartoes compactos do detalhe Invest 2026-09-22 */
+          #selectionPage .selection-detail{gap:14px}
+          #selectionPage .detail-hero{padding:13px 16px;border-radius:14px}
+          #selectionPage .detail-hero h2{font-size:26px;line-height:1.12;margin:0 0 3px}
+          #selectionPage .detail-hero strong{font-size:16px;line-height:1.2}
+          #selectionPage .detail-hero span{font-size:12px;line-height:1.3;margin-top:3px}
+          #selectionPage .detail-metrics{gap:10px}
+          #selectionPage .detail-metric{gap:7px;padding:10px 8px;border-radius:11px;min-height:82px}
+          #selectionPage .detail-metric span{font-size:11px;line-height:1.25}
+          #selectionPage .detail-metric strong{font-size:18px;line-height:1.15}
+          @media(max-width:480px){
+            #selectionPage .selection-detail{gap:12px}
+            #selectionPage .detail-hero{padding:12px 10px}
+            #selectionPage .detail-hero h2{font-size:24px}
+            #selectionPage .detail-metric{min-height:76px;padding:9px 6px;gap:6px}
+            #selectionPage .detail-metric strong{font-size:16px}
+          }
+          '''
+          css_path.write_text(css,encoding='utf-8')
+          html_path = Path('invest/private.html')
+          html = html_path.read_text(encoding='utf-8')
+          old = '/invest/private.css?v=9'
+          assert html.count(old)==1, 'Versao do CSS diferente da esperada'
+          html_path.write_text(html.replace(old,'/invest/private.css?v=10',1),encoding='utf-8')
+          assert marker in css_path.read_text(encoding='utf-8')
+          assert '/invest/private.css?v=10' in html_path.read_text(encoding='utf-8')
+          print('OK: cartao da empresa e cinco indicadores compactados; CSS atualizado')
+          PY
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add invest/private.css invest/private.html
+          git commit -m 'Compactar cabecalho e indicadores dos detalhes das acoes'
+          git push
