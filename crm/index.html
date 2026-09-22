@@ -9,143 +9,41 @@
   <link rel="stylesheet" href="/styles.css" />
   <title>AXIVA CRM | Prospecção e vendas sem complicação</title>
   <style>
-    #para-quem {
-      padding-bottom: 28px;
-    }
-
-    .insights-section {
-      padding: 24px 0 30px;
-      background: #ffffff;
-    }
-
-    .insights-section .eyebrow,
-    .insights-section .emphasis-eyebrow {
-      color: #0b6f6d;
-    }
-
-    .insights-head {
-      max-width: none;
-      margin-bottom: 28px;
-    }
-
-    .insights-head h2 {
-      margin: 8px 0 12px;
-      color: #07182d;
-    }
-
-    .insights-head p {
-      margin: 0;
-      max-width: none;
-      color: #64748b;
-      font-size: 1.05rem;
-      line-height: 1.7;
-      white-space: nowrap;
-    }
-
-    .insights-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0 42px;
-      border-top: 1px solid #dfe7ef;
-    }
-
-    .insight-item {
-      position: relative;
-      min-height: 112px;
-      padding: 24px 8px 22px 24px;
-      border-bottom: 1px solid #dfe7ef;
-    }
-
-    .insight-item::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 29px;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #00a88f;
-      box-shadow: 0 0 0 5px rgba(0,168,143,.10);
-    }
-
-    .insight-item strong {
-      display: block;
-      margin-bottom: 7px;
-      color: #0b192c;
-      font-size: 1rem;
-      line-height: 1.4;
-      font-weight: 700;
-    }
-
-    .insight-item span {
-      display: block;
-      color: #64748b;
-      font-size: .92rem;
-      line-height: 1.55;
-    }
-
-    .insights-section + .cta {
-      padding-top: 28px;
-    }
-
-    .footer-links {
-      display: flex;
-      align-items: center;
-      gap: 22px;
-    }
-
-    .footer-links a:hover {
-      color: #fff;
-    }
-
-    @media (max-width: 1100px) {
-      .insights-head p {
-        white-space: normal;
-      }
-    }
-
-    @media (max-width: 900px) {
-      .insights-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
+    #para-quem { padding-bottom: 28px; }
+    .insights-section { padding: 24px 0 30px; background: #ffffff; }
+    .insights-section .eyebrow, .insights-section .emphasis-eyebrow { color: #0b6f6d; }
+    .insights-head { max-width: none; margin-bottom: 28px; }
+    .insights-head h2 { margin: 8px 0 12px; color: #07182d; }
+    .insights-head p { margin: 0; max-width: none; color: #64748b; font-size: 1.05rem; line-height: 1.7; white-space: nowrap; }
+    .insights-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 42px; border-top: 1px solid #dfe7ef; }
+    .insight-item { position: relative; min-height: 112px; padding: 24px 8px 22px 24px; border-bottom: 1px solid #dfe7ef; }
+    .insight-item::before { content: ""; position: absolute; left: 0; top: 29px; width: 7px; height: 7px; border-radius: 50%; background: #00a88f; box-shadow: 0 0 0 5px rgba(0,168,143,.10); }
+    .insight-item strong { display: block; margin-bottom: 7px; color: #0b192c; font-size: 1rem; line-height: 1.4; font-weight: 700; }
+    .insight-item span { display: block; color: #64748b; font-size: .92rem; line-height: 1.55; }
+    .insights-section + .cta { padding-top: 28px; }
+    .footer-links { display: flex; align-items: center; gap: 22px; }
+    .footer-links a:hover { color: #fff; }
+    .trial-section { padding: 38px 0 60px; background: #f5f8fc; }
+    .trial-card { max-width: 780px; margin: 0 auto; padding: 36px 40px; text-align: center; background: #fff; border: 1px solid #dce5ee; border-radius: 20px; box-shadow: 0 15px 45px rgba(11,25,44,.06); }
+    .trial-card h2 { color: #0b192c; margin: 12px 0 8px; font-size: clamp(1.8rem,4vw,2.5rem); }
+    .trial-card p { color: #526276; line-height: 1.65; margin: 10px 0; }
+    .trial-card .trial-free { font-weight: 700; color: #0b6f6d; }
+    .trial-price { margin: 24px 0 4px; color: #0b192c; font-size: 2.5rem; font-weight: 800; letter-spacing: -.03em; }
+    .trial-price small { font-size: 1rem; font-weight: 500; letter-spacing: 0; }
+    .trial-per-user { display: block; color: #64748b; margin: 0 0 24px; }
+    .trial-card .btn { display: inline-flex; justify-content: center; min-width: 210px; }
+    @media (max-width: 1100px) { .insights-head p { white-space: normal; } }
+    @media (max-width: 900px) { .insights-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     @media (max-width: 620px) {
-      #para-quem {
-        padding-bottom: 22px;
-      }
-
-      .insights-section {
-        padding: 18px 0 24px;
-      }
-
-      .insights-head {
-        margin-bottom: 24px;
-      }
-
-      .insights-grid {
-        grid-template-columns: 1fr;
-        gap: 0;
-      }
-
-      .insight-item {
-        min-height: auto;
-        padding: 20px 8px 20px 24px;
-      }
-
-      .insight-item::before {
-        top: 25px;
-      }
-
-      .insights-section + .cta {
-        padding-top: 22px;
-      }
-
-      .footer-links {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-      }
+      #para-quem { padding-bottom: 22px; }
+      .insights-section { padding: 18px 0 24px; }
+      .insights-head { margin-bottom: 24px; }
+      .insights-grid { grid-template-columns: 1fr; gap: 0; }
+      .insight-item { min-height: auto; padding: 20px 8px 20px 24px; }
+      .insight-item::before { top: 25px; }
+      .insights-section + .cta { padding-top: 22px; }
+      .footer-links { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .trial-card { padding: 28px 20px; }
     }
   </style>
 </head>
@@ -162,7 +60,6 @@
       </div>
     </div>
   </nav>
-
   <main>
     <section class="hero crm-hero">
       <div class="container hero-grid">
@@ -199,7 +96,6 @@
         </div>
       </div>
     </section>
-
     <section class="section alt" id="como-funciona">
       <div class="container split">
         <div>
@@ -216,7 +112,6 @@
         </div>
       </div>
     </section>
-
     <section class="section" id="recursos">
       <div class="container">
         <span class="eyebrow">Tudo em um só ambiente</span>
@@ -231,7 +126,6 @@
         </div>
       </div>
     </section>
-
     <section class="section alt" id="para-quem">
       <div class="container">
         <span class="eyebrow emphasis-eyebrow">Para quem é</span>
@@ -242,7 +136,6 @@
         </div>
       </div>
     </section>
-
     <section class="insights-section" id="indicadores">
       <div class="container">
         <div class="insights-head">
@@ -250,48 +143,30 @@
           <h2>Acesse facilmente o que realmente importa no seu comercial.</h2>
           <p>Informações essenciais para decisões mais rápidas.</p>
         </div>
-
         <div class="insights-grid">
-          <div class="insight-item">
-            <strong>Negócios em andamento</strong>
-            <span>Veja a quantidade de oportunidades ativas no seu funil de vendas.</span>
-          </div>
-          <div class="insight-item">
-            <strong>Resultados das vendas</strong>
-            <span>Acompanhe vendas realizadas e evolução dos resultados comerciais.</span>
-          </div>
-          <div class="insight-item">
-            <strong>Resultado por canal de vendas</strong>
-            <span>Compare WhatsApp, redes sociais e prospecção para entender de onde vêm seus resultados.</span>
-          </div>
-          <div class="insight-item">
-            <strong>Campanhas de captação de leads</strong>
-            <span>Organize suas ações de prospecção e acompanhe campanhas em andamento.</span>
-          </div>
-          <div class="insight-item">
-            <strong>Público-alvo definido</strong>
-            <span>Estruture segmentos e critérios para direcionar melhor sua prospecção.</span>
-          </div>
-          <div class="insight-item">
-            <strong>Relatórios de vendas</strong>
-            <span>Tenha uma visão consolidada dos principais dados da operação comercial.</span>
-          </div>
-          <div class="insight-item">
-            <strong>Alertas de retornos atrasados</strong>
-            <span>Identifique contatos vencidos e oportunidades que precisam de atenção.</span>
-          </div>
-          <div class="insight-item">
-            <strong>Base comercial centralizada</strong>
-            <span>Mantenha leads, clientes, histórico e negociações organizados em um único ambiente.</span>
-          </div>
-          <div class="insight-item">
-            <strong>Desempenho por vendedor</strong>
-            <span>Acompanhe a atuação comercial individual e os resultados da equipe.</span>
-          </div>
+          <div class="insight-item"><strong>Negócios em andamento</strong><span>Veja a quantidade de oportunidades ativas no seu funil de vendas.</span></div>
+          <div class="insight-item"><strong>Resultados das vendas</strong><span>Acompanhe vendas realizadas e evolução dos resultados comerciais.</span></div>
+          <div class="insight-item"><strong>Resultado por canal de vendas</strong><span>Compare WhatsApp, redes sociais e prospecção para entender de onde vêm seus resultados.</span></div>
+          <div class="insight-item"><strong>Campanhas de captação de leads</strong><span>Organize suas ações de prospecção e acompanhe campanhas em andamento.</span></div>
+          <div class="insight-item"><strong>Público-alvo definido</strong><span>Estruture segmentos e critérios para direcionar melhor sua prospecção.</span></div>
+          <div class="insight-item"><strong>Relatórios de vendas</strong><span>Tenha uma visão consolidada dos principais dados da operação comercial.</span></div>
+          <div class="insight-item"><strong>Alertas de retornos atrasados</strong><span>Identifique contatos vencidos e oportunidades que precisam de atenção.</span></div>
+          <div class="insight-item"><strong>Base comercial centralizada</strong><span>Mantenha leads, clientes, histórico e negociações organizados em um único ambiente.</span></div>
+          <div class="insight-item"><strong>Desempenho por vendedor</strong><span>Acompanhe a atuação comercial individual e os resultados da equipe.</span></div>
         </div>
       </div>
     </section>
-
+    <section class="trial-section" id="teste-gratis" aria-labelledby="trial-heading">
+      <div class="container"><div class="trial-card">
+        <span class="eyebrow emphasis-eyebrow">AXIVA CRM</span>
+        <h2 id="trial-heading">Teste por 30 dias grátis</h2>
+        <p class="trial-free">100% de acesso. Não é necessário nenhum pagamento.</p>
+        <p>Recursos essenciais para profissionalizar sua área comercial.</p>
+        <div class="trial-price">R$ 45 <small>/mês</small></div>
+        <span class="trial-per-user">Por usuário, após o período gratuito.</span>
+        <a class="btn btn-primary" href="/crm/contato/">Entre em Contato</a>
+      </div></div>
+    </section>
     <section class="cta">
       <div class="container cta-box">
         <div><h2>Seu comercial em um só lugar.</h2><p>Entre no AXIVA CRM e acompanhe sua operação de prospecção e vendas.</p></div>
@@ -299,7 +174,6 @@
       </div>
     </section>
   </main>
-
   <footer class="footer"><div class="container footer-inner"><span>© 2026 AXIVA CRM</span><div class="footer-links"><a href="/crm/o-que-e-crm">O que é CRM?</a><a href="/privacidade">Política de Privacidade</a><a href="/termos">Termos de Serviço</a><a href="/">Voltar para AXIVA</a></div></div></footer>
 </body>
 </html>
