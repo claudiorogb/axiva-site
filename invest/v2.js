@@ -57,7 +57,7 @@ async function loadMarket(){try{const j=await fetchJSON(MARKET_API,3);renderMark
 function setupHeroMacro(){
   const panel=document.querySelector('.hero-panel');if(!panel)return;
   panel.classList.add('macro-panel');
-  panel.innerHTML=`<div class="panel-head"><strong>Mercado hoje</strong><span class="tag">AXIVA Invest</span></div><div class="macro-grid"><div class="macro-card" data-macro="BRL=X"><span class="macro-label">Dólar comercial</span><strong class="macro-value">—</strong><span class="macro-change flat">—</span></div><div class="macro-card" data-macro="EURBRL=X"><span class="macro-label">Euro</span><strong class="macro-value">—</strong><span class="macro-change flat">—</span></div><div class="macro-card" data-macro="^BVSP"><span class="macro-label">Ibovespa</span><strong class="macro-value">—</strong><span class="macro-change flat">—</span></div><div class="macro-card" data-macro="CDI"><span class="macro-label">CDI anualizado</span><strong class="macro-value">—</strong><span class="macro-change flat">—</span></div></div><div class="macro-foot">Atualização automática</div>`;
+  panel.innerHTML=`<div class="panel-head"><strong>Mercado hoje</strong></div><div class="macro-grid"><div class="macro-card" data-macro="BRL=X"><span class="macro-label">Dólar comercial</span><strong class="macro-value">—</strong><span class="macro-change flat">—</span></div><div class="macro-card" data-macro="EURBRL=X"><span class="macro-label">Euro</span><strong class="macro-value">—</strong><span class="macro-change flat">—</span></div><div class="macro-card" data-macro="^BVSP"><span class="macro-label">Ibovespa</span><strong class="macro-value">—</strong><span class="macro-change flat">—</span></div><div class="macro-card" data-macro="CDI"><span class="macro-label">CDI anualizado</span><strong class="macro-value">—</strong><span class="macro-change flat">—</span></div></div>`;
 }
 function macroValue(item){
   const v=n(item.value);if(v==null)return '—';
@@ -72,7 +72,7 @@ function renderMacro(data){
     const card=[...document.querySelectorAll('[data-macro]')].find(el=>el.getAttribute('data-macro')===String(item.key||''));if(!card)return;
     card.querySelector('.macro-value').textContent=macroValue(item);
     const change=card.querySelector('.macro-change'),ch=n(item.change_pct),cls=ch==null||ch===0?'flat':ch>0?'up':'down',arrow=ch==null||ch===0?'':ch>0?'▲':'▼';
-    if(item.key==='CDI'){change.className='macro-change flat';change.textContent=item.value==null?'—':'Taxa diária anualizada • 252 dias úteis';return;}
+    if(item.key==='CDI'){change.className='macro-change flat';change.textContent='';return;}
     change.className='macro-change '+cls;change.textContent=ch==null?'—':`${arrow}${arrow?' ':''}${fmtPct(ch)}`;
   });
 }

@@ -5,3 +5,7 @@
 
 /* Ajustes de legibilidade nos planos e alinhamento da seta de estratégias. */
 #planos .plan:nth-child(2) .btn{white-space:nowrap;font-size:clamp(10px,.83vw,12px);letter-spacing:-.025em;padding-inline:5px;text-align:center}.strategy-steps article>div:last-child{padding-top:0}.compare-arrow svg{display:block;width:20px;height:20px;flex:none}
+
+/* Ajustes solicitados: metodologia alinhada e marcadores discretos */
+@media(min-width:1051px){#metodologia .method-grid{align-items:start}#metodologia .method-grid>div:last-child{padding-top:0}}
+#metodologia .method-title{margin:0 0 14px;line-height:1.2}#metodologia .step{grid-template-columns:28px minmax(0,1fr);gap:14px;padding:18px 0}#metodologia .step-num{width:26px;height:26px;font-size:10px;font-weight:800}#metodologia .step h3{margin-top:0}#metodologia .step p{line-height:1.6}
