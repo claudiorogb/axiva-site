@@ -1,0 +1,63 @@
+name: Atualizar textos da selecao exclusiva Invest
+on:
+  push:
+    paths:
+      - '.github/workflows/update-invest-selection-copy-20260922.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  update-selection:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Alterar apenas textos e apresentacao da selecao
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          html_path=Path('invest/private.html')
+          html=html_path.read_text(encoding='utf-8')
+          old='<header class="topbar"><div><span class="eyebrow"></span><h1 id="pageTitle">Seleção de Ações</h1></div>'
+          new='<header class="topbar"><div><span class="eyebrow"></span><h1 id="pageTitle">AÇÕES SELECIONADAS</h1></div>'
+          assert html.count(old)==1, 'Cabecalho da selecao diferente do esperado'
+          html=html.replace(old,new,1)
+          old='<div class="intro"><div><p>Até 20 empresas que melhor atendem aos critérios da metodologia AXIVA na atualização atual.</p></div><div class="legend">Fundamentos + valuation</div></div>'
+          new='''<div class="intro selection-intro"><div><p class="selection-subtitle">Conforme a metodologia de qualidade + desconto.</p><p class="selection-explanation">Segundo nossa metodologia, as empresas são selecionadas pela combinação entre qualidade dos fundamentos e desconto em relação ao preço atual.<br>Consulte a página <a href="#metodo" id="selectionMethodLink">Método</a> para entender os critérios utilizados.</p></div><div class="legend">Fundamentos + valuation</div></div>'''
+          assert html.count(old)==1, 'Introducao da selecao diferente do esperado'
+          html=html.replace(old,new,1)
+          old='      <div id="selectionTableWrap" class="table-wrap hidden"></div>\n    </section>'
+          new='''      <div id="selectionTableWrap" class="table-wrap hidden"></div>
+      <footer class="selection-disclaimer">*Este site possui caráter exclusivamente informativo e não constitui recomendação, indicação ou oferta de compra ou venda de ações. As decisões de investimento são de responsabilidade exclusiva do investidor.</footer>
+    </section>'''
+          assert html.count(old)==1, 'Final da secao de selecao diferente do esperado'
+          html=html.replace(old,new,1)
+          for old,new in [('/invest/private.css?v=6','/invest/private.css?v=7'),('/invest/private.js?v=5','/invest/private.js?v=6')]:
+            assert html.count(old)==1, f'Versao nao encontrada: {old}'
+            html=html.replace(old,new,1)
+          html_path.write_text(html,encoding='utf-8')
+          js_path=Path('invest/private.js')
+          js=js_path.read_text(encoding='utf-8')
+          old="  $('pageTitle').textContent=btn.textContent.trim()"
+          new="  $('pageTitle').textContent=btn.dataset.page==='selection'?'AÇÕES SELECIONADAS':btn.textContent.trim()"
+          assert js.count(old)==1, 'Atualizacao de titulo diferente do esperado'
+          js=js.replace(old,new,1)
+          anchor="document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click',async()=>{"
+          assert js.count(anchor)==1, 'Navegacao nao encontrada'
+          js=js.replace(anchor,"$('selectionMethodLink').addEventListener('click',e=>{e.preventDefault();document.querySelector('.nav-item[data-page=\"method\"]')?.click()})\n\n"+anchor,1)
+          js_path.write_text(js,encoding='utf-8')
+          css_path=Path('invest/private.css')
+          css=css_path.read_text(encoding='utf-8')
+          marker='/* Textos da selecao de acoes - 2026-09-22 */'
+          assert marker not in css, 'Estilo ja aplicado'
+          css+='\n'+marker+'\n#selectionPage .selection-intro{align-items:start}#selectionPage .selection-subtitle{font-size:16px;font-weight:700;color:#405a73;margin:0 0 14px}#selectionPage .selection-explanation{font-size:14px;line-height:1.65;color:#526b82;margin:0;max-width:980px}#selectionPage .selection-explanation a{color:#087f86;text-decoration:underline;font-weight:800}#selectionPage .selection-disclaimer{margin-top:18px;color:#61758b;font-size:12px;line-height:1.6;padding:0 4px 18px}\n'
+          css_path.write_text(css,encoding='utf-8')
+          assert 'AÇÕES SELECIONADAS' in html and 'selectionMethodLink' in js and 'selection-disclaimer' in html
+          print('OK: titulo, subtitulo, explicacao, link para Metodo e rodape adicionados')
+          PY
+          node --check invest/private.js
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add invest/private.html invest/private.js invest/private.css
+          git commit -m 'Atualizar textos, link de metodologia e rodape da selecao Invest'
+          git push
