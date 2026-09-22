@@ -1,0 +1,52 @@
+name: Ajustar textos e alinhamento da AXIVA Invest
+on:
+  push:
+    paths:
+      - '.github/workflows/adjust-invest-home-cleanup-20260922.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  adjust-home:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ajustar apenas a página pública Invest
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          js=Path('invest/v2.js')
+          source=js.read_text()
+          changes=[
+            ('<strong>Mercado hoje</strong><span class="tag">AXIVA Invest</span>', '<strong>Mercado hoje</strong>'),
+            ('</div></div><div class="macro-foot">Atualização automática</div>`;', '</div></div>`;'),
+            ("change.textContent=item.value==null?'—':'Taxa diária anualizada • 252 dias úteis';return;", "change.textContent='';return;"),
+          ]
+          for old,new in changes:
+            assert source.count(old)==1, f'Trecho inesperado no v2.js: {old[:55]}'
+            source=source.replace(old,new,1)
+          js.write_text(source)
+          for name in ('invest/index.html','invest/v2.html'):
+            page=Path(name)
+            html=page.read_text()
+            old='<div class="kicker">O que você encontra</div>'
+            assert html.count(old)==1, f'Título não encontrado de forma única: {name}'
+            page.write_text(html.replace(old,'',1))
+          css=Path('invest/v2-fixes.css')
+          styles=css.read_text()
+          marker='/* Ajustes solicitados: metodologia alinhada e marcadores discretos */'
+          assert marker not in styles
+          styles+='\n'+marker+'\n'
+          styles+='@media(min-width:1051px){#metodologia .method-grid{align-items:start}#metodologia .method-grid>div:last-child{padding-top:0}}\n'
+          styles+='#metodologia .method-title{margin:0 0 14px;line-height:1.2}#metodologia .step{grid-template-columns:28px minmax(0,1fr);gap:14px;padding:18px 0}#metodologia .step-num{width:26px;height:26px;font-size:10px;font-weight:800}#metodologia .step h3{margin-top:0}#metodologia .step p{line-height:1.6}\n'
+          css.write_text(styles)
+          print('OK: textos removidos, metodologia alinhada, números reduzidos')
+          PY
+          node --check invest/v2.js
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add invest/v2.js invest/index.html invest/v2.html invest/v2-fixes.css
+          git commit -m 'Remover textos do mercado e alinhar metodologia Invest'
+          git push
