@@ -1,0 +1,25 @@
+name: Concluir interface de edição do plano AXIVA Invest
+on:
+  push:
+    paths:
+      - '.github/workflows/run-invest-plan-ui-fix.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  finish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Aplicar ajuste validado e publicar
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          python3 - <<'PY'
+          from pathlib import Path
+          import subprocess, textwrap
+          workflow=Path('.github/workflows/add-invest-admin-change-plan.yml').read_text()
+          assert workflow.count('        run: |')==1
+          script=textwrap.dedent(workflow.split('        run: |',1)[1])
+          subprocess.run(['bash','-e'],input=script,text=True,check=True)
+          PY
