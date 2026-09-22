@@ -79,13 +79,14 @@ async function loadPrivateArea(){
 }
 
 async function loadSelection(){
-  selectionStatus.classList.remove('hidden');selectionStatus.textContent='Carregando Seleção de Ações...';selectionWrap.classList.add('hidden')
+  $('selectionDetail').classList.add('hidden');$('selectionPage').classList.remove('detail-open');selectionStatus.classList.remove('hidden');selectionStatus.textContent='Carregando Seleção de Ações...';selectionWrap.classList.add('hidden')
   try{const j=await callPrivate('selection');renderSelection(Array.isArray(j.data)?j.data:[])}
   catch(e){selectionStatus.textContent=e.status===403?'Sua assinatura não está ativa.':'Não foi possível carregar os dados agora.'}
 }
 function renderSelection(rows){
   if(!rows.length){selectionStatus.textContent='Nenhuma empresa disponível na seleção atual.';return}
-  const body=rows.map(r=>{const d=n(r.discount_pct),dcls=d==null?'':d>=0?'pos':'neg';return `<div class="private-row"><div>${r.position??'—'}</div><div class="ticker"><b>${esc(r.ticker)}</b><span>${esc(r.company_name||'')}</span></div><div>${money(r.current_price)}</div><div>${money(r.target_price)}</div><div class="discount ${dcls}">${pct(r.discount_pct)}</div><div>${money(r.graham_price)}</div><div>${num(r.pl)}</div><div>${num(r.pvp)}</div><div>${pct(r.roe)}</div><div><span class="quality">${r.quality_score==null?'—':Math.round(Number(r.quality_score))}</span></div></div>`}).join('')
+  window.axivaSelectionRows=rows
+  const body=rows.map((r,index)=>{const d=n(r.discount_pct),dcls=d==null?'':d>=0?'pos':'neg';return `<div class="private-row selection-clickable" data-selection-index="${index}" role="button" tabindex="0" aria-label="Ver detalhes de ${esc(r.ticker)}"><div>${r.position??'—'}</div><div class="ticker"><b>${esc(r.ticker)}</b><span>${esc(r.company_name||'')}</span></div><div>${money(r.current_price)}</div><div>${money(r.target_price)}</div><div class="discount ${dcls}">${pct(r.discount_pct)}</div><div>${money(r.graham_price)}</div><div>${num(r.pl)}</div><div>${num(r.pvp)}</div><div>${pct(r.roe)}</div><div><span class="quality">${r.quality_score==null?'—':Math.round(Number(r.quality_score))}</span></div></div>`}).join('')
   selectionWrap.innerHTML=`<div class="private-table"><div class="private-row private-head"><div>#</div><div>Empresa</div><div>Cotação</div><div>Preço-alvo</div><div>Desconto</div><div>Graham</div><div>P/L</div><div>P/VP</div><div>ROE</div><div>Qualidade</div></div>${body}</div>`
   selectionStatus.classList.add('hidden');selectionWrap.classList.remove('hidden')
 }
