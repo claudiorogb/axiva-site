@@ -148,13 +148,45 @@ async function loadAdminUsers(){
 }
 function userCard(u,type){
   const pending=type==='pending',status=u.status||'active',canDelete=String(u.email||'').toLowerCase()!==String(userEmail.textContent||'').toLowerCase()
-  return `<div class="user-row"><div><b>${esc(u.email)}</b><span>${pending?'Aguardando primeiro acesso':'Conta criada'} • ${esc(u.role||'subscriber')} • ${esc(u.plan||'—')}</span></div><div><span class="user-status ${status}">${status==='active'?'Ativo':status}</span></div><div class="user-actions"><button data-action="${status==='active'?'suspend':'activate'}" data-email="${esc(u.email)}">${status==='active'?'Suspender':'Ativar'}</button>${canDelete?`<button class="danger" data-action="delete" data-email="${esc(u.email)}">Excluir</button>`:''}</div></div>`
+  const plans=[['mensal','Mensal'],['trimestral','Trimestral'],['semestral','Semestral'],['anual','Anual']]
+  if(u.role==='admin')plans.push(['admin','Admin'])
+  const current=String(u.plan||'')
+  if(current&&!plans.some(([value])=>value===current))plans.unshift([current,current])
+  const select=`<label class="plan-editor-label">Plano <select class="plan-editor" aria-label="Plano de ${esc(u.email)}">${plans.map(([value,label])=>`<option value="${esc(value)}" ${value===current?'selected':''}>${esc(label)}</option>`).join('')}</select></label>`
+  const identity=pending?`data-kind="pending" data-email="${esc(u.email)}"`:`data-kind="registered" data-user-id="${esc(u.user_id)}"`
+  return `<div class="user-row"><div><b>${esc(u.email)}</b><span>${pending?'Aguardando primeiro acesso':'Conta criada'} • ${esc(u.role||'subscriber')} • ${esc(u.plan||'—')}</span></div><div><span class="user-status ${status}">${status==='active'?'Ativo':status}</span></div><div class="user-actions"><div class="plan-editor-group">${select}<button type="button" class="save-plan-btn" ${identity}>Salvar plano</button></div><button data-action="${status==='active'?'suspend':'activate'}" data-email="${esc(u.email)}">${status==='active'?'Suspender':'Ativar'}</button>${canDelete?`<button class="danger" data-action="delete" data-email="${esc(u.email)}">Excluir</button>`:''}</div></div>`
 }
 function renderAdminUsers(j){
   const active=Array.isArray(j.active)?j.active:[],pending=Array.isArray(j.pending)?j.pending:[]
   $('adminUsersStatus').classList.add('hidden')
   $('adminUsers').innerHTML=`<div class="user-group"><h4>Usuários ativos/cadastrados</h4>${active.map(u=>userCard(u,'active')).join('')||'<p class="muted">Nenhum usuário.</p>'}</div><div class="user-group"><h4>Aguardando primeiro acesso</h4>${pending.map(u=>userCard(u,'pending')).join('')||'<p class="muted">Nenhum acesso pendente.</p>'}</div>`
-  document.querySelectorAll('.user-actions button').forEach(btn=>btn.addEventListener('click',()=>adminAction(btn.dataset.action,btn.dataset.email)))
+  document.querySelectorAll('.user-actions button[data-action]').forEach(btn=>btn.addEventListener('click',()=>adminAction(btn.dataset.action,btn.dataset.email)))
+  document.querySelectorAll('.save-plan-btn').forEach(btn=>btn.addEventListener('click',()=>saveUserPlan(btn)))
+}
+async function saveUserPlan(btn){
+  const select=btn.closest('.plan-editor-group')?.querySelector('.plan-editor')
+  const plan=select?.value
+  if(!plan)return
+  const email=btn.dataset.email||btn.closest('.user-row')?.querySelector('b')?.textContent||''
+  const previous=btn.closest('.user-row')?.querySelector('.plan-editor')?.getAttribute('data-saved-plan')||''
+  const originalText=btn.textContent
+  btn.disabled=true
+  btn.textContent='Salvando...'
+  $('adminMessage').textContent='Atualizando plano...'
+  try{
+    const {data:{session}}=await supabase.auth.getSession()
+    if(!session?.access_token)throw new Error('Sessão expirada')
+    const response=await fetch(`${SUPABASE_URL}/functions/v1/invest-admin-update-plan`,{
+      method:'POST',
+      headers:{Authorization:`Bearer ${session.access_token}`,apikey:SUPABASE_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify(btn.dataset.kind==='pending'?{kind:'pending',email,plan}:{kind:'registered',user_id:btn.dataset.userId,plan}),
+      cache:'no-store'
+    })
+    if(!response.ok)throw new Error('Não foi possível salvar o plano')
+    $('adminMessage').textContent=`Plano de ${email} atualizado para ${plan}.`
+    await loadAdminUsers()
+  }catch(e){$('adminMessage').textContent=e.message||'Não foi possível alterar o plano.'}
+  finally{btn.disabled=false;btn.textContent=originalText}
 }
 async function adminAction(action,email){
   if(action==='delete'&&!confirm(`Excluir o acesso de ${email}? A conta será removida da área AXIVA Invest.`))return

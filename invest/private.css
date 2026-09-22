@@ -58,3 +58,6 @@
   .history-row>*:last-child{grid-column:1/-1}
   .user-actions{flex-wrap:wrap}
 }
+
+/* Edição administrativa de plano: controles adaptáveis sem alterar outras ações. */
+.plan-editor-group{display:flex;align-items:end;gap:8px;flex-wrap:wrap}.plan-editor-label{display:flex;flex-direction:column;gap:5px;font-size:11px;color:#51657a;font-weight:800}.plan-editor{min-width:112px;max-width:170px;padding:9px;border:1px solid #ccd8e3;border-radius:9px;background:#fff;color:#07182d;font:inherit}.save-plan-btn:disabled{opacity:.65;cursor:wait}.user-actions{flex-wrap:wrap;align-items:end}@media(max-width:600px){.plan-editor-group{width:100%}.plan-editor-label{flex:1}.plan-editor{width:100%;max-width:none}}
