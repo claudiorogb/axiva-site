@@ -17,33 +17,24 @@ jobs:
           from pathlib import Path
           path=Path('invest/member-content.js')
           source=path.read_text()
-          intro_old='''      <h2>Como funciona nossa seleção de Ações</h2>
-      <p>Desenvolvemos essa seleção para identificar empresas que combinam bons fundamentos financeiros com preço de mercado atrativo em relação ao preço alvo estimado por nossa metodologia.</p>
-      <p>O objetivo é evitar que uma empresa apareça bem posicionada apenas porque sua cotação está abaixo do preço estimado, quando seus fundamentos não apresentam bons números.</p>'''
-          intro_new='''      <h2>Como funciona nossa seleção de Ações</h2>
-      <div class="method-highlight">
-        <p>Desenvolvemos essa seleção para identificar empresas que combinam bons fundamentos financeiros com preço de mercado atrativo em relação ao preço alvo estimado por nossa metodologia.</p>
-        <p>O objetivo é evitar que uma empresa apareça bem posicionada apenas porque sua cotação está abaixo do preço estimado, quando seus fundamentos não apresentam bons números.</p>
-      </div>'''
-          assert source.count(intro_old)==1, 'Introducao original nao localizada'
-          source=source.replace(intro_old,intro_new,1)
+          first='<h2>Como funciona nossa seleção de Ações</h2>'
+          second='<p>Desenvolvemos essa seleção para identificar empresas que combinam bons fundamentos financeiros com preço de mercado atrativo em relação ao preço alvo estimado por nossa metodologia.</p>'
+          third='<p>O objetivo é evitar que uma empresa apareça bem posicionada apenas porque sua cotação está abaixo do preço estimado, quando seus fundamentos não apresentam bons números.</p>'
+          assert source.count(first)==1 and source.count(second)==1 and source.count(third)==1
+          source=source.replace(first+'\n      '+second+'\n      '+third,first+'\n      <div class="method-highlight">\n        '+second+'\n        '+third+'\n      </div>',1)
           old='body:has(#methodPage.active) #pageTitle {display:none}'
           new='body:has(#methodPage.active) #pageTitle, body:has(#important-infoPage.active) #pageTitle {display:none}'
-          assert source.count(old)==1, 'Regra do titulo nao localizada'
+          assert source.count(old)==1
           source=source.replace(old,new,1)
           marker='    .member-intro p {'
-          assert source.count(marker)==1, 'Estilos da introducao nao localizados'
-          new_css='''    #methodPage .method-highlight {background:#f0fdfc;border:1px solid #c6e8e5;border-radius:16px;padding:18px 22px;margin:16px 0 0;max-width:100%;box-shadow:0 4px 14px rgba(7,24,45,.03)}
-    #methodPage .method-highlight p {max-width:none;margin:0 0 12px;color:#405c70;line-height:1.75}
-    #methodPage .method-highlight p:last-child {margin-bottom:0}
-    @media(max-width:700px){#methodPage .method-highlight {padding:16px}}
-'''
-          source=source.replace(marker,new_css+marker,1)
+          assert source.count(marker)==1
+          css='#methodPage .method-highlight {background:#f0fdfc;border:1px solid #c6e8e5;border-radius:16px;padding:18px 22px;margin:16px 0 0;max-width:100%;box-shadow:0 4px 14px rgba(7,24,45,.03)}\n    #methodPage .method-highlight p {max-width:none;margin:0 0 12px;color:#405c70;line-height:1.75}\n    #methodPage .method-highlight p:last-child {margin-bottom:0}\n    @media(max-width:700px){#methodPage .method-highlight {padding:16px}}\n    '
+          source=source.replace(marker,'    '+css+marker,1)
           path.write_text(source)
           html=Path('invest/private.html')
           page=html.read_text()
           old_script='/invest/member-content.js?v=1'
-          assert page.count(old_script)==1, 'Versao do script nao localizada'
+          assert page.count(old_script)==1
           html.write_text(page.replace(old_script,'/invest/member-content.js?v=2',1))
           assert source.count('class="method-highlight"')==1
           assert 'body:has(#important-infoPage.active) #pageTitle {display:none}' in source
