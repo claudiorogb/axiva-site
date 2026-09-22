@@ -1,0 +1,59 @@
+name: Ajustes visuais e CDI da página AXIVA Invest
+on:
+  push:
+    paths:
+      - '.github/workflows/refine-invest-home-20260922.yml'
+permissions:
+  contents: write
+jobs:
+  adjust-home:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Atualizar somente página pública Invest
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          js=Path('invest/v2.js')
+          s=js.read_text()
+          old='<span class="macro-label">CDI</span>'
+          assert s.count(old)==1
+          s=s.replace(old,'<span class="macro-label">CDI anualizado</span>',1)
+          old="  if(item.unit==='% a.d.')return v.toLocaleString('pt-BR',{minimumFractionDigits:4,maximumFractionDigits:4})+'% a.d.';"
+          assert s.count(old)==1
+          new="  if(item.key==='CDI'&&item.unit==='% a.d.'){const annual=(Math.pow(1+v/100,252)-1)*100;return annual.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';}\n"+old
+          s=s.replace(old,new,1)
+          old="    change.className='macro-change '+cls;change.textContent=ch==null?'—':`${arrow}${arrow?' ':''}${fmtPct(ch)}`;"
+          assert s.count(old)==1
+          new="    if(item.key==='CDI'){change.className='macro-change flat';change.textContent=item.value==null?'—':'Taxa diária anualizada • 252 dias úteis';return;}\n"+old
+          s=s.replace(old,new,1)
+          import re
+          s,count=re.subn(r'<span class="step-badge">[123]</span>','',s)
+          assert count==3, f'Esperados três números, encontrados {count}'
+          old='<div class="compare-arrow">›</div>'
+          assert s.count(old)==1
+          s=s.replace(old,'<div class="compare-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></div>',1)
+          js.write_text(s)
+          css=Path('invest/v2-fixes.css')
+          styles=css.read_text()
+          styles+='\n/* Ajustes de legibilidade nos planos e alinhamento da seta de estratégias. */\n#planos .plan:nth-child(2) .btn{white-space:nowrap;font-size:clamp(10px,.83vw,12px);letter-spacing:-.025em;padding-inline:5px;text-align:center}.strategy-steps article>div:last-child{padding-top:0}.compare-arrow svg{display:block;width:20px;height:20px;flex:none}\n'
+          css.write_text(styles)
+          html=Path('invest/index.html')
+          page=html.read_text()
+          assert 'src="/invest/v2.js' in page
+          page,count=re.subn(r'src="/invest/v2.js(?:\?v=\d+)?"','src="/invest/v2.js?v=6"',page,count=1)
+          assert count==1
+          html.write_text(page)
+          assert 'CDI anualizado' in s and 'Math.pow(1+v/100,252)' in s
+          assert s.count('step-badge')==0
+          assert '<div class="compare-arrow" aria-hidden="true"><svg' in s
+          assert 'white-space:nowrap' in styles
+          print('Verificações dos quatro ajustes concluídas')
+          PY
+          node --check invest/v2.js
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add invest/v2.js invest/v2-fixes.css invest/index.html
+          git commit -m 'Exibir CDI anualizado e ajustar plano trimestral e estratégias'
+          git push
