@@ -1,0 +1,101 @@
+name: Ajustar area exclusiva AXIVA Invest no celular
+on:
+  push:
+    paths:
+      - .github/workflows/fix-invest-mobile-responsive.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  mobile-layout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Adaptar layout sem alterar dados ou autenticacao
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          css_path=Path('invest/private.css')
+          css=css_path.read_text()
+          marker='/* AXIVA mobile layout 2026-09-22 */'
+          mobile=r'''
+          /* AXIVA mobile layout 2026-09-22 */
+          .app-view,.main,.page,.table-wrap,.tool-card,.strategy-builder-card,.admin-layout,.admin-card{min-width:0}
+          .table-wrap{max-width:100%;-webkit-overflow-scrolling:touch}
+          .private-table,.analysis-table{width:max-content}
+          @media(max-width:700px){
+            html,body{width:100%;max-width:100%;overflow-x:hidden}
+            .app-view{display:block;width:100%;min-width:0}
+            .sidebar{position:static;min-height:0;padding:14px 12px 12px;width:100%}
+            .side-brand{padding:0 2px 12px}
+            .side-brand img{width:30px;height:30px}
+            .side-brand strong{font-size:15px}
+            .sidebar nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:12px}
+            .nav-item{min-width:0;padding:11px 9px;font-size:12px;text-align:center;line-height:1.35}
+            .side-bottom{margin-top:10px;padding:10px 2px 0;display:flex;align-items:center;justify-content:space-between;gap:10px}
+            .side-bottom span{min-width:0;font-size:11px;overflow-wrap:anywhere}
+            .side-bottom button{margin:0;flex-shrink:0}
+            .main{min-width:0;width:100%;padding:18px 12px 32px}
+            .topbar{margin-bottom:18px;gap:8px}
+            .topbar h1{font-size:24px}
+            .intro{gap:10px;margin-bottom:14px}
+            .intro h2{font-size:21px}
+            .intro p{font-size:13px;line-height:1.5}
+            .legend{white-space:normal}
+            .table-wrap{width:100%;max-width:100%;overflow:visible;background:transparent;box-shadow:none;border-radius:0}
+            .private-table,.analysis-table{width:100%;min-width:0}
+            .private-row.private-head,.analysis-row.private-head{display:none}
+            .private-row,.analysis-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;background:#071d34;border:1px solid #193d5a;border-radius:14px;margin-bottom:10px;overflow:hidden;font-size:13px}
+            .private-row>div,.analysis-row>div{min-width:0;padding:10px 12px;overflow-wrap:anywhere}
+            .private-row>div:before,.analysis-row>div:before{display:block;color:#91a9bd;font-size:10px;font-weight:800;margin-bottom:4px;text-transform:uppercase;letter-spacing:.025em}
+            .private-row>div:first-child{grid-column:1;grid-row:1;color:#91a9bd}
+            .private-row>div:first-child:before{content:'Posição'}
+            .private-row>.ticker{grid-column:2;grid-row:1}
+            .private-row>.ticker:before,.analysis-row>.ticker:before{content:'Empresa'}
+            .private-row>div:nth-child(3):before,.analysis-row>div:nth-child(2):before{content:'Cotação'}
+            .private-row>div:nth-child(4):before,.analysis-row>div:nth-child(3):before{content:'Preço-alvo'}
+            .private-row>div:nth-child(5):before,.analysis-row>div:nth-child(4):before{content:'Desconto'}
+            .private-row>div:nth-child(6):before,.analysis-row>div:nth-child(5):before{content:'Graham'}
+            .private-row>div:nth-child(7):before,.analysis-row>div:nth-child(6):before{content:'P/L'}
+            .private-row>div:nth-child(8):before,.analysis-row>div:nth-child(7):before{content:'P/VP'}
+            .private-row>div:nth-child(9):before,.analysis-row>div:nth-child(8):before{content:'ROE'}
+            .private-row>div:nth-child(10):before{content:'Qualidade'}
+            .analysis-row>div:nth-child(9):before{content:'ROIC'}
+            .analysis-row>div:nth-child(10):before{content:'DY'}
+            .analysis-row>.ticker{grid-column:1/-1}
+            .private-row .ticker b,.analysis-row .ticker b{font-size:14px}
+            .private-row .ticker span,.analysis-row .ticker span{font-size:11px;line-height:1.4;overflow-wrap:anywhere}
+            .tool-card,.strategy-card,.strategy-builder-card,.info-card,.admin-card{padding:14px}
+            .private-slider-grid,.strategy-grid,.method-grid,.admin-layout{grid-template-columns:minmax(0,1fr)}
+            .tool-actions{flex-wrap:wrap}
+            .tool-actions button{flex:1 1 140px}
+            .strategy-card-head{flex-wrap:wrap}
+            .strategy-company{grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:6px}
+            .strategy-company>*,.user-row>*{min-width:0;overflow-wrap:anywhere}
+            .history-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px}
+            .history-row>*:last-child{grid-column:1/-1}
+            .user-actions{flex-wrap:wrap}
+          }
+          '''
+          if marker not in css:
+              css_path.write_text(css+'\n'+mobile)
+          html_path=Path('invest/private.html')
+          html=html_path.read_text()
+          html=html.replace('/invest/private.css?v=3','/invest/private.css?v=4')
+          html_path.write_text(html)
+          assert marker in css_path.read_text()
+          assert '/invest/private.css?v=4' in html_path.read_text()
+          print('Responsive styles and cache version updated')
+          PY
+      - name: Publicar na branch principal
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add invest/private.css invest/private.html
+          git diff --cached --check
+          if ! git diff --cached --quiet; then
+            git commit -m 'Ajustar layout da area exclusiva AXIVA Invest para celulares'
+            git push origin main
+          fi
