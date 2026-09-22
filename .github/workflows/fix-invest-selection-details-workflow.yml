@@ -1,0 +1,28 @@
+name: Corrigir workflow de detalhes Invest
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-invest-selection-details-workflow.yml'
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Corrigir linhas do bloco de execucao
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('.github/workflows/invest-selection-details-20260922.yml')
+          lines=p.read_text().splitlines()
+          start=next(i for i,line in enumerate(lines) if line.strip()=='run: |')
+          fixed=[line if i<=start or not line.strip() or len(line)-len(line.lstrip())>=10 else '          '+line for i,line in enumerate(lines)]
+          p.write_text('\n'.join(fixed)+'\n')
+          print('Bloco YAML corrigido')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .github/workflows/invest-selection-details-20260922.yml
+          git commit -m 'Corrigir recuos no workflow de detalhes'
+          git push
