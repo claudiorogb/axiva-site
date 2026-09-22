@@ -19,7 +19,7 @@ jobs:
           styles = css.read_text()
           marker = '/* Seleção de Ações: preencher a largura até Qualidade no desktop */'
           assert marker not in styles
-          assert '.private-table{width:max-content}' in styles
+          assert '.private-table,.analysis-table{width:max-content}' in styles
           styles += '\n' + marker + '\n@media (min-width:701px){#selectionTableWrap .private-table{width:100%;min-width:1180px}#selectionTableWrap .private-row{width:100%}}\n'
           css.write_text(styles)
           html = Path('invest/private.html')
