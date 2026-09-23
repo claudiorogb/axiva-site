@@ -105,17 +105,43 @@ function resetFilters(){
   document.getElementById('results').innerHTML='<div class="empty">Ajuste seus critérios e clique em <b>Analisar</b>.</div>';
 }
 
+function publicFilterCriteria(){
+  return {
+    plMax:n(document.getElementById('plMax')?.value),
+    pvpMax:n(document.getElementById('pvpMax')?.value),
+    roeMin:n(document.getElementById('roeMin')?.value)/100,
+    roicMin:n(document.getElementById('roicMin')?.value)/100,
+    dyMin:n(document.getElementById('dyMin')?.value)/100
+  };
+}
+function publicRowMeetsFilters(r,c){
+  const pl=n(r.pl),pvp=n(r.pvp),roe=n(r.roe),roic=n(r.roic),dy=n(r.dividend_yield);
+  return pl!=null&&pl<=c.plMax&&pvp!=null&&pvp<=c.pvpMax&&roe!=null&&roe>=c.roeMin&&roic!=null&&roic>=c.roicMin&&dy!=null&&dy>=c.dyMin;
+}
 async function buscar(){
   const panel=document.getElementById('filterPanel'),out=document.getElementById('results');
   panel.classList.add('loading');out.innerHTML='<div class="empty">Analisando empresas...</div>';
-  const q=new URLSearchParams({limit:'25'}),ticker=document.getElementById('ticker').value.trim();
-  if(ticker)q.set('ticker',ticker);
-  q.set('pl_max',document.getElementById('plMax').value);
-  q.set('pvp_max',document.getElementById('pvpMax').value);
-  q.set('roe_min',document.getElementById('roeMin').value);
-  q.set('roic_min',document.getElementById('roicMin').value);
-  q.set('dy_min',document.getElementById('dyMin').value);
-  try{const j=await fetchJSON(SEARCH_API+'?'+q.toString(),4);renderResults(Array.isArray(j.data)?j.data:[]);}catch(e){console.error('AXIVA search error',e);out.innerHTML='<div class="empty"><b>A consulta não pôde ser concluída.</b><br>Tente novamente em alguns segundos.</div>';}finally{panel.classList.remove('loading');}
+  const ticker=document.getElementById('ticker').value.trim().toUpperCase(),criteria=publicFilterCriteria();
+  const q=new URLSearchParams({limit:'25'});
+  if(ticker){
+    q.set('ticker',ticker);
+  }else{
+    q.set('pl_max',document.getElementById('plMax').value);
+    q.set('pvp_max',document.getElementById('pvpMax').value);
+    q.set('roe_min',document.getElementById('roeMin').value);
+    q.set('roic_min',document.getElementById('roicMin').value);
+    q.set('dy_min',document.getElementById('dyMin').value);
+  }
+  try{
+    const j=await fetchJSON(SEARCH_API+'?'+q.toString(),4);
+    let rows=Array.isArray(j.data)?j.data:[];
+    if(ticker&&rows.length){
+      const exact=rows.find(r=>String(r.ticker||'').toUpperCase()===ticker);
+      if(exact)rows=[exact];
+      if(rows.some(r=>!publicRowMeetsFilters(r,criteria)))alert('essa empresa não atende aos critérios do filtro aplicado');
+    }
+    renderResults(rows);
+  }catch(e){console.error('AXIVA search error',e);out.innerHTML='<div class="empty"><b>A consulta não pôde ser concluída.</b><br>Tente novamente em alguns segundos.</div>';}finally{panel.classList.remove('loading');}
 }
 
 function renderResults(rows){
