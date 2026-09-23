@@ -104,13 +104,21 @@ async function loadAnalysisData(){
   try{const j=await callPrivate('analysis');analysisRows=Array.isArray(j.data)?j.data:[];$('analysisStatus').textContent=`${analysisRows.length} empresas disponíveis para análise.`}
   catch(e){$('analysisStatus').textContent='Não foi possível carregar a base fundamentalista.'}
 }
+function privateRowMeetsFilters(r,c){
+  const pl=n(r.pl),pvp=n(r.pvp),roe=n(r.roe),roic=n(r.roic),dy=n(r.dividend_yield)
+  return pl!=null&&pl<=c.plMax&&pvp!=null&&pvp<=c.pvpMax&&roe!=null&&roe>=c.roeMin&&roic!=null&&roic>=c.roicMin&&dy!=null&&dy>=c.dyMin
+}
 function applyPrivateFilters(){
-  const ticker=$('privateTicker').value.trim().toUpperCase(),plMax=n($('pPl').value),pvpMax=n($('pPvp').value),roeMin=n($('pRoe').value)/100,roicMin=n($('pRoic').value)/100,dyMin=n($('pDy').value)/100
-  const rows=analysisRows.filter(r=>{
-    const match=!ticker||String(r.ticker||'').toUpperCase().includes(ticker)||String(r.company_name||'').toUpperCase().includes(ticker)
-    const pl=n(r.pl),pvp=n(r.pvp),roe=n(r.roe),roic=n(r.roic),dy=n(r.dividend_yield)
-    return match&&pl!=null&&pl<=plMax&&pvp!=null&&pvp<=pvpMax&&roe!=null&&roe>=roeMin&&roic!=null&&roic>=roicMin&&dy!=null&&dy>=dyMin
-  }).slice(0,50)
+  const ticker=$('privateTicker').value.trim().toUpperCase()
+  const criteria={plMax:n($('pPl').value),pvpMax:n($('pPvp').value),roeMin:n($('pRoe').value)/100,roicMin:n($('pRoic').value)/100,dyMin:n($('pDy').value)/100}
+  let rows
+  if(ticker){
+    const exact=analysisRows.filter(r=>String(r.ticker||'').toUpperCase()===ticker)
+    rows=(exact.length?exact:analysisRows.filter(r=>String(r.ticker||'').toUpperCase().includes(ticker)||String(r.company_name||'').toUpperCase().includes(ticker))).slice(0,50)
+    if(rows.length&&rows.some(r=>!privateRowMeetsFilters(r,criteria)))alert('essa empresa não atende aos critérios do filtro aplicado')
+  }else{
+    rows=analysisRows.filter(r=>privateRowMeetsFilters(r,criteria)).slice(0,50)
+  }
   renderAnalysis(rows)
 }
 function renderAnalysis(rows){
