@@ -326,8 +326,7 @@ function sectorPanel(r){
     :''
   return '<div class="micro-note">Setor: <b>'+esc(r.sector||'—')+'</b> • '+s.peers.length+' empresas de referência. Cada emissor entra uma única vez.</div><div class="comparison-list">'+items.map(([label,val,med,kind,isPct,stats])=>{
     const [rel,cls]=relativeText(val,med,kind)
-    const range=stats?.count?'faixa '+(isPct?pct(stats.min):num(stats.min))+' a '+(isPct?pct(stats.max):num(stats.max)):'dados insuficientes'
-    return '<div class="comparison-row"><b>'+label+'</b><span>Empresa '+(isPct?pct(val):num(val))+'</span><span>Mediana do setor '+(isPct?pct(med):num(med))+'</span><strong class="'+cls+'">'+rel+'</strong><small>'+range+'</small></div>'
+    return '<div class="comparison-row"><b>'+label+'</b><span>Empresa '+(isPct?pct(val):num(val))+'</span><span>Mediana do setor '+(isPct?pct(med):num(med))+'</span><strong class="'+cls+'">'+rel+'</strong></div>'
   }).join('')+'</div>'+dyNote
 }
 function autoSummary(r){
