@@ -638,19 +638,6 @@ function renderOverviewFollow(){
   }
 }
 
-function simulate(){
-  const r=resolveRow($('simTicker').value),price=n($('simPrice').value),ws=$('simWorkspace')
-  if(!r||price==null||price<=0){ws.innerHTML='<div class="status">Informe uma empresa válida e um preço hipotético maior que zero.</div>';return}
-  const lpa=n(r.lpa),vpa=n(r.vpa),current=n(r.current_price),dy=n(r.dividend_yield)
-  const dividendCash=current!=null&&dy!=null?current*dy:null
-  const simPL=lpa!=null&&lpa>0?price/lpa:null,simPVP=vpa!=null&&vpa>0?price/vpa:null,simDY=dividendCash!=null?dividendCash/price:null
-  const marginTarget=n(r.target_price)>0?(n(r.target_price)-price)/n(r.target_price):null
-  const marginGraham=n(r.graham_price)>0?(n(r.graham_price)-price)/n(r.graham_price):null
-  const item=(label,value,sub)=>'<div class="sim-result"><span>'+label+'</span><strong>'+value+'</strong><small>'+sub+'</small></div>'
-  ws.innerHTML='<div class="sim-result-grid">'+item('Preço simulado',money(price),'atual '+money(current))+item('P/L simulado',num(simPL),'atual '+num(r.pl))+item('P/VP simulado',num(simPVP),'atual '+num(r.pvp))+item('DY estimado',pct(simDY),'mantendo proventos implícitos atuais')+item('Margem p/ preço-alvo',pct(marginTarget),'referência AXIVA')+'</div><div class="suite-card" style="margin-top:10px"><div class="comparison-list"><div class="comparison-row"><b>Preço-alvo</b><span>'+money(r.target_price)+'</span><span>Preço hipotético '+money(price)+'</span><strong>'+pct(marginTarget)+'</strong></div><div class="comparison-row"><b>Graham</b><span>'+money(r.graham_price)+'</span><span>Preço hipotético '+money(price)+'</span><strong>'+pct(marginGraham)+'</strong></div></div><div class="micro-note">Simulação estática: LPA, VPA e proventos implícitos são mantidos constantes. Alterações futuras nos fundamentos mudam os resultados.</div></div>'
-}
-$('simRunBtn')?.addEventListener('click',simulate)
-$('simTicker')?.addEventListener('change',()=>{const r=resolveRow($('simTicker').value);if(r&&n(r.current_price)!=null)$('simPrice').value=Number(r.current_price).toFixed(2)})
 
 function setRows(data){
   rows=Array.isArray(data)?data:[]
