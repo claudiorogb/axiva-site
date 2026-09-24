@@ -61,7 +61,7 @@ function setupHeroMacro(){
 }
 function macroValue(item){
   const v=n(item.value);if(v==null)return '—';
-  if(item.unit==='BRL')return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:2,maximumFractionDigits:2});
+  if(item.unit==='BRL')return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:3,maximumFractionDigits:3});
   if(item.unit==='PTS')return v.toLocaleString('pt-BR',{maximumFractionDigits:0})+' pts';
   if(item.key==='CDI'&&item.unit==='% a.d.'){const annual=(Math.pow(1+v/100,252)-1)*100;return annual.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';}
   if(item.unit==='% a.d.')return v.toLocaleString('pt-BR',{minimumFractionDigits:4,maximumFractionDigits:4})+'% a.d.';
