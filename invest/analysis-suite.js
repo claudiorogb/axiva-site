@@ -473,7 +473,21 @@ async function renderCompany(r){
     '<div class="insight-grid single"><article class="insight-card"><h3>Empresa x próprio histórico</h3>'+historyPanel(data)+'</article></div>'
   $('companyStatus').classList.add('hidden')
   $('companyAddWatchInline')?.addEventListener('click',()=>addWatch(data.ticker))
-  $('companyExportInline')?.addEventListener('click',()=>csvDownload('axiva-'+data.ticker+'-'+today()+'.csv',['Indicador','Valor'],[['Ticker',data.ticker],['Empresa',data.company_name],['Preço',data.current_price],['Preço-alvo',data.target_price],['Graham',data.graham_price],['Desconto',data.discount_pct],['Qualidade',data.quality_score],['P/L',data.pl],['P/VP',data.pvp],['DY',data.dividend_yield],['ROE',data.roe],['ROIC',data.roic],['Setor',data.sector]]))
+  $('companyExportInline')?.addEventListener('click',()=>csvDownload('axiva-'+data.ticker+'-'+today()+'.csv',['Indicador','Valor'],[
+    ['Ticker',data.ticker],
+    ['Empresa',data.company_name],
+    ['Preço',money(data.current_price)],
+    ['Preço-alvo',money(data.target_price)],
+    ['Graham',money(data.graham_price)],
+    ['Desconto',pct(data.discount_pct)],
+    ['Qualidade',n(data.quality_score)==null?'—':num(data.quality_score,0)+'/100'],
+    ['P/L',num(data.pl)],
+    ['P/VP',num(data.pvp)],
+    ['DY',pct(data.dividend_yield)],
+    ['ROE',pct(data.roe)],
+    ['ROIC',pct(data.roic)],
+    ['Setor',data.sector]
+  ]))
 }
 function openCompany(ticker){
   const r=resolveRow(ticker);if(!r)return
