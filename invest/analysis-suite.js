@@ -343,15 +343,15 @@ function qualityBreakdown(r){
   const cls=n(r.methodology_class),score=n(r.quality_score)
   if(cls==null||score==null)return '<div class="limited-data">A nota de Qualidade ainda não está disponível para este ativo porque o valuation/histórico necessário não foi concluído.</div>'
   const lines=[]
-  const addGate=(label,pass,detail)=>lines.push('<div class="quality-line '+(pass?'pass':'fail')+'"><span>'+esc(label)+' <small>'+esc(detail)+'</small></span><b>'+(pass?'Atende':'Não atende')+'</b></div>')
+  const addGate=(label,pass)=>lines.push('<div class="quality-line '+(pass?'pass':'fail')+'"><span>'+esc(label)+'</span><b>'+(pass?'Atende':'Não atende')+'</b></div>')
   const pl=n(r.pl),eq=n(r.equity),roe=n(r.roe),roic=n(r.roic),liq=n(r.liquidity_2m),growth=n(r.revenue_growth_5y),ebit=n(r.ebit_margin),net=n(r.net_margin),debt=n(r.net_debt_to_equity),cr=n(r.current_ratio)
-  addGate('P/L positivo',pl!=null&&pl>0,num(pl))
-  addGate('Patrimônio positivo',eq!=null&&eq>0,money(eq))
-  addGate('ROE acima de 10%',roe!=null&&roe>.10,pct(roe))
-  if(cls!==1)addGate('ROIC acima de 10%',roic!=null&&roic>.10,pct(roic))
-  addGate('Liquidez média ≥ R$ 300 mil',liq!=null&&liq>=300000,money(liq))
-  addGate('Crescimento de receita 5a positivo',growth!=null&&growth>0,pct(growth))
-  const gatesPass=(pl||0)>0&&(eq||0)>0&&(roe||0)>.10&&(liq||0)>=300000&&(growth||0)>0&&(cls===1||(roic||0)>.10)
+  addGate('P/L positivo',pl!=null&&pl>0)
+  addGate('Patrimônio positivo',eq!=null&&eq>0)
+  addGate('ROE acima de 10%',roe!=null&&roe>.10)
+  if(cls!==1)addGate('ROIC acima de 10%',roic!=null&&roic>.10)
+  addGate('Liquidez média ≥ R$ 300 milhões',liq!=null&&liq>=300000000)
+  addGate('Crescimento de receita 5a positivo',growth!=null&&growth>0)
+  const gatesPass=(pl||0)>0&&(eq||0)>0&&(roe||0)>.10&&(liq||0)>=300000000&&(growth||0)>0&&(cls===1||(roic||0)>.10)
   if(!gatesPass)return lines.join('')+'<div class="quality-total"><span>Nota final</span><strong>'+num(score,0)+'/100</strong></div><div class="micro-note">Uma trava mínima não foi atendida; pela metodologia atual, a nota é zerada.</div>'
   const contrib=[]
   const push=(name,points)=>contrib.push('<div class="quality-line"><span>'+esc(name)+'</span><b>+'+points+' pts</b></div>')
@@ -370,6 +370,21 @@ function qualityBreakdown(r){
   }
   return lines.join('')+'<div class="micro-note">Travas mínimas atendidas. Pontos que formam a nota:</div>'+contrib.join('')+'<div class="quality-total"><span>Nota final</span><strong>'+num(score,0)+'/100</strong></div>'
 }
+function companyFundamentalsPanel(r){
+  const items=[
+    ['ROE',pct(r.roe)],
+    ['ROIC',pct(r.roic)],
+    ['Margem líquida',pct(r.net_margin)],
+    ['P/L',num(r.pl)],
+    ['P/VP',num(r.pvp)],
+    ['DY',pct(r.dividend_yield)],
+    ['Dív. líquida / EBITDA',num(r.net_debt_to_ebitda)],
+    ['Dív. líquida / patrimônio',num(r.net_debt_to_equity)],
+    ['Cresc. Rec. 5 anos',pct(r.revenue_growth_5y)]
+  ]
+  return '<div class="fundamentals-grid">'+items.map(([label,value])=>'<div class="fundamental-item"><span>'+esc(label)+'</span><strong>'+value+'</strong></div>').join('')+'</div>'
+}
+
 function sectorStats(r){
   const peers=rows.filter(x=>x.is_reference_ticker===true&&x.sector&&x.sector===r.sector)
   const calc=(key,positiveOnly=false)=>{
@@ -476,7 +491,8 @@ async function renderCompany(r){
       metric('Preço Graham',money(data.graham_price),'referência de Graham','Estimativa de valor baseada na fórmula de Benjamin Graham quando LPA e VPA válidos estão disponíveis.')+
     '</div>'+
     '<div class="insight-grid"><article class="insight-card"><h3>Resumo</h3><p class="auto-summary">'+esc(autoSummary(data))+'</p><div class="result-action-bar"><button class="mini-btn secondary" id="companyExportInline">Exportar análise</button><button class="mini-btn secondary" id="companyAddWatchInline">Adicionar à minha lista</button></div></article><article class="insight-card"><h3>Margem de segurança</h3>'+safetyPanel(data)+'</article></div>'+
-    '<div class="insight-grid"><article class="insight-card"><h3>Empresa x setor</h3>'+sectorPanel(data)+'</article><article class="insight-card"><h3>Qualidade: como a nota foi formada</h3><div class="quality-breakdown">'+qualityBreakdown(data)+'</div></article></div>'+
+    '<div class="insight-grid"><article class="insight-card"><h3>Fundamentos da empresa</h3>'+companyFundamentalsPanel(data)+'</article><article class="insight-card"><h3>Qualidade: como a nota foi formada</h3><div class="quality-breakdown">'+qualityBreakdown(data)+'</div></article></div>'+
+    '<div class="insight-grid single"><article class="insight-card"><h3>Empresa x setor</h3>'+sectorPanel(data)+'</article></div>'+
     '<div class="insight-grid single"><article class="insight-card"><h3>Empresa x próprio histórico</h3>'+historyPanel(data)+'</article></div>'
   $('companyStatus').classList.add('hidden')
   $('companyAddWatchInline')?.addEventListener('click',()=>addWatch(data.ticker))
