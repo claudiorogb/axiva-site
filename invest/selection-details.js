@@ -27,6 +27,8 @@ function openDetail(index){
   });
   detail.querySelector('.detail-important-link').addEventListener('click',()=>document.querySelector('.nav-item[data-page="important-info"]')?.click());
   detail.querySelector('.detail-analyze').addEventListener('click',()=>{
+    window.axivaCompanyOrigin='selection';
+    document.getElementById('companyBackBtn')?.classList.remove('hidden');
     const nav=document.querySelector('.nav-item[data-page="company"]');
     nav?.click();
     const input=document.getElementById('companyTicker');
