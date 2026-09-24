@@ -4,6 +4,7 @@ const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const money=v=>n(v)==null?'—':Number(v).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})
 const num=(v,d=2)=>n(v)==null?'—':Number(v).toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d})
 const pct=v=>n(v)==null?'—':(Number(v)*100).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1})+'%'
+const fraction=v=>{const x=n(v);return x==null?null:x/100}
 const signPct=v=>n(v)==null?'—':(Number(v)*100).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1,signDisplay:'always'})+' p.p.'
 const median=values=>{const a=values.map(n).filter(v=>v!=null).sort((a,b)=>a-b);if(!a.length)return null;const m=Math.floor(a.length/2);return a.length%2?a[m]:(a[m-1]+a[m])/2}
 const today=()=>new Date().toISOString().slice(0,10)
@@ -74,16 +75,16 @@ function filterState(){
     sector:$('advSector')?.value||'',
     max_pl:n($('pPl')?.value),
     max_pvp:n($('pPvp')?.value),
-    min_roe:n($('pRoe')?.value)/100,
-    min_roic:n($('pRoic')?.value)/100,
-    min_dy:n($('pDy')?.value)/100,
+    min_roe:fraction($('pRoe')?.value),
+    min_roic:fraction($('pRoic')?.value),
+    min_dy:fraction($('pDy')?.value),
     min_quality:n($('advQuality')?.value),
-    min_discount:n($('advDiscount')?.value)/100,
-    min_revenue_growth_5y:n($('advGrowth')?.value)/100,
+    min_discount:fraction($('advDiscount')?.value),
+    min_revenue_growth_5y:fraction($('advGrowth')?.value),
     max_net_debt_to_equity:n($('advDebt')?.value),
     max_price:n($('advPrice')?.value),
-    min_ebit_margin:n($('advEbit')?.value)/100,
-    min_net_margin:n($('advNet')?.value)/100,
+    min_ebit_margin:fraction($('advEbit')?.value),
+    min_net_margin:fraction($('advNet')?.value),
     min_current_ratio:n($('advCurrentRatio')?.value)
   }
 }
