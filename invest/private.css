@@ -216,3 +216,19 @@ button,input,select{font-family:inherit}
   #analysisPage .filter-top-row input,#analysisPage .filter-top-row select{height:33px}
   #analysisPage .ticker-search{max-width:none}
 }
+
+
+/* Lista de alertas - acompanhamento */
+#alertsContent{margin-top:12px;display:grid;gap:8px}
+.alert-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--ax-line);border-radius:10px;background:#fff}
+.alert-row>div:first-child{min-width:0}
+.alert-row>div:first-child b{display:block;color:#071d34;font-size:12px}
+.alert-row>div:first-child span{display:block;color:#65798d;font-size:10px;margin-top:3px}
+.alert-status{font-size:10px;font-weight:850;padding:5px 8px;border-radius:999px;white-space:nowrap}
+.alert-status.wait{background:#eef4f8;color:#536d83}
+.alert-status.hit{background:#dff8f4;color:#007e76}
+.alert-status.off{background:#f2f3f5;color:#777}
+@media(max-width:700px){
+  .alert-row{grid-template-columns:1fr auto}
+  .alert-row .compact-actions{grid-column:1/-1}
+}
