@@ -137,24 +137,6 @@ function resetPrivateFilters(){
   $('privateTicker').value='';const vals={pPl:15,pPvp:3,pRoe:10,pRoic:10,pDy:0};Object.entries(vals).forEach(([id,v])=>{const el=$(id);el.value=v;el.dispatchEvent(new Event('input'))});$('analysisResults').classList.add('hidden');$('analysisStatus').textContent=`${analysisRows.length} empresas disponíveis para análise.`
 }
 
-async function loadStrategies(){
-  $('strategiesStatus').classList.remove('hidden');$('strategiesContent').classList.add('hidden')
-  try{const j=await callPrivate('strategies');renderStrategies(j);strategiesLoaded=true}
-  catch(e){$('strategiesStatus').textContent='Não foi possível carregar as estratégias.'}
-}
-function criteriaText(s){
-  const parts=[]
-  if(s.max_pl!=null)parts.push(`P/L ≤ ${num(s.max_pl)}`);if(s.max_pvp!=null)parts.push(`P/VP ≤ ${num(s.max_pvp)}`);if(s.min_roe!=null)parts.push(`ROE ≥ ${pct(s.min_roe)}`);if(s.min_roic!=null)parts.push(`ROIC ≥ ${pct(s.min_roic)}`);if(s.min_dy!=null)parts.push(`DY ≥ ${pct(s.min_dy)}`);if(s.min_revenue_growth_5y!=null)parts.push(`Cresc. receita ≥ ${pct(s.min_revenue_growth_5y)}`)
-  return parts.length?parts.join(' • '):'Critérios relativos ao grupo comparável.'
-}
-function renderStrategies(j){
-  const defs=Array.isArray(j.strategies)?j.strategies:[],results=Array.isArray(j.results)?j.results:[],history=Array.isArray(j.history)?j.history:[]
-  const cards=defs.map(s=>{const members=results.filter(r=>r.strategy_id===s.strategy_id);const rows=members.slice(0,30).map(r=>`<div class="strategy-company"><b>${esc(r.ticker)}</b><span>${esc(r.company_name||'')}</span><em>${num(r.pl)} P/L</em><em>${pct(r.roe)} ROE</em><em>${pct(r.dividend_yield)} DY</em></div>`).join('');return `<article class="strategy-card"><div class="strategy-card-head"><div><span>Versão ${s.current_version}</span><h3>${esc(s.name)}</h3></div><strong>${members.length} empresas</strong></div><p class="criteria">${criteriaText(s)}</p><div class="strategy-companies">${rows||'<div class="empty-mini">Nenhuma empresa atende aos critérios nesta atualização.</div>'}</div></article>`}).join('')
-  const recent=history.slice(0,20).map(h=>`<div class="history-row"><span>${new Date(h.captured_at).toLocaleDateString('pt-BR')}</span><b>${esc(h.ticker)}</b><span>${esc(h.status|| (h.present?'Presente':'Fora'))}</span></div>`).join('')
-  $('strategiesContent').innerHTML=`<div class="strategy-grid">${cards}</div><div class="history-card"><h3>Histórico recente</h3>${recent||'<p>Sem movimentações registradas.</p>'}</div>`
-  $('strategiesStatus').classList.add('hidden');$('strategiesContent').classList.remove('hidden')
-}
-
 async function loadAdminUsers(){
   if(currentRole!=='admin')return
   $('adminUsersStatus').classList.remove('hidden');$('adminUsersStatus').textContent='Carregando usuários...';$('adminUsers').innerHTML=''
@@ -246,7 +228,6 @@ document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click'
   const pageTitle=pageTitles[btn.dataset.page]
   $('pageTitle').textContent=pageTitle!==undefined?pageTitle:btn.textContent.trim()
   if(btn.dataset.page==='admin')await loadAdminUsers()
-  if(btn.dataset.page==='strategies'&&!strategiesLoaded)await loadStrategies()
 }))
 
 const {data:{session}}=await supabase.auth.getSession()
