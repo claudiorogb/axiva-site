@@ -304,10 +304,13 @@ function qualityBreakdown(r){
   return lines.join('')+'<div class="micro-note">Travas mínimas atendidas. Pontos que formam a nota:</div>'+contrib.join('')+'<div class="quality-total"><span>Nota final</span><strong>'+num(score,0)+'/100</strong></div>'
 }
 function sectorPanel(r){
-  const peers=rows.filter(x=>x.sector&&x.sector===r.sector)
-  const metrics=[['P/L','pl',false],['P/VP','pvp',false],['DY','dividend_yield',true],['ROE','roe',true],['ROIC','roic',true]]
-  return '<div class="micro-note">'+peers.length+' ativos negociáveis no setor <b>'+esc(r.sector||'—')+'</b>.</div><div class="comparison-list">'+metrics.map(([label,key,isPct])=>{
-    const m=median(peers.map(x=>x[key]));return '<div class="comparison-row"><b>'+label+'</b><span>Mediana do setor</span><strong>'+(isPct?pct(m):num(m))+'</strong><span>faixa '+(isPct?pct(Math.min(...peers.map(x=>n(x[key])).filter(v=>v!=null))):num(Math.min(...peers.map(x=>n(x[key])).filter(v=>v!=null))))+' a '+(isPct?pct(Math.max(...peers.map(x=>n(x[key])).filter(v=>v!=null))):num(Math.max(...peers.map(x=>n(x[key])).filter(v=>v!=null))))+'</span></div>'
+  const peers=rows.filter(x=>x.is_reference_ticker===true&&x.sector&&x.sector===r.sector)
+  const metrics=[['P/L','pl',false,true],['P/VP','pvp',false,true],['DY','dividend_yield',true,false],['ROE','roe',true,false],['ROIC','roic',true,false]]
+  return '<div class="micro-note">'+peers.length+' empresas de referência no setor <b>'+esc(r.sector||'—')+'</b>. Cada emissor entra uma única vez.</div><div class="comparison-list">'+metrics.map(([label,key,isPct,positiveOnly])=>{
+    const values=peers.map(x=>n(x[key])).filter(v=>v!=null&&(!positiveOnly||v>0))
+    if(!values.length)return '<div class="comparison-row"><b>'+label+'</b><span>Mediana do setor</span><strong>—</strong><span>dados insuficientes</span></div>'
+    const m=median(values),lo=Math.min(...values),hi=Math.max(...values)
+    return '<div class="comparison-row"><b>'+label+'</b><span>Mediana do setor</span><strong>'+(isPct?pct(m):num(m))+'</strong><span>faixa '+(isPct?pct(lo):num(lo))+' a '+(isPct?pct(hi):num(hi))+'</span></div>'
   }).join('')+'</div>'
 }
 function autoSummary(r){
