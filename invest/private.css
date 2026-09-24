@@ -293,3 +293,11 @@ button,input,select{font-family:inherit}
 
 /* Aviso discreto da Página Inicial */
 .overview-note{margin-top:20px;padding-top:10px;border-top:1px solid #dfe7ee;color:#7a8a99;font-size:10px;line-height:1.5;text-align:right}
+
+
+/* Mais filtros abaixo de Empresa / ticker */
+.filter-ticker-stack{display:flex;flex-direction:column;gap:8px;max-width:none}
+.filter-ticker-stack>label{font-size:10px;font-weight:850;color:#51657a;text-transform:uppercase}
+.filter-ticker-stack>label input{display:block;width:100%;margin-top:6px;text-transform:none}
+.advanced-filter-under-ticker{width:max-content;min-width:118px;padding:0 10px;margin:0}
+.advanced-filter-under-ticker summary{padding:8px 0}
