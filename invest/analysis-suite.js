@@ -402,7 +402,7 @@ async function renderCompany(r){
   const sector=sectorStats(data)
   const metric=(label,val,sub,tip='')=>'<div class="metric-mini"><span>'+label+(tip?' <span class="help-bubble tiny" data-tip="'+esc(tip)+'" tabindex="0">?</span>':'')+'</span><strong>'+val+'</strong><small>'+sub+'</small></div>'
   ws.innerHTML=
-    '<div class="company-head-card"><div><span class="eyebrow">'+esc(data.ticker)+'</span><h2>'+esc(data.company_name||data.ticker)+'</h2><p>'+esc(data.sector||'Setor não informado')+' • '+esc(data.subsector||'')+' • '+esc(data.segment||'')+'</p></div><div class="company-price"><strong>'+money(data.current_price)+'</strong><span>Cotação • '+(data.price_quoted_at?new Date(data.price_quoted_at).toLocaleString('pt-BR'):'data indisponível')+'</span></div></div>'+
+    '<div class="company-head-card"><div><span class="eyebrow">'+esc(data.ticker)+'</span><h2>'+esc(data.company_name||data.ticker)+'</h2><p>Setor: '+esc(data.sector||'Não informado')+'</p></div><div class="company-price"><strong>'+money(data.current_price)+'</strong><span>Cotação • '+(data.price_quoted_at?new Date(data.price_quoted_at).toLocaleString('pt-BR'):'data indisponível')+'</span></div></div>'+
     '<div class="metric-cards">'+
       metric('Preço-alvo',money(data.target_price),'AXIVA', 'Referência calculada por múltiplos históricos quando os dados necessários estão disponíveis.')+
       metric('Desconto / ágio',pct(data.discount_pct),n(data.discount_pct)>=0?'abaixo do preço-alvo':'acima do preço-alvo')+
