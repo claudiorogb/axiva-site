@@ -228,9 +228,9 @@ $('firstAccessBtn').addEventListener('click',async()=>{
 
 $('forgotBtn').addEventListener('click',async()=>{const email=emailInput.value.trim();if(!email){loginMessage.textContent='Informe seu e-mail para solicitar a redefinição da senha.';return}const {error}=await supabase.auth.resetPasswordForEmail(email,{redirectTo:`${location.origin}/invest/private`});loginMessage.textContent=error?'Não foi possível solicitar a redefinição agora.':'Se o e-mail estiver cadastrado, você receberá as instruções para redefinir sua senha.'})
 $('logoutBtn').addEventListener('click',async()=>{await supabase.auth.signOut();showLogin()})
-$('privateAnalyzeBtn').addEventListener('click',applyPrivateFilters)
-$('privateResetBtn').addEventListener('click',resetPrivateFilters)
-$('privateTicker').addEventListener('keydown',e=>{if(e.key==='Enter')applyPrivateFilters()})
+$('privateAnalyzeBtn').addEventListener('click',()=>window.axivaSuiteApplyFilters?window.axivaSuiteApplyFilters():applyPrivateFilters())
+$('privateResetBtn').addEventListener('click',()=>window.axivaSuiteResetFilters?window.axivaSuiteResetFilters():resetPrivateFilters())
+$('privateTicker').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();window.axivaSuiteApplyFilters?window.axivaSuiteApplyFilters():applyPrivateFilters()}})
 $('refreshUsersBtn').addEventListener('click',loadAdminUsers)
 $('adminUserForm').addEventListener('submit',async e=>{e.preventDefault();const email=$('adminEmail').value.trim().toLowerCase(),role=$('adminRole').value,plan=$('adminPlan').value,ends=$('adminEnds').value;$('adminMessage').textContent='Liberando acesso...';try{await callPrivate('admin-users',{method:'POST',body:{action:'add',email,role,plan,ends_at:ends?`${ends}T23:59:59`:null}});$('adminMessage').textContent='Acesso liberado. O usuário já pode criar o primeiro acesso com este e-mail.';$('adminUserForm').reset();await loadAdminUsers()}catch(e){$('adminMessage').textContent='Não foi possível liberar o acesso.'}})
 
