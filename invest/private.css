@@ -200,3 +200,19 @@ button,input,select{font-family:inherit}
   .discovery-pager{gap:6px;padding-top:14px}
   .discovery-pager button{padding:7px 9px;font-size:11px}
 }
+
+
+/* Ajustes Descobrir: tabela e filtros em uma linha 2026-09-24 */
+@media(min-width:951px){
+  #analysisResults .analysis-table{width:100%;min-width:1180px}
+  #analysisResults .analysis-row{width:100%}
+  #analysisPage .analysis-controls{grid-template-columns:minmax(0,1fr) auto;column-gap:10px;row-gap:12px;align-items:end}
+  #analysisPage .filter-top-row{grid-column:1;grid-row:1;grid-template-columns:1.15fr 1fr .78fr .78fr;gap:8px}
+  #analysisPage .advanced-filter-box{grid-column:2;grid-row:1;width:122px;min-width:122px;padding:0 10px;align-self:end}
+  #analysisPage .advanced-filter-box summary{white-space:nowrap;padding:9px 0}
+  #analysisPage .advanced-filter-box[open]{grid-column:1/-1;grid-row:2;width:auto;min-width:0}
+  #analysisPage .tool-actions{grid-column:1/-1}
+  #analysisPage .analysis-controls>.compact-actions{grid-row:auto}
+  #analysisPage .filter-top-row input,#analysisPage .filter-top-row select{height:33px}
+  #analysisPage .ticker-search{max-width:none}
+}
