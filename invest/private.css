@@ -289,3 +289,7 @@ button,input,select{font-family:inherit}
   .private-header-links{width:100%;justify-content:flex-start;gap:8px 14px}
   .private-header-links a,.private-header-links button{font-size:11px}
 }
+
+
+/* Aviso discreto da Página Inicial */
+.overview-note{margin-top:20px;padding-top:10px;border-top:1px solid #dfe7ee;color:#7a8a99;font-size:10px;line-height:1.5;text-align:right}
