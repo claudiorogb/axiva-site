@@ -6,7 +6,7 @@
 <title>AXIVA Invest — Área exclusiva</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="/axiva-mark.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/invest/private.css?v=17">
+<link rel="stylesheet" href="/invest/private.css?v=18">
 </head>
 <body>
 <div id="loginView" class="login-view">
@@ -121,13 +121,15 @@
       <div class="tool-card">
         <div class="analysis-controls">
           <div class="filter-top-row">
-            <label class="ticker-search">Empresa / ticker<input id="privateTicker" type="text" placeholder="Ex.: ITUB4"></label>
+            <div class="ticker-search filter-ticker-stack">
+              <label>Empresa / ticker<input id="privateTicker" type="text" placeholder="Ex.: ITUB4"></label>
+              <details class="advanced-filter-box advanced-filter-under-ticker">
+                <summary>Mais filtros</summary>
+            </div>
             <label class="suite-field">Setor<select id="advSector"><option value="">Todos os setores</option></select></label>
             <label class="suite-field">Qualidade mínima <span class="help-bubble tiny" data-tip="Nota de 0 a 100 calculada pela metodologia AXIVA. Nem todos os ativos possuem valuation completo ainda." tabindex="0">?</span><input id="advQuality" type="number" min="0" max="100" step="1" placeholder="Ex.: 70"></label>
             <label class="suite-field">Desconto mínimo % <span class="help-bubble tiny" data-tip="Diferença entre o preço-alvo AXIVA e a cotação atual, quando o valuation está disponível." tabindex="0">?</span><input id="advDiscount" type="number" step=".5" placeholder="Ex.: 15"></label>
           </div>
-          <details class="advanced-filter-box">
-            <summary>Mais filtros</summary>
             <div id="privateSliders" class="private-slider-grid"></div>
             <div class="advanced-fields">
               <label>Cresc. receita 5 anos mínimo %<input id="advGrowth" type="number" step=".5" placeholder="Ex.: 5"></label>
@@ -137,7 +139,8 @@
               <label>Margem líquida mínima %<input id="advNet" type="number" step=".5" placeholder="Ex.: 8"></label>
               <label>Liquidez corrente mínima<input id="advCurrentRatio" type="number" step=".1" placeholder="Ex.: 1,2"></label>
             </div>
-          </details>
+              </details>
+            </div>
           <div class="tool-actions compact-actions">
             <button id="privateAnalyzeBtn" class="mini-btn primary">Analisar</button>
             <button id="privateResetBtn" class="mini-btn secondary">Limpar</button>
