@@ -307,27 +307,24 @@ function sectorStats(r){
   const peers=rows.filter(x=>x.is_reference_ticker===true&&x.sector&&x.sector===r.sector)
   const calc=(key,positiveOnly=false)=>{
     const values=peers.map(x=>n(x[key])).filter(v=>v!=null&&(!positiveOnly||v>0))
-    return {median:median(values),min:values.length?Math.min(...values):null,max:values.length?Math.max(...values):null,count:values.length}
+    const mean=values.length?values.reduce((sum,v)=>sum+v,0)/values.length:null
+    return {median:median(values),mean,min:values.length?Math.min(...values):null,max:values.length?Math.max(...values):null,count:values.length}
   }
   return {peers,pl:calc('pl',true),pvp:calc('pvp',true),dy:calc('dividend_yield'),roe:calc('roe'),roic:calc('roic')}
 }
 function sectorPanel(r){
   const s=sectorStats(r)
   const items=[
-    ['P/L',r.pl,s.pl.median,'valuation',false,s.pl],
-    ['P/VP',r.pvp,s.pvp.median,'valuation',false,s.pvp],
-    ['DY',r.dividend_yield,s.dy.median,'return',true,s.dy],
-    ['ROE',r.roe,s.roe.median,'return',true,s.roe],
-    ['ROIC',r.roic,s.roic.median,'return',true,s.roic]
+    ['P/L',r.pl,s.pl.median,'valuation',false,'Mediana do setor'],
+    ['P/VP',r.pvp,s.pvp.median,'valuation',false,'Mediana do setor'],
+    ['DY',r.dividend_yield,s.dy.mean,'return',true,'Média do setor'],
+    ['ROE',r.roe,s.roe.median,'return',true,'Mediana do setor'],
+    ['ROIC',r.roic,s.roic.median,'return',true,'Mediana do setor']
   ]
-  const zeroDy=s.peers.filter(x=>n(x.dividend_yield)===0).length
-  const dyNote=n(s.dy.median)===0&&s.peers.length
-    ?'<div class="micro-note">DY mediano de 0,0%: '+zeroDy+' de '+s.peers.length+' empresas de referência do setor estão com DY de 0,0% na base atual.</div>'
-    :''
-  return '<div class="micro-note">Setor: <b>'+esc(r.sector||'—')+'</b> • '+s.peers.length+' empresas de referência. Cada emissor entra uma única vez.</div><div class="comparison-list">'+items.map(([label,val,med,kind,isPct,stats])=>{
-    const [rel,cls]=relativeText(val,med,kind)
-    return '<div class="comparison-row"><b>'+label+'</b><span>Empresa '+(isPct?pct(val):num(val))+'</span><span>Mediana do setor '+(isPct?pct(med):num(med))+'</span><strong class="'+cls+'">'+rel+'</strong></div>'
-  }).join('')+'</div>'+dyNote
+  return '<div class="micro-note">Setor: <b>'+esc(r.sector||'—')+'</b> • '+s.peers.length+' empresas de referência. Cada emissor entra uma única vez.</div><div class="comparison-list">'+items.map(([label,val,ref,kind,isPct,refLabel])=>{
+    const [rel,cls]=relativeText(val,ref,kind)
+    return '<div class="comparison-row"><b>'+label+'</b><span>Empresa '+(isPct?pct(val):num(val))+'</span><span>'+refLabel+' '+(isPct?pct(ref):num(ref))+'</span><strong class="'+cls+'">'+rel+'</strong></div>'
+  }).join('')+'</div>'
 }
 function autoSummary(r){
   const s=sectorStats(r),parts=[]
@@ -408,7 +405,7 @@ async function renderCompany(r){
       metric('Qualidade',n(data.quality_score)==null?'—':num(data.quality_score,0)+'/100','metodologia AXIVA')+
       metric('P/L',num(data.pl),'setor: '+num(sector.pl.median),'Preço dividido pelo lucro por ação.')+
       metric('ROE',pct(data.roe),'setor: '+pct(sector.roe.median),'Retorno sobre patrimônio líquido.')+
-      metric('DY',pct(data.dividend_yield),'setor: '+pct(sector.dy.median),'Dividend Yield com base nos dados fundamentalistas atuais.')+
+      metric('DY',pct(data.dividend_yield),'média do setor: '+pct(sector.dy.mean),'Dividend Yield com base nos dados fundamentalistas atuais.')+
     '</div>'+
     '<div class="insight-grid"><article class="insight-card"><h3>Resumo</h3><p class="auto-summary">'+esc(autoSummary(data))+'</p><div class="result-action-bar"><button class="mini-btn secondary" id="companyExportInline">Exportar análise</button><button class="mini-btn secondary" id="companyAddWatchInline">☆ Minha Lista</button></div></article><article class="insight-card"><h3>Margem de segurança</h3>'+safetyPanel(data)+'</article></div>'+
     '<div class="insight-grid"><article class="insight-card"><h3>Empresa x setor</h3>'+sectorPanel(data)+'</article><article class="insight-card"><h3>Qualidade: como a nota foi formada</h3><div class="quality-breakdown">'+qualityBreakdown(data)+'</div></article></div>'+
