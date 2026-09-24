@@ -27,8 +27,8 @@ async function api(options={}){
 const defs=[
   {key:'max_pl',id:'sPl',label:'P/L máximo',min:0,max:35,step:.5,value:15,suffix:'',mode:'number'},
   {key:'max_pvp',id:'sPvp',label:'P/VP máximo',min:0,max:13.5,step:.1,value:3,suffix:'',mode:'number'},
-  {key:'min_roe',id:'sRoe',label:'ROE mínimo',min:-50,max:100,step:.5,value:15,suffix:'%',mode:'percent'},
-  {key:'min_roic',id:'sRoic',label:'ROIC mínimo',min:-50,max:100,step:.5,value:10,suffix:'%',mode:'percent'},
+  {key:'min_roe',id:'sRoe',label:'ROE mínimo',min:0,max:100,step:.5,value:15,suffix:'%',mode:'percent'},
+  {key:'min_roic',id:'sRoic',label:'ROIC mínimo',min:0,max:100,step:.5,value:10,suffix:'%',mode:'percent'},
   {key:'min_dy',id:'sDy',label:'DY mínimo',min:0,max:30,step:.25,value:5,suffix:'%',mode:'percent'},
   {key:'min_quality',id:'sQuality',label:'Qualidade mínima',min:0,max:100,step:1,value:70,suffix:'/100',mode:'number'},
   {key:'min_ebit_margin',id:'sEbit',label:'Margem EBIT mínima',min:-50,max:80,step:.5,value:10,suffix:'%',mode:'percent'},
