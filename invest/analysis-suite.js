@@ -303,20 +303,37 @@ function qualityBreakdown(r){
   }
   return lines.join('')+'<div class="micro-note">Travas mínimas atendidas. Pontos que formam a nota:</div>'+contrib.join('')+'<div class="quality-total"><span>Nota final</span><strong>'+num(score,0)+'/100</strong></div>'
 }
-function sectorPanel(r){
+function sectorStats(r){
   const peers=rows.filter(x=>x.is_reference_ticker===true&&x.sector&&x.sector===r.sector)
-  const metrics=[['P/L','pl',false,true],['P/VP','pvp',false,true],['DY','dividend_yield',true,false],['ROE','roe',true,false],['ROIC','roic',true,false]]
-  return '<div class="micro-note">'+peers.length+' empresas de referência no setor <b>'+esc(r.sector||'—')+'</b>. Cada emissor entra uma única vez.</div><div class="comparison-list">'+metrics.map(([label,key,isPct,positiveOnly])=>{
+  const calc=(key,positiveOnly=false)=>{
     const values=peers.map(x=>n(x[key])).filter(v=>v!=null&&(!positiveOnly||v>0))
-    if(!values.length)return '<div class="comparison-row"><b>'+label+'</b><span>Mediana do setor</span><strong>—</strong><span>dados insuficientes</span></div>'
-    const m=median(values),lo=Math.min(...values),hi=Math.max(...values)
-    return '<div class="comparison-row"><b>'+label+'</b><span>Mediana do setor</span><strong>'+(isPct?pct(m):num(m))+'</strong><span>faixa '+(isPct?pct(lo):num(lo))+' a '+(isPct?pct(hi):num(hi))+'</span></div>'
-  }).join('')+'</div>'
+    return {median:median(values),min:values.length?Math.min(...values):null,max:values.length?Math.max(...values):null,count:values.length}
+  }
+  return {peers,pl:calc('pl',true),pvp:calc('pvp',true),dy:calc('dividend_yield'),roe:calc('roe'),roic:calc('roic')}
+}
+function sectorPanel(r){
+  const s=sectorStats(r)
+  const items=[
+    ['P/L',r.pl,s.pl.median,'valuation',false,s.pl],
+    ['P/VP',r.pvp,s.pvp.median,'valuation',false,s.pvp],
+    ['DY',r.dividend_yield,s.dy.median,'return',true,s.dy],
+    ['ROE',r.roe,s.roe.median,'return',true,s.roe],
+    ['ROIC',r.roic,s.roic.median,'return',true,s.roic]
+  ]
+  const zeroDy=s.peers.filter(x=>n(x.dividend_yield)===0).length
+  const dyNote=n(s.dy.median)===0&&s.peers.length
+    ?'<div class="micro-note">DY mediano de 0,0%: '+zeroDy+' de '+s.peers.length+' empresas de referência do setor estão com DY de 0,0% na base atual.</div>'
+    :''
+  return '<div class="micro-note">Setor: <b>'+esc(r.sector||'—')+'</b> • '+s.peers.length+' empresas de referência. Cada emissor entra uma única vez.</div><div class="comparison-list">'+items.map(([label,val,med,kind,isPct,stats])=>{
+    const [rel,cls]=relativeText(val,med,kind)
+    const range=stats?.count?'faixa '+(isPct?pct(stats.min):num(stats.min))+' a '+(isPct?pct(stats.max):num(stats.max)):'dados insuficientes'
+    return '<div class="comparison-row"><b>'+label+'</b><span>Empresa '+(isPct?pct(val):num(val))+'</span><span>Mediana do setor '+(isPct?pct(med):num(med))+'</span><strong class="'+cls+'">'+rel+'</strong><small>'+range+'</small></div>'
+  }).join('')+'</div>'+dyNote
 }
 function autoSummary(r){
-  const parts=[]
-  const [plRel]=relativeText(r.pl,r.median_pl,'valuation');if(plRel!=='—')parts.push('P/L '+plRel+' da mediana do grupo comparável')
-  const [roeRel]=relativeText(r.roe,r.median_roe,'return');if(roeRel!=='—')parts.push('ROE '+roeRel+' da mediana')
+  const s=sectorStats(r),parts=[]
+  const [plRel]=relativeText(r.pl,s.pl.median,'valuation');if(plRel!=='—')parts.push('P/L '+plRel+' da mediana do setor')
+  const [roeRel]=relativeText(r.roe,s.roe.median,'return');if(roeRel!=='—')parts.push('ROE '+roeRel+' da mediana do setor')
   if(n(r.discount_pct)!=null)parts.push(n(r.discount_pct)>=0?'cotação '+pct(r.discount_pct)+' abaixo do preço-alvo AXIVA':'cotação '+pct(Math.abs(r.discount_pct))+' acima do preço-alvo AXIVA')
   if(n(r.quality_score)!=null)parts.push('Qualidade '+num(r.quality_score,0)+'/100')
   return parts.length?parts.join('. ')+'.':'Os dados disponíveis ainda não permitem formar um resumo completo de valuation e comparação.'
@@ -382,6 +399,7 @@ async function renderCompany(r){
   const data=payload?.company||r
   currentCompany=data
   const ws=$('companyWorkspace');ws.classList.remove('hidden')
+  const sector=sectorStats(data)
   const metric=(label,val,sub,tip='')=>'<div class="metric-mini"><span>'+label+(tip?' <span class="help-bubble tiny" data-tip="'+esc(tip)+'" tabindex="0">?</span>':'')+'</span><strong>'+val+'</strong><small>'+sub+'</small></div>'
   ws.innerHTML=
     '<div class="company-head-card"><div><span class="eyebrow">'+esc(data.ticker)+'</span><h2>'+esc(data.company_name||data.ticker)+'</h2><p>'+esc(data.sector||'Setor não informado')+' • '+esc(data.subsector||'')+' • '+esc(data.segment||'')+'</p></div><div class="company-price"><strong>'+money(data.current_price)+'</strong><span>Cotação • '+(data.price_quoted_at?new Date(data.price_quoted_at).toLocaleString('pt-BR'):'data indisponível')+'</span></div></div>'+
@@ -389,13 +407,13 @@ async function renderCompany(r){
       metric('Preço-alvo',money(data.target_price),'AXIVA', 'Referência calculada por múltiplos históricos quando os dados necessários estão disponíveis.')+
       metric('Desconto / ágio',pct(data.discount_pct),n(data.discount_pct)>=0?'abaixo do preço-alvo':'acima do preço-alvo')+
       metric('Qualidade',n(data.quality_score)==null?'—':num(data.quality_score,0)+'/100','metodologia AXIVA')+
-      metric('P/L',num(data.pl),'grupo: '+num(data.median_pl),'Preço dividido pelo lucro por ação.')+
-      metric('ROE',pct(data.roe),'grupo: '+pct(data.median_roe),'Retorno sobre patrimônio líquido.')+
-      metric('DY',pct(data.dividend_yield),'grupo: '+pct(data.median_dy),'Dividend Yield com base nos dados fundamentalistas atuais.')+
+      metric('P/L',num(data.pl),'setor: '+num(sector.pl.median),'Preço dividido pelo lucro por ação.')+
+      metric('ROE',pct(data.roe),'setor: '+pct(sector.roe.median),'Retorno sobre patrimônio líquido.')+
+      metric('DY',pct(data.dividend_yield),'setor: '+pct(sector.dy.median),'Dividend Yield com base nos dados fundamentalistas atuais.')+
     '</div>'+
     '<div class="insight-grid"><article class="insight-card"><h3>Resumo</h3><p class="auto-summary">'+esc(autoSummary(data))+'</p><div class="result-action-bar"><button class="mini-btn secondary" id="companyExportInline">Exportar análise</button><button class="mini-btn secondary" id="companyAddWatchInline">☆ Minha Lista</button></div></article><article class="insight-card"><h3>Margem de segurança</h3>'+safetyPanel(data)+'</article></div>'+
-    '<div class="insight-grid"><article class="insight-card"><h3>Empresa x grupo comparável</h3>'+groupComparison(data)+'</article><article class="insight-card"><h3>Qualidade: como a nota foi formada</h3><div class="quality-breakdown">'+qualityBreakdown(data)+'</div></article></div>'+
-    '<div class="insight-grid"><article class="insight-card"><h3>Empresa x próprio histórico</h3>'+historyPanel(data)+'</article><article class="insight-card"><h3>Painel do setor</h3>'+sectorPanel(data)+'</article></div>'
+    '<div class="insight-grid"><article class="insight-card"><h3>Empresa x setor</h3>'+sectorPanel(data)+'</article><article class="insight-card"><h3>Qualidade: como a nota foi formada</h3><div class="quality-breakdown">'+qualityBreakdown(data)+'</div></article></div>'+
+    '<div class="insight-grid single"><article class="insight-card"><h3>Empresa x próprio histórico</h3>'+historyPanel(data)+'</article></div>'
   $('companyStatus').classList.add('hidden')
   $('companyAddWatchInline')?.addEventListener('click',()=>addWatch(data.ticker))
   $('companyExportInline')?.addEventListener('click',()=>csvDownload('axiva-'+data.ticker+'-'+today()+'.csv',['Indicador','Valor'],[['Ticker',data.ticker],['Empresa',data.company_name],['Preço',data.current_price],['Preço-alvo',data.target_price],['Graham',data.graham_price],['Desconto',data.discount_pct],['Qualidade',data.quality_score],['P/L',data.pl],['P/VP',data.pvp],['DY',data.dividend_yield],['ROE',data.roe],['ROIC',data.roic],['Setor',data.sector]]))
