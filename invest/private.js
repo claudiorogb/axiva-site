@@ -36,7 +36,18 @@ $('resetForm').addEventListener('submit',async e=>{
   if(pass!==confirmPass){message.textContent='As senhas informadas não são iguais.';return}
   btn.disabled=true;message.textContent='Salvando sua nova senha...'
   try{
-    const {data:{session}}=await supabase.auth.getSession()
+    const companyBackBtn=$('companyBackBtn')
+companyBackBtn?.addEventListener('click',()=>{
+  const origin=window.axivaCompanyOrigin
+  if(!origin||origin==='company')return
+  document.querySelector('.nav-item[data-page="'+origin+'"]')?.click()
+})
+document.querySelectorAll('.nav-item[data-page="company"]').forEach(btn=>btn.addEventListener('click',()=>{
+  const origin=window.axivaCompanyOrigin
+  if(companyBackBtn)companyBackBtn.classList.toggle('hidden',!origin||origin==='company')
+}))
+
+const {data:{session}}=await supabase.auth.getSession()
     if(!session){message.textContent='O link expirou. Solicite uma nova recuperação de senha.';return}
     const {error}=await supabase.auth.updateUser({password:pass})
     if(error){message.textContent='Não foi possível alterar a senha. Confira os requisitos ou solicite um novo link.';return}
@@ -226,6 +237,10 @@ document.querySelectorAll('[data-header-page]').forEach(link=>link.addEventListe
 
 document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click',async()=>{
   if(btn.id==='adminNav'&&currentRole!=='admin')return
+  const currentPage=document.querySelector('.nav-item.active')?.dataset.page||null
+  if(btn.dataset.page==='company'&&currentPage&&currentPage!=='company'){
+    window.axivaCompanyOrigin=currentPage
+  }
   document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));btn.classList.add('active')
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(btn.dataset.page+'Page')?.classList.add('active')
   const pageTitles={overview:'PÁGINA INICIAL',selection:'',analysis:'',company:'ANALISAR EMPRESA',compare:'',watch:'MINHA LISTA E ALERTAS',strategies:'',method:'METODOLOGIA',admin:'ADMINISTRAÇÃO'}
