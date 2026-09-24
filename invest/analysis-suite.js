@@ -1,5 +1,5 @@
 const $=id=>document.getElementById(id)
-const n=v=>{const x=Number(v);return Number.isFinite(x)?x:null}
+const n=v=>{if(v===null||v===undefined||v==='')return null;const x=Number(v);return Number.isFinite(x)?x:null}
 const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))
 const money=v=>n(v)==null?'—':Number(v).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})
 const num=(v,d=2)=>n(v)==null?'—':Number(v).toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d})
