@@ -334,3 +334,8 @@ button,input,select{font-family:inherit}
 /* Resumo e aviso final da análise da empresa */
 .company-summary-box{border:1px solid #bfd2de;border-left:4px solid #17b8b0;border-radius:14px;padding:18px 20px;background:#fff;color:#355673;font-size:18px;line-height:1.45}
 .company-page-footnote{margin-top:14px;padding:0 2px 8px;font-size:11px;line-height:1.5;color:#6a7f91}
+
+
+/* Cores do desconto/ágio no Raio-X */
+.discount-value.discount-good{color:#087c78}
+.discount-value.discount-bad{color:#c62828}
