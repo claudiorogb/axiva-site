@@ -449,6 +449,7 @@ async function renderCompany(r){
       metric('P/L',num(data.pl),'setor: '+num(sector.pl.median),'Preço dividido pelo lucro por ação.')+
       metric('ROE',pct(data.roe),'setor: '+pct(sector.roe.median),'Retorno sobre patrimônio líquido.')+
       metric('DY',pct(data.dividend_yield),'média do setor: '+pct(sector.dy.mean),'Dividend Yield com base nos dados fundamentalistas atuais.')+
+      metric('Preço Graham',money(data.graham_price),'referência de Graham','Estimativa de valor baseada na fórmula de Benjamin Graham quando LPA e VPA válidos estão disponíveis.')+
     '</div>'+
     '<div class="insight-grid"><article class="insight-card"><h3>Resumo</h3><p class="auto-summary">'+esc(autoSummary(data))+'</p><div class="result-action-bar"><button class="mini-btn secondary" id="companyExportInline">Exportar análise</button><button class="mini-btn secondary" id="companyAddWatchInline">☆ Minha Lista</button></div></article><article class="insight-card"><h3>Margem de segurança</h3>'+safetyPanel(data)+'</article></div>'+
     '<div class="insight-grid"><article class="insight-card"><h3>Empresa x setor</h3>'+sectorPanel(data)+'</article><article class="insight-card"><h3>Qualidade: como a nota foi formada</h3><div class="quality-breakdown">'+qualityBreakdown(data)+'</div></article></div>'+
