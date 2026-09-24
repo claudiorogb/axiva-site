@@ -253,3 +253,18 @@ button,input,select{font-family:inherit}
   .alert-row .compact-actions{grid-column:1/-1}
   .alerts-full-card{margin-top:10px}
 }
+
+
+/* Estratégias com critérios selecionáveis 2026-09-24 */
+#strategiesPage .strategy-criteria-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:20px}
+.strategy-criterion{border:1px solid #dce5ed;border-radius:12px;background:#f8fafc;padding:12px;opacity:.68;transition:.15s ease}
+.strategy-criterion.enabled{border-color:#6ad1cc;background:#f1fcfb;opacity:1}
+.strategy-criterion-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.strategy-check{display:flex!important;align-items:center;gap:7px;margin:0!important;font-size:11px!important;font-weight:850!important;color:#405a73!important;text-transform:none!important;cursor:pointer}
+.strategy-check input{width:15px;height:15px;margin:0;accent-color:#13beb8}
+.strategy-criterion output{font-size:11px;font-weight:900;color:#071d34;white-space:nowrap}
+.strategy-criterion>input[type=range]{width:100%;accent-color:#13beb8}
+.strategy-criterion>input[type=range]:disabled{opacity:.35}
+.strategy-criterion small{display:block;margin-top:7px;color:#6d7f90;font-size:9px;line-height:1.35}
+@media(max-width:1100px){#strategiesPage .strategy-criteria-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){#strategiesPage .strategy-criteria-grid{grid-template-columns:1fr}}
