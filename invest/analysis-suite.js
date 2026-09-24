@@ -261,12 +261,15 @@ function mapSvg(){
 }
 
 function relativeText(value,med,kind){
-  const v=n(value),m=n(med);if(v==null||m==null||m===0)return ['—','relative-neutral']
-  const d=(v-m)/Math.abs(m)
-  const direction=d>=0?'acima':'abaixo'
-  let cls='relative-neutral'
-  if(kind==='valuation')cls=Math.abs(d)<.05?'relative-neutral':d<0?'relative-good':'relative-alert'
-  else if(kind==='return')cls=Math.abs(d)<.05?'relative-neutral':d>0?'relative-good':'relative-alert'
+  const v=n(value),m=n(med);if(v==null||m==null)return ['—','relative-neutral']
+  if(kind==='return'){
+    const pp=(v-m)*100,direction=pp>=0?'acima':'abaixo'
+    const cls=Math.abs(pp)<.5?'relative-neutral':pp>0?'relative-good':'relative-alert'
+    return [Math.abs(pp).toLocaleString('pt-BR',{maximumFractionDigits:1})+' p.p. '+direction,cls]
+  }
+  if(m===0)return ['—','relative-neutral']
+  const d=(v-m)/Math.abs(m),direction=d>=0?'acima':'abaixo'
+  const cls=Math.abs(d)<.05?'relative-neutral':d<0?'relative-good':'relative-alert'
   return [Math.abs(d*100).toLocaleString('pt-BR',{maximumFractionDigits:1})+'% '+direction,cls]
 }
 function qualityBreakdown(r){
