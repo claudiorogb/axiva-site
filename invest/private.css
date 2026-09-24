@@ -303,3 +303,9 @@ button,input,select{font-family:inherit}
 /* Retorno contextual da página Analisar empresa */
 .company-page-back{display:flex;align-items:center;min-height:31px;margin-bottom:10px}
 .company-page-back .mini-btn{font-size:11px}
+
+
+/* Destaque ao passar o mouse na tabela Descobrir */
+#analysisPage .suite-result-row{cursor:pointer}
+#analysisPage .suite-result-row:hover{background:#103452}
+#analysisPage .suite-result-row:focus-visible{outline:3px solid #13beb8;outline-offset:-3px}
