@@ -170,7 +170,7 @@ window.axivaSuiteResetFilters=resetFilters
 const presets={
   valor:{pPl:12,pPvp:2,pRoe:12,pRoic:0,pDy:0,quality:'',discount:'',growth:'',debt:'',price:'',ebit:'',net:'',ratio:''},
   dividendos:{pPl:20,pPvp:4,pRoe:12,pRoic:0,pDy:6,quality:'',discount:'',growth:'',debt:'',price:'',ebit:'',net:'',ratio:''},
-  qualidade:{pPl:35,pPvp:13.5,pRoe:10,pRoic:10,pDy:0,quality:70,discount:'',growth:3,debt:'',price:'',ebit:'',net:'',ratio:''},
+  qualidade:{pPl:35,pPvp:13.5,pRoe:0,pRoic:0,pDy:0,quality:70,discount:'',growth:'',debt:'',price:'',ebit:'',net:'',ratio:''},
   rentabilidade:{pPl:35,pPvp:13.5,pRoe:18,pRoic:15,pDy:0,quality:'',discount:'',growth:'',debt:'',price:'',ebit:'',net:'',ratio:''},
   desconto:{pPl:35,pPvp:13.5,pRoe:0,pRoic:0,pDy:0,quality:'',discount:15,growth:'',debt:'',price:'',ebit:'',net:'',ratio:''}
 }
