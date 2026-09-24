@@ -50,7 +50,14 @@ function gotoPage(page){
   const btn=document.querySelector('.nav-item[data-page="'+page+'"]')
   if(btn)btn.click()
 }
-document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>gotoPage(b.dataset.goto)))
+document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>{
+  if(b.dataset.goto==='company'){
+    const origin=document.querySelector('.nav-item.active')?.dataset.page||null
+    window.axivaCompanyOrigin=origin&&origin!=='company'?origin:null
+    $('companyBackBtn')?.classList.toggle('hidden',!window.axivaCompanyOrigin)
+  }
+  gotoPage(b.dataset.goto)
+}))
 
 function resolveRow(value){
   const q=String(value||'').trim().toUpperCase()
@@ -491,8 +498,18 @@ async function renderCompany(r){
 }
 function openCompany(ticker){
   const r=resolveRow(ticker);if(!r)return
+  const origin=document.querySelector('.nav-item.active')?.dataset.page||null
+  window.axivaCompanyOrigin=origin&&origin!=='company'?origin:null
+  $('companyBackBtn')?.classList.toggle('hidden',!window.axivaCompanyOrigin)
   gotoPage('company');renderCompany(r)
 }
+$('companyBackBtn')?.addEventListener('click',()=>{
+  const origin=window.axivaCompanyOrigin
+  if(!origin||origin==='company')return
+  window.axivaCompanyOrigin=null
+  $('companyBackBtn')?.classList.add('hidden')
+  gotoPage(origin)
+})
 $('companyLoadBtn')?.addEventListener('click',()=>{const r=resolveRow($('companyTicker').value);if(r)renderCompany(r);else $('companyStatus').textContent='Empresa não encontrada na base atual.'})
 $('companyTicker')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('companyLoadBtn').click()}})
 $('companyWatchBtn')?.addEventListener('click',()=>{const r=resolveRow($('companyTicker').value);if(r)addWatch(r.ticker)})
