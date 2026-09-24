@@ -20,7 +20,7 @@ const money=v=>v==null?'—':Number(v).toLocaleString('pt-BR',{style:'currency',
 const num=v=>v==null?'—':Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})
 const pct=v=>v==null?'—':(Number(v)*100).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%'
 const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))
-const n=v=>{const x=Number(v);return Number.isFinite(x)?x:null}
+const n=v=>{if(v===null||v===undefined||v==='')return null;const x=Number(v);return Number.isFinite(x)?x:null}
 
 function showLogin(msg=''){loginView.classList.remove('hidden');appView.classList.add('hidden');$('resetView').classList.add('hidden');loginMessage.textContent=msg}
 function showApp(){if(recoveryMode){showResetView();return}loginView.classList.add('hidden');$('resetView').classList.add('hidden');appView.classList.remove('hidden')}
@@ -51,7 +51,9 @@ $('resetForm').addEventListener('submit',async e=>{
 async function callPrivate(section,options={}){
   const {data:{session}}=await supabase.auth.getSession()
   if(!session?.access_token)throw Object.assign(new Error('not_authenticated'),{status:401})
-  const r=await fetch(`${PRIVATE_API}?section=${encodeURIComponent(section)}`,{
+  const params=new URLSearchParams({section})
+  Object.entries(options.params||{}).forEach(([k,v])=>{if(v!=null&&v!=='')params.set(k,String(v))})
+  const r=await fetch(`${PRIVATE_API}?${params.toString()}`,{
     method:options.method||'GET',
     headers:{Authorization:`Bearer ${session.access_token}`,apikey:SUPABASE_KEY,Accept:'application/json','Content-Type':'application/json'},
     body:options.body?JSON.stringify(options.body):undefined,
@@ -61,6 +63,7 @@ async function callPrivate(section,options={}){
   if(!r.ok)throw Object.assign(new Error(j.error||`http_${r.status}`),{status:r.status})
   return j
 }
+window.axivaPrivateApi=callPrivate
 
 async function loadPrivateArea(){
   try{
@@ -101,7 +104,7 @@ function setupPrivateSliders(){
 }
 async function loadAnalysisData(){
   setupPrivateSliders();$('analysisStatus').classList.remove('hidden');$('analysisStatus').textContent='Carregando base fundamentalista...'
-  try{const j=await callPrivate('analysis');analysisRows=Array.isArray(j.data)?j.data:[];$('analysisStatus').textContent=`${analysisRows.length} empresas disponíveis para análise.`}
+  try{const j=await callPrivate('analysis');analysisRows=Array.isArray(j.data)?j.data:[];window.axivaAnalysisRows=analysisRows;$('analysisStatus').textContent=`${analysisRows.length} empresas disponíveis para análise.`;window.dispatchEvent(new CustomEvent('axiva:analysis-ready',{detail:{rows:analysisRows}}))}
   catch(e){$('analysisStatus').textContent='Não foi possível carregar a base fundamentalista.'}
 }
 function privateRowMeetsFilters(r,c){
@@ -225,9 +228,9 @@ $('firstAccessBtn').addEventListener('click',async()=>{
 
 $('forgotBtn').addEventListener('click',async()=>{const email=emailInput.value.trim();if(!email){loginMessage.textContent='Informe seu e-mail para solicitar a redefinição da senha.';return}const {error}=await supabase.auth.resetPasswordForEmail(email,{redirectTo:`${location.origin}/invest/private`});loginMessage.textContent=error?'Não foi possível solicitar a redefinição agora.':'Se o e-mail estiver cadastrado, você receberá as instruções para redefinir sua senha.'})
 $('logoutBtn').addEventListener('click',async()=>{await supabase.auth.signOut();showLogin()})
-$('privateAnalyzeBtn').addEventListener('click',applyPrivateFilters)
-$('privateResetBtn').addEventListener('click',resetPrivateFilters)
-$('privateTicker').addEventListener('keydown',e=>{if(e.key==='Enter')applyPrivateFilters()})
+$('privateAnalyzeBtn').addEventListener('click',()=>window.axivaSuiteApplyFilters?window.axivaSuiteApplyFilters():applyPrivateFilters())
+$('privateResetBtn').addEventListener('click',()=>window.axivaSuiteResetFilters?window.axivaSuiteResetFilters():resetPrivateFilters())
+$('privateTicker').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();window.axivaSuiteApplyFilters?window.axivaSuiteApplyFilters():applyPrivateFilters()}})
 $('refreshUsersBtn').addEventListener('click',loadAdminUsers)
 $('adminUserForm').addEventListener('submit',async e=>{e.preventDefault();const email=$('adminEmail').value.trim().toLowerCase(),role=$('adminRole').value,plan=$('adminPlan').value,ends=$('adminEnds').value;$('adminMessage').textContent='Liberando acesso...';try{await callPrivate('admin-users',{method:'POST',body:{action:'add',email,role,plan,ends_at:ends?`${ends}T23:59:59`:null}});$('adminMessage').textContent='Acesso liberado. O usuário já pode criar o primeiro acesso com este e-mail.';$('adminUserForm').reset();await loadAdminUsers()}catch(e){$('adminMessage').textContent='Não foi possível liberar o acesso.'}})
 
@@ -237,7 +240,8 @@ document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click'
   if(btn.id==='adminNav'&&currentRole!=='admin')return
   document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));btn.classList.add('active')
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(btn.dataset.page+'Page')?.classList.add('active')
-  $('pageTitle').textContent=btn.dataset.page==='selection'?'AÇÕES SELECIONADAS':btn.textContent.trim()
+  const pageTitles={overview:'VISÃO GERAL',selection:'AÇÕES SELECIONADAS',analysis:'DESCOBRIR EMPRESAS',company:'ANALISAR EMPRESA',compare:'COMPARAR EMPRESAS',watch:'ACOMPANHAR',simulate:'SIMULAR PREÇO',strategies:'ESTRATÉGIAS',method:'METODOLOGIA',admin:'ADMINISTRAÇÃO'}
+  $('pageTitle').textContent=pageTitles[btn.dataset.page]||btn.textContent.trim()
   if(btn.dataset.page==='admin')await loadAdminUsers()
   if(btn.dataset.page==='strategies'&&!strategiesLoaded)await loadStrategies()
 }))
