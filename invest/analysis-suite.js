@@ -12,6 +12,8 @@ const today=()=>new Date().toISOString().slice(0,10)
 let rows=[]
 let rowMap=new Map()
 let discoveryRows=[]
+let discoveryPage=1
+const DISCOVERY_PAGE_SIZE=20
 let compareTickers=[]
 let watchData=[]
 let alertData=[]
@@ -141,28 +143,69 @@ function whyText(r,c){
   if(c.sector)a.push('Setor: '+c.sector)
   return a.length?a.join(' • '):'Compatível com os filtros atualmente abertos.'
 }
-function renderDiscovery(list,c){
-  discoveryRows=list
+function discoveryComplete(r){
+  return [
+    r.current_price,r.target_price,r.discount_pct,r.graham_price,
+    r.pl,r.pvp,r.roe,r.roic,r.dividend_yield
+  ].every(v=>n(v)!=null)
+}
+function sortDiscovery(list){
+  return [...list].sort((a,b)=>{
+    const ac=discoveryComplete(a)?1:0,bc=discoveryComplete(b)?1:0
+    if(ac!==bc)return bc-ac
+    return String(a.ticker||'').localeCompare(String(b.ticker||''),'pt-BR')
+  })
+}
+function discoveryPager(totalPages,current){
+  if(totalPages<=1)return ''
+  const pages=[]
+  const add=n=>{if(n>=1&&n<=totalPages&&!pages.includes(n))pages.push(n)}
+  add(1);add(2);add(current-1);add(current);add(current+1);add(totalPages-1);add(totalPages)
+  pages.sort((a,b)=>a-b)
+  let html='<div class="discovery-pager" aria-label="Paginação das empresas">'
+  html+='<button type="button" data-page="'+Math.max(1,current-1)+'" '+(current===1?'disabled':'')+'>‹ Anterior</button>'
+  let prev=0
+  for(const p of pages){
+    if(prev&&p-prev>1)html+='<span class="pager-ellipsis">…</span>'
+    html+='<button type="button" data-page="'+p+'" class="'+(p===current?'active':'')+'">Pag '+p+'</button>'
+    prev=p
+  }
+  html+='<button type="button" data-page="'+Math.min(totalPages,current+1)+'" '+(current===totalPages?'disabled':'')+'>Próxima ›</button></div>'
+  return html
+}
+function renderDiscovery(list,c,page=discoveryPage){
+  const ordered=sortDiscovery(list)
+  discoveryRows=ordered
   const status=$('analysisStatus'),wrap=$('analysisResults'),pills=$('activeCriteria'),explain=$('discoveryExplain')
   if(pills)pills.innerHTML=criteriaPills(c).map(([a,b])=>'<span class="criterion-pill"><strong>'+esc(a)+':</strong> '+esc(b)+'</span>').join('')||'<span class="criterion-pill">Sem filtros restritivos</span>'
-  if(!list.length){if(status)status.textContent='Nenhuma empresa encontrada com estes critérios.';if(wrap)wrap.classList.add('hidden');if(explain)explain.innerHTML='';return}
-  const shown=list.slice(0,100)
+  if(explain)explain.innerHTML=''
+  if(!ordered.length){if(status)status.textContent='Nenhuma empresa encontrada com estes critérios.';if(wrap)wrap.classList.add('hidden');return}
+  const totalPages=Math.max(1,Math.ceil(ordered.length/DISCOVERY_PAGE_SIZE))
+  discoveryPage=Math.min(Math.max(1,page),totalPages)
+  const startIndex=(discoveryPage-1)*DISCOVERY_PAGE_SIZE
+  const shown=ordered.slice(startIndex,startIndex+DISCOVERY_PAGE_SIZE)
   const body=shown.map(r=>'<div class="analysis-row suite-result-row" data-ticker="'+esc(r.ticker)+'" tabindex="0"><div class="ticker"><b>'+esc(r.ticker)+'</b><span>'+esc(r.company_name||'')+'</span></div><div>'+money(r.current_price)+'</div><div>'+money(r.target_price)+'</div><div class="discount '+(n(r.discount_pct)>=0?'pos':'neg')+'">'+pct(r.discount_pct)+'</div><div>'+money(r.graham_price)+'</div><div>'+num(r.pl)+'</div><div>'+num(r.pvp)+'</div><div>'+pct(r.roe)+'</div><div>'+pct(r.roic)+'</div><div>'+pct(r.dividend_yield)+'</div></div>').join('')
-  wrap.innerHTML='<div class="analysis-table"><div class="analysis-row private-head"><div>Empresa</div><div>Cotação</div><div>Preço-alvo</div><div>Desconto</div><div>Graham</div><div>P/L</div><div>P/VP</div><div>ROE</div><div>ROIC</div><div>DY</div></div>'+body+'</div>'
+  wrap.innerHTML='<div class="analysis-table"><div class="analysis-row private-head"><div>Empresa</div><div>Cotação</div><div>Preço-alvo</div><div>Desconto</div><div>Graham</div><div>P/L</div><div>P/VP</div><div>ROE</div><div>ROIC</div><div>DY</div></div>'+body+'</div>'+discoveryPager(totalPages,discoveryPage)
   wrap.classList.remove('hidden')
-  status.textContent=list.length+' empresa(s) encontrada(s) no universo atual'+(list.length>100?' • exibindo 100':'')+'.'
-  explain.innerHTML='<div class="result-action-bar"><span class="micro-note">Clique em uma empresa para abrir o Raio-X.</span></div>'+shown.slice(0,12).map(r=>'<div class="match-explain"><b>'+esc(r.ticker)+'</b> — '+esc(whyText(r,c))+'</div>').join('')
+  const first=startIndex+1,last=startIndex+shown.length
+  status.textContent=ordered.length+' empresa(s) encontrada(s) • exibindo '+first+'–'+last+' • página '+discoveryPage+' de '+totalPages+'. Empresas com dados completos aparecem primeiro.'
   wrap.querySelectorAll('.suite-result-row').forEach(el=>{
     const open=()=>openCompany(el.dataset.ticker)
     el.addEventListener('click',open);el.addEventListener('keydown',e=>{if(e.key==='Enter')open()})
   })
+  wrap.querySelectorAll('.discovery-pager [data-page]').forEach(btn=>btn.addEventListener('click',()=>{
+    const p=Number(btn.dataset.page);if(!Number.isFinite(p)||p===discoveryPage)return
+    renderDiscovery(discoveryRows,c,p)
+    wrap.scrollIntoView({behavior:'smooth',block:'start'})
+  }))
 }
 function applyFilters(){
   const c=filterState()
-  renderDiscovery(rows.filter(r=>rowMatches(r,c)),c)
+  discoveryPage=1
+  renderDiscovery(rows.filter(r=>rowMatches(r,c)),c,1)
 }
 function resetFilters(){
-  suiteDefaults();renderDiscovery(rows,filterState());$('naturalFeedback').textContent='Filtros limpos. O universo completo está disponível para nova busca.'
+  suiteDefaults();discoveryPage=1;renderDiscovery(rows,filterState(),1);$('naturalFeedback').textContent='Filtros limpos. O universo completo está disponível para nova busca.'
 }
 window.axivaSuiteApplyFilters=applyFilters
 window.axivaSuiteResetFilters=resetFilters
