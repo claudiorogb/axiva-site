@@ -156,3 +156,29 @@ button,input,select{font-family:inherit}
 .tool-actions .mini-btn.primary,.compact-actions .mini-btn.primary{background:#0faaa6!important;border-color:#0faaa6!important;color:#fff!important}
 .tool-actions .mini-btn.secondary,.compact-actions .mini-btn.secondary{background:#edf3f7!important;border-color:#cbd8e2!important;color:#27435e!important}
 .tool-actions .mini-btn.danger,.compact-actions .mini-btn.danger{background:#fff3f3!important;border-color:#f0c7c9!important;color:#9a3036!important}
+
+
+/* Seleção simplificada e detalhe visual — 2026-09-24 */
+#selectionTableWrap .private-table{width:100%;min-width:0}
+#selectionTableWrap .private-row{grid-template-columns:1.65fr .9fr .9fr .8fr .8fr .7fr;width:100%}
+#selectionTableWrap .private-row>.ticker{min-width:0}
+.detail-top-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.detail-analyze{border:0;background:#13beb8;color:#05213b;border-radius:10px;padding:10px 14px;font:inherit;font-size:13px;font-weight:850;cursor:pointer}
+.detail-analyze:hover{filter:brightness(.98)}
+#selectionPage .detail-hero{background:#071d34;border:1px solid #193d5a;border-top:3px solid #13beb8;text-align:left;color:#fff;padding:16px 18px}
+#selectionPage .detail-hero h2{color:#5ee0d6;font-size:14px;letter-spacing:.12em;text-transform:uppercase;margin:0 0 5px}
+#selectionPage .detail-hero strong{color:#fff;font-size:24px;line-height:1.15}
+#selectionPage .detail-hero span{color:#c7d6e4;font-size:12px;margin-top:5px}
+@media(max-width:700px){
+  #selectionTableWrap .private-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #selectionTableWrap .private-row>.ticker{grid-column:1/-1;grid-row:auto}
+  #selectionTableWrap .private-row>.ticker:before{content:'Empresa'}
+  #selectionTableWrap .private-row>div:nth-child(2):before{content:'Cotação'}
+  #selectionTableWrap .private-row>div:nth-child(3):before{content:'Preço-alvo'}
+  #selectionTableWrap .private-row>div:nth-child(4):before{content:'Desconto'}
+  #selectionTableWrap .private-row>div:nth-child(5):before{content:'Graham'}
+  #selectionTableWrap .private-row>div:nth-child(6):before{content:'Qualidade'}
+  .detail-top-actions{align-items:stretch}
+  .detail-top-actions .detail-back,.detail-top-actions .detail-analyze{flex:1 1 auto}
+  #selectionPage .detail-hero strong{font-size:20px}
+}
