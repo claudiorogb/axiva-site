@@ -329,3 +329,8 @@ button,input,select{font-family:inherit}
 .company-analysis-left{display:grid;gap:12px;min-width:0}
 .company-quality-card{align-self:stretch}
 @media(max-width:900px){.company-analysis-main{grid-template-columns:1fr}.company-quality-card{align-self:auto}}
+
+
+/* Resumo e aviso final da análise da empresa */
+.company-summary-box{border:1px solid #bfd2de;border-left:4px solid #17b8b0;border-radius:14px;padding:18px 20px;background:#fff;color:#355673;font-size:18px;line-height:1.45}
+.company-page-footnote{margin-top:14px;padding:0 2px 8px;font-size:11px;line-height:1.5;color:#6a7f91}
