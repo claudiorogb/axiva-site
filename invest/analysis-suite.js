@@ -521,9 +521,26 @@ function renderAlerts(){
   el.querySelectorAll('[data-alert-toggle]').forEach(b=>b.addEventListener('click',()=>toggleAlert(b.dataset.alertToggle,b.dataset.active==='true')))
   el.querySelectorAll('[data-alert-delete]').forEach(b=>b.addEventListener('click',()=>deleteAlert(b.dataset.alertDelete)))
 }
+function hydrateAlert(a){
+  const r=rowMap.get(String(a.ticker||'').toUpperCase())
+  const current=r?({
+    price:r.current_price,discount_pct:r.discount_pct,pl:r.pl,pvp:r.pvp,roe:r.roe,roic:r.roic,
+    dividend_yield:r.dividend_yield,quality_score:r.quality_score
+  })[a.metric]:null
+  const cv=n(current),th=n(a.threshold)
+  const triggered=!!a.active&&cv!=null&&th!=null&&(a.operator==='gte'?cv>=th:cv<=th)
+  return {...a,current_value:cv,triggered,company_name:r?.company_name||null}
+}
 async function loadAlerts(){
-  try{const j=await api('alerts');alertData=Array.isArray(j.data)?j.data:[];$('alertsStatus').textContent=alertData.filter(a=>a.triggered&&a.active).length+' condição(ões) atingida(s) agora.';renderAlerts();renderOverviewFollow()}
-  catch(e){$('alertsStatus').textContent='Não foi possível carregar os alertas.'}
+  const client=window.axivaSupabase
+  if(!client){$('alertsStatus').textContent='Não foi possível carregar os alertas.';return}
+  try{
+    const {data,error}=await client.from('invest_user_alerts').select('id,ticker,metric,operator,threshold,active,last_triggered_at,created_at,updated_at').order('created_at',{ascending:false})
+    if(error)throw error
+    alertData=(data||[]).map(hydrateAlert)
+    $('alertsStatus').textContent=alertData.filter(a=>a.triggered&&a.active).length+' condição(ões) atingida(s) agora.'
+    renderAlerts();renderOverviewFollow()
+  }catch(e){console.error('AXIVA alerts load error',e);$('alertsStatus').textContent='Não foi possível carregar os alertas.'}
 }
 function updateAlertHint(){
   const metric=$('alertMetric')?.value
@@ -539,15 +556,39 @@ $('alertMetric')?.addEventListener('change',updateAlertHint)
 updateAlertHint()
 
 $('alertForm')?.addEventListener('submit',async e=>{
-  e.preventDefault();const r=resolveRow($('alertTicker').value);if(!r){toast('Empresa não encontrada.');return}
+  e.preventDefault()
+  const r=resolveRow($('alertTicker').value);if(!r){toast('Empresa não encontrada.');return}
   const metric=$('alertMetric').value,operator=$('alertOperator').value
-  let threshold=n($('alertThreshold').value);if(threshold==null)return
+  let threshold=n($('alertThreshold').value);if(threshold==null){toast('Informe um valor válido.');return}
   if(['discount_pct','roe','roic','dividend_yield'].includes(metric))threshold/=100
-  try{await api('alerts',{method:'POST',body:{action:'create',ticker:r.ticker,metric,operator,threshold}});e.target.reset();toast('Alerta criado.');await loadAlerts()}
-  catch(err){toast('Não foi possível criar o alerta.')}
+  const client=window.axivaSupabase
+  if(!client){toast('Não foi possível criar o alerta.');return}
+  try{
+    const {data:{user},error:userErr}=await client.auth.getUser()
+    if(userErr||!user)throw userErr||new Error('not_authenticated')
+    const {error}=await client.from('invest_user_alerts').insert({user_id:user.id,ticker:r.ticker,metric,operator,threshold})
+    if(error)throw error
+    e.target.reset();updateAlertHint();toast('Alerta criado.');await loadAlerts()
+  }catch(err){console.error('AXIVA alert create error',err);toast('Não foi possível criar o alerta.')}
 })
-async function toggleAlert(id,active){try{await api('alerts',{method:'POST',body:{action:'toggle',id,active}});await loadAlerts()}catch(e){toast('Não foi possível alterar o alerta.')}}
-async function deleteAlert(id){try{await api('alerts',{method:'POST',body:{action:'delete',id}});await loadAlerts()}catch(e){toast('Não foi possível excluir o alerta.')}}
+async function toggleAlert(id,active){
+  const client=window.axivaSupabase
+  try{
+    const update={active,updated_at:new Date().toISOString()}
+    if(active)update.last_triggered_at=null
+    const {error}=await client.from('invest_user_alerts').update(update).eq('id',id)
+    if(error)throw error
+    await loadAlerts()
+  }catch(e){console.error('AXIVA alert toggle error',e);toast('Não foi possível alterar o alerta.')}
+}
+async function deleteAlert(id){
+  const client=window.axivaSupabase
+  try{
+    const {error}=await client.from('invest_user_alerts').delete().eq('id',id)
+    if(error)throw error
+    await loadAlerts()
+  }catch(e){console.error('AXIVA alert delete error',e);toast('Não foi possível excluir o alerta.')}
+}
 function renderOverviewFollow(){
   const el=$('overviewStats');if(!el||!rows.length)return
   const cards=el.querySelectorAll('.stat-mini')
