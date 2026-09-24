@@ -51,7 +51,9 @@ $('resetForm').addEventListener('submit',async e=>{
 async function callPrivate(section,options={}){
   const {data:{session}}=await supabase.auth.getSession()
   if(!session?.access_token)throw Object.assign(new Error('not_authenticated'),{status:401})
-  const r=await fetch(`${PRIVATE_API}?section=${encodeURIComponent(section)}`,{
+  const params=new URLSearchParams({section})
+  Object.entries(options.params||{}).forEach(([k,v])=>{if(v!=null&&v!=='')params.set(k,String(v))})
+  const r=await fetch(`${PRIVATE_API}?${params.toString()}`,{
     method:options.method||'GET',
     headers:{Authorization:`Bearer ${session.access_token}`,apikey:SUPABASE_KEY,Accept:'application/json','Content-Type':'application/json'},
     body:options.body?JSON.stringify(options.body):undefined,
@@ -61,6 +63,7 @@ async function callPrivate(section,options={}){
   if(!r.ok)throw Object.assign(new Error(j.error||`http_${r.status}`),{status:r.status})
   return j
 }
+window.axivaPrivateApi=callPrivate
 
 async function loadPrivateArea(){
   try{
@@ -101,7 +104,7 @@ function setupPrivateSliders(){
 }
 async function loadAnalysisData(){
   setupPrivateSliders();$('analysisStatus').classList.remove('hidden');$('analysisStatus').textContent='Carregando base fundamentalista...'
-  try{const j=await callPrivate('analysis');analysisRows=Array.isArray(j.data)?j.data:[];$('analysisStatus').textContent=`${analysisRows.length} empresas disponíveis para análise.`}
+  try{const j=await callPrivate('analysis');analysisRows=Array.isArray(j.data)?j.data:[];window.axivaAnalysisRows=analysisRows;$('analysisStatus').textContent=`${analysisRows.length} empresas disponíveis para análise.`;window.dispatchEvent(new CustomEvent('axiva:analysis-ready',{detail:{rows:analysisRows}}))}
   catch(e){$('analysisStatus').textContent='Não foi possível carregar a base fundamentalista.'}
 }
 function privateRowMeetsFilters(r,c){
@@ -237,7 +240,8 @@ document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click'
   if(btn.id==='adminNav'&&currentRole!=='admin')return
   document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));btn.classList.add('active')
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(btn.dataset.page+'Page')?.classList.add('active')
-  $('pageTitle').textContent=btn.dataset.page==='selection'?'AÇÕES SELECIONADAS':btn.textContent.trim()
+  const pageTitles={overview:'VISÃO GERAL',selection:'AÇÕES SELECIONADAS',analysis:'DESCOBRIR EMPRESAS',company:'ANALISAR EMPRESA',compare:'COMPARAR EMPRESAS',watch:'ACOMPANHAR',simulate:'SIMULAR PREÇO',strategies:'ESTRATÉGIAS',method:'METODOLOGIA',admin:'ADMINISTRAÇÃO'}
+  $('pageTitle').textContent=pageTitles[btn.dataset.page]||btn.textContent.trim()
   if(btn.dataset.page==='admin')await loadAdminUsers()
   if(btn.dataset.page==='strategies'&&!strategiesLoaded)await loadStrategies()
 }))
