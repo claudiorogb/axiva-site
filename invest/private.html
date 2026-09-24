@@ -6,7 +6,7 @@
 <title>AXIVA Invest — Área exclusiva</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="/axiva-mark.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/invest/private.css?v=12">
+<link rel="stylesheet" href="/invest/private.css?v=2?v=12">
 </head>
 <body>
 <div id="loginView" class="login-view">
@@ -174,7 +174,7 @@
     </section>
 
     <section id="watchPage" class="page">
-      <div class="intro"><div><h2>Acompanhar</h2><p>Monte sua lista e crie condições para saber quando preço ou indicadores atingirem os valores definidos.</p></div><span class="help-bubble" data-tip="Nesta versão, os alertas são verificados quando você abre ou atualiza a área exclusiva. Eles aparecem aqui quando a condição é atingida." tabindex="0">?</span></div>
+      <div class="intro"><div><p>Monte sua lista e crie condições para saber quando preço ou indicadores atingirem os valores definidos.</p></div><span class="help-bubble" data-tip="Os alertas são verificados automaticamente e podem gerar um e-mail quando a condição definida for atingida." tabindex="0">?</span></div>
       <div class="watch-layout">
         <div class="suite-card">
           <div class="compact-section-head"><div><h3>Minha Lista</h3><p>Salve as empresas que quer acompanhar sem montar uma carteira.</p></div></div>
@@ -183,7 +183,7 @@
           <div id="watchlistContent"></div>
         </div>
         <div class="suite-card">
-          <div class="compact-section-head"><div><h3>Alertas da plataforma</h3><p>Defina uma condição objetiva. Quando ela for atingida, você recebe no máximo um e-mail por dia útil para esse alerta.</p></div></div>
+          <div class="compact-section-head"><div><h3>Alertas da plataforma</h3><p>Defina uma condição. Quando ela for atingida, você recebe um e-mail para esse alerta.</p></div></div>
           <form id="alertForm" class="alert-form">
             <label>Empresa<input id="alertTicker" list="companyTickerList" placeholder="Ex.: ITUB4" required></label>
             <label>Indicador<select id="alertMetric"><option value="price">Preço</option><option value="discount_pct">Desconto AXIVA</option><option value="pl">P/L</option><option value="pvp">P/VP</option><option value="roe">ROE</option><option value="roic">ROIC</option><option value="dividend_yield">DY</option><option value="quality_score">Qualidade</option></select></label>
@@ -192,9 +192,12 @@
             <button class="mini-btn primary" type="submit">Criar alerta</button>
           </form>
           <div id="alertValueHint" class="micro-note">Para preço, informe o valor em reais.</div>
-          <div id="alertsStatus" class="micro-note"></div>
-          <div id="alertsContent"></div>
         </div>
+      </div>
+      <div class="suite-card alerts-full-card">
+        <div class="compact-section-head"><div><h3>Alertas criados</h3><p>Acompanhe, pause, reinicie ou cancele seus alertas.</p></div></div>
+        <div id="alertsStatus" class="micro-note"></div>
+        <div id="alertsContent"></div>
       </div>
     </section>
 
@@ -268,6 +271,13 @@
 <script type="module" src="/invest/private.js?v=10"></script>
 <script type="module" src="/invest/selection-details.js?v=1"></script>
 <script type="module" src="/invest/user-strategies.js?v=1"></script>
-<script type="module" src="/invest/analysis-suite.js?v=5"></script>
+<script type="module" src="/invest/analysis-suite.js?v=6"></script>
+<div id="axivaModal" class="axiva-modal hidden" role="dialog" aria-modal="true" aria-labelledby="axivaModalTitle">
+  <div class="axiva-modal-card">
+    <h3 id="axivaModalTitle">Aviso</h3>
+    <p id="axivaModalMessage"></p>
+    <div id="axivaModalActions" class="axiva-modal-actions"></div>
+  </div>
+</div>
 </body>
 </html>
