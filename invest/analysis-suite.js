@@ -503,11 +503,11 @@ $('compareExportBtn')?.addEventListener('click',()=>{
 
 async function addWatch(ticker){
   try{await api('watchlist',{method:'POST',body:{action:'add',ticker}});toast(ticker+' adicionado à Minha Lista.');await loadWatch()}
-  catch(e){toast('Não foi possível adicionar à lista.')}
+  catch(e){showError('Não foi possível adicionar à lista. '+(e?.message||''))}
 }
 async function removeWatch(ticker){
   try{await api('watchlist',{method:'POST',body:{action:'delete',ticker}});await loadWatch()}
-  catch(e){toast('Não foi possível remover da lista.')}
+  catch(e){showError('Não foi possível remover da lista. '+(e?.message||''))}
 }
 function renderWatch(){
   const el=$('watchlistContent')
