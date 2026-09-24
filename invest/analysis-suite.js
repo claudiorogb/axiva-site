@@ -224,13 +224,22 @@ $('exportDiscoveryBtn')?.addEventListener('click',()=>{
   csvDownload('axiva-descoberta-'+today()+'.csv',['Ticker','Empresa','Setor','Preço','Preço-alvo','Desconto','Qualidade','P/L','P/VP','DY','ROE','ROIC'],discoveryRows.map(r=>[r.ticker,r.company_name,r.sector,r.current_price,r.target_price,r.discount_pct,r.quality_score,r.pl,r.pvp,r.dividend_yield,r.roe,r.roic]))
 })
 
-$('saveCurrentStrategyBtn')?.addEventListener('click',async()=>{
-  const name=prompt('Nome da estratégia:')
-  if(!name||name.trim().length<2)return
-  const c=filterState()
-  const body={action:'create',name:name.trim(),sector:c.sector||null,max_pl:isActiveValue('max_pl',c.max_pl)?c.max_pl:null,max_pvp:isActiveValue('max_pvp',c.max_pvp)?c.max_pvp:null,min_roe:isActiveValue('min_roe',c.min_roe)?c.min_roe:null,min_roic:isActiveValue('min_roic',c.min_roic)?c.min_roic:null,min_dy:isActiveValue('min_dy',c.min_dy)?c.min_dy:null,min_quality:c.min_quality,min_discount:c.min_discount,min_revenue_growth_5y:c.min_revenue_growth_5y,max_net_debt_to_equity:c.max_net_debt_to_equity,max_price:c.max_price,min_ebit_margin:c.min_ebit_margin,min_net_margin:c.min_net_margin,min_current_ratio:c.min_current_ratio}
-  try{await api('user-strategies',{method:'POST',body});toast('Estratégia salva.');}
-  catch(e){toast('Não foi possível salvar esta estratégia agora.')}
+$('saveCurrentStrategyBtn')?.addEventListener('click',()=>{
+  $('strategyQuickSave')?.classList.remove('hidden')
+  $('strategyQuickName')?.focus()
+})
+$('strategyQuickCancel')?.addEventListener('click',()=>{$('strategyQuickSave')?.classList.add('hidden');if($('strategyQuickName'))$('strategyQuickName').value=''})
+$('strategyQuickConfirm')?.addEventListener('click',async()=>{
+  const name=String($('strategyQuickName')?.value||'').trim()
+  if(name.length<2){toast('Informe um nome para a estratégia.');return}
+  const fs=filterState()
+  const body={action:'create',name,sector:fs.sector||null,max_pl:isActiveValue('max_pl',fs.max_pl)?fs.max_pl:null,max_pvp:isActiveValue('max_pvp',fs.max_pvp)?fs.max_pvp:null,min_roe:isActiveValue('min_roe',fs.min_roe)?fs.min_roe:null,min_roic:isActiveValue('min_roic',fs.min_roic)?fs.min_roic:null,min_dy:isActiveValue('min_dy',fs.min_dy)?fs.min_dy:null,min_quality:fs.min_quality,min_discount:fs.min_discount,min_revenue_growth_5y:fs.min_revenue_growth_5y,max_net_debt_to_equity:fs.max_net_debt_to_equity,max_price:fs.max_price,min_ebit_margin:fs.min_ebit_margin,min_net_margin:fs.min_net_margin,min_current_ratio:fs.min_current_ratio}
+  try{
+    await api('user-strategies',{method:'POST',body})
+    toast('Estratégia salva.')
+    $('strategyQuickSave')?.classList.add('hidden')
+    if($('strategyQuickName'))$('strategyQuickName').value=''
+  }catch(e){toast('Não foi possível salvar esta estratégia agora.')}
 })
 
 function mapSvg(){
@@ -448,6 +457,19 @@ async function loadAlerts(){
   try{const j=await api('alerts');alertData=Array.isArray(j.data)?j.data:[];$('alertsStatus').textContent=alertData.filter(a=>a.triggered&&a.active).length+' condição(ões) atingida(s) agora.';renderAlerts();renderOverviewFollow()}
   catch(e){$('alertsStatus').textContent='Não foi possível carregar os alertas.'}
 }
+function updateAlertHint(){
+  const metric=$('alertMetric')?.value
+  const percent=['discount_pct','roe','roic','dividend_yield'].includes(metric)
+  const quality=metric==='quality_score'
+  if($('alertThreshold')){
+    $('alertThreshold').placeholder=percent?'Ex.: 15 para 15%':quality?'Ex.: 70':'Ex.: 30,00'
+    $('alertThreshold').step=quality?'1':'.01'
+  }
+  if($('alertValueHint'))$('alertValueHint').textContent=percent?'Informe o percentual como número inteiro. Ex.: 15 para 15%.':quality?'Informe uma nota entre 0 e 100.':'Para preço e múltiplos, informe o valor numérico mostrado na plataforma.'
+}
+$('alertMetric')?.addEventListener('change',updateAlertHint)
+updateAlertHint()
+
 $('alertForm')?.addEventListener('submit',async e=>{
   e.preventDefault();const r=resolveRow($('alertTicker').value);if(!r){toast('Empresa não encontrada.');return}
   const metric=$('alertMetric').value,operator=$('alertOperator').value
