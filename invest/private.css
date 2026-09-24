@@ -162,7 +162,7 @@ button,input,select{font-family:inherit}
 #selectionTableWrap .private-table{width:100%;min-width:0}
 #selectionTableWrap .private-row{grid-template-columns:1.65fr .9fr .9fr .8fr .8fr .7fr;width:100%}
 #selectionTableWrap .private-row>.ticker{min-width:0}
-.detail-top-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.detail-top-actions{display:flex;align-items:center;justify-content:flex-start;gap:10px;flex-wrap:wrap}
 .detail-analyze{border:0;background:#13beb8;color:#05213b;border-radius:10px;padding:10px 14px;font:inherit;font-size:13px;font-weight:850;cursor:pointer}
 .detail-analyze:hover{filter:brightness(.98)}
 #selectionPage .detail-hero{background:#071d34;border:1px solid #193d5a;border-top:3px solid #13beb8;text-align:left;color:#fff;padding:16px 18px}
