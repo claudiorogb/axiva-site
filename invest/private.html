@@ -6,7 +6,7 @@
 <title>AXIVA Invest — Área exclusiva</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="/axiva-mark.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/invest/private.css?v=11">
+<link rel="stylesheet" href="/invest/private.css?v=12">
 </head>
 <body>
 <div id="loginView" class="login-view">
@@ -137,6 +137,7 @@
           </div>
         </div>
         <div id="activeCriteria" class="active-criteria"></div>
+        <div id="strategyQuickSave" class="quick-save hidden"><input id="strategyQuickName" type="text" maxlength="80" placeholder="Nome da estratégia"><button id="strategyQuickConfirm" class="mini-btn primary" type="button">Salvar</button><button id="strategyQuickCancel" class="mini-btn secondary" type="button">Cancelar</button></div>
         <div id="analysisStatus" class="status">Carregando base fundamentalista...</div>
         <div id="analysisResults" class="table-wrap hidden"></div>
         <div id="discoveryExplain" class="explain-results"></div>
@@ -187,9 +188,10 @@
             <label>Empresa<input id="alertTicker" list="companyTickerList" placeholder="Ex.: ITUB4" required></label>
             <label>Indicador<select id="alertMetric"><option value="price">Preço</option><option value="discount_pct">Desconto AXIVA</option><option value="pl">P/L</option><option value="pvp">P/VP</option><option value="roe">ROE</option><option value="roic">ROIC</option><option value="dividend_yield">DY</option><option value="quality_score">Qualidade</option></select></label>
             <label>Condição<select id="alertOperator"><option value="lte">Menor ou igual</option><option value="gte">Maior ou igual</option></select></label>
-            <label>Valor<input id="alertThreshold" type="number" step=".01" required></label>
+            <label>Valor<input id="alertThreshold" type="number" step=".01" required placeholder="Ex.: 30,00"></label>
             <button class="mini-btn primary" type="submit">Criar alerta</button>
           </form>
+          <div id="alertValueHint" class="micro-note">Para preço, informe o valor em reais.</div>
           <div id="alertsStatus" class="micro-note"></div>
           <div id="alertsContent"></div>
         </div>
@@ -266,6 +268,6 @@
 <script type="module" src="/invest/private.js?v=9"></script>
 <script type="module" src="/invest/selection-details.js?v=1"></script>
 <script type="module" src="/invest/user-strategies.js?v=1"></script>
-<script type="module" src="/invest/analysis-suite.js?v=1"></script>
+<script type="module" src="/invest/analysis-suite.js?v=2"></script>
 </body>
 </html>
