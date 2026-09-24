@@ -364,7 +364,7 @@ function sectorPanel(r){
     ['ROE',r.roe,s.roe.median,'return',true,'Mediana do setor'],
     ['ROIC',r.roic,s.roic.median,'return',true,'Mediana do setor']
   ]
-  return '<div class="micro-note">Setor: <b>'+esc(r.sector||'—')+'</b> • '+s.peers.length+' empresas de referência. Cada emissor entra uma única vez.</div><div class="comparison-list">'+items.map(([label,val,ref,kind,isPct,refLabel])=>{
+  return '<div class="micro-note">Setor: <b>'+esc(r.sector||'—')+'</b> • '+s.peers.length+' empresas de referência.</div><div class="comparison-list">'+items.map(([label,val,ref,kind,isPct,refLabel])=>{
     const [rel,cls]=relativeText(val,ref,kind)
     return '<div class="comparison-row"><b>'+label+'</b><span>Empresa '+(isPct?pct(val):num(val))+'</span><span>'+refLabel+' '+(isPct?pct(ref):num(ref))+'</span><strong class="'+cls+'">'+rel+'</strong></div>'
   }).join('')+'</div>'
