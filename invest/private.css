@@ -322,3 +322,10 @@ button,input,select{font-family:inherit}
 .fundamental-item strong{display:block;margin-top:5px;font-size:13px;color:#173a56;overflow-wrap:anywhere}
 @media(max-width:850px){.fundamentals-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){.fundamentals-grid{grid-template-columns:1fr}}
+
+
+/* Empresa x setor abaixo dos fundamentos */
+.company-analysis-main{align-items:start}
+.company-analysis-left{display:grid;gap:12px;min-width:0}
+.company-quality-card{align-self:stretch}
+@media(max-width:900px){.company-analysis-main{grid-template-columns:1fr}.company-quality-card{align-self:auto}}
