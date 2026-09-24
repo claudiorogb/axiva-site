@@ -187,3 +187,16 @@ button,input,select{font-family:inherit}
 /* Unificar painel setorial 2026-09-24 */
 .insight-grid.single{grid-template-columns:1fr}
 .insight-grid.single>.insight-card{grid-column:1/-1}
+
+
+/* Paginação Descobrir 2026-09-24 */
+.discovery-pager{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:18px 10px 4px}
+.discovery-pager button{border:1px solid #cbd8e2;background:#fff;color:#17324d;border-radius:9px;padding:8px 11px;font:inherit;font-size:12px;font-weight:800;cursor:pointer}
+.discovery-pager button:hover:not(:disabled){border-color:#13beb8;background:#eefcfb}
+.discovery-pager button.active{background:#13beb8;border-color:#13beb8;color:#05213b}
+.discovery-pager button:disabled{opacity:.45;cursor:not-allowed}
+.pager-ellipsis{color:#607287;font-weight:800;padding:0 2px}
+@media(max-width:700px){
+  .discovery-pager{gap:6px;padding-top:14px}
+  .discovery-pager button{padding:7px 9px;font-size:11px}
+}
