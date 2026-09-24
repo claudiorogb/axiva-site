@@ -589,7 +589,7 @@ function updateAlertHint(){
     $('alertThreshold').placeholder=percent?'Ex.: 15 para 15%':quality?'Ex.: 70':'Ex.: 30,00'
     $('alertThreshold').step=quality?'1':'.01'
   }
-  if($('alertValueHint'))$('alertValueHint').textContent=percent?'Informe o percentual como número inteiro. Ex.: 15 para 15%.':quality?'Informe uma nota entre 0 e 100.':'Para preço e múltiplos, informe o valor numérico mostrado na plataforma.'
+  if($('alertValueHint'))$('alertValueHint').textContent=percent?'Informe o percentual como número inteiro. Ex.: 15 para 15%.':quality?'Informe uma nota entre 0 e 100.':''
 }
 $('alertMetric')?.addEventListener('change',updateAlertHint)
 updateAlertHint()
