@@ -12,7 +12,7 @@ const MACRO_API='https://zbtijblvkzkeposvkfob.supabase.co/functions/v1/invest-ma
 const SEARCH_API='https://zbtijblvkzkeposvkfob.supabase.co/functions/v1/invest-public-search';
 
 const fallbackMarket=[
-{label:'Itaú PN',price:42.39,day_change_pct:.0009445100},{label:'B3 ON',price:17.35,day_change_pct:-.0011514105},{label:'WEG ON',price:51.02,day_change_pct:.0055183287},{label:'Ambev ON',price:15.73,day_change_pct:-.0088216761},{label:'Localiza ON',price:35.78,day_change_pct:.0053385783},{label:'Lojas Renner ON',price:11.20,day_change_pct:-.0008920607},{label:'PRIO ON',price:64.24,day_change_pct:.0051635112},{label:'Porto ON',price:49.81,day_change_pct:-.0045963229},{label:'Vivara ON',price:22.43,day_change_pct:.0013392857},{label:'Raia Drogasil ON',price:19.57,day_change_pct:.0015353122},{label:'BTG Pactual Units',price:60.22,day_change_pct:-.0042989418},{label:'CPFL Energia ON',price:44.91,day_change_pct:.0040241449}
+{label:'Itaú PN',price:null,day_change_pct:null},{label:'B3 ON',price:null,day_change_pct:null},{label:'WEG ON',price:null,day_change_pct:null},{label:'Ambev ON',price:null,day_change_pct:null},{label:'Localiza ON',price:null,day_change_pct:null},{label:'Lojas Renner ON',price:null,day_change_pct:null},{label:'PRIO ON',price:null,day_change_pct:null},{label:'Porto ON',price:null,day_change_pct:null},{label:'Vivara ON',price:null,day_change_pct:null},{label:'Raia Drogasil ON',price:null,day_change_pct:null},{label:'BTG Pactual Units',price:null,day_change_pct:null},{label:'CPFL Energia ON',price:null,day_change_pct:null},{label:'Sabesp ON',price:null,day_change_pct:null},{label:'Taesa Units',price:null,day_change_pct:null},{label:'Aura 360',price:null,day_change_pct:null},{label:'Totvs ON',price:null,day_change_pct:null},{label:'Multiplan ON',price:null,day_change_pct:null},{label:'Vibra ON',price:null,day_change_pct:null}
 ];
 
 const fmtMoney=v=>v==null?'—':Number(v).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
@@ -52,7 +52,7 @@ function renderMarket(data){
   document.getElementById('tickerA').innerHTML=html;
   document.getElementById('tickerB').innerHTML=html;
 }
-async function loadMarket(){try{const j=await fetchJSON(MARKET_API,3);renderMarket(j.data);}catch(e){console.error('AXIVA market error',e);renderMarket(fallbackMarket);}}
+async function loadMarket(){try{const j=await fetchJSON(MARKET_API,3);if(!Array.isArray(j.data)||!j.data.length)throw new Error('market_data_invalid');renderMarket(j.data);try{localStorage.setItem('axiva_market_cache',JSON.stringify({saved_at:Date.now(),data:j.data}));}catch(_){}}catch(e){console.error('AXIVA market error',e);let used=false;try{const c=JSON.parse(localStorage.getItem('axiva_market_cache')||'null');if(c&&Array.isArray(c.data)&&Date.now()-Number(c.saved_at||0)<=15*60*1000){renderMarket(c.data);used=true;}}catch(_){}if(!used)renderMarket(fallbackMarket);}}
 
 function setupHeroMacro(){
   const panel=document.querySelector('.hero-panel');if(!panel)return;
@@ -77,8 +77,8 @@ function renderMacro(data){
   });
 }
 async function loadMacro(){
-  try{const j=await fetchJSON(MACRO_API,3);if(!Array.isArray(j.data))throw new Error('macro_data_invalid');renderMacro(j.data);try{localStorage.setItem('axiva_macro_cache',JSON.stringify(j.data));}catch(_){}}
-  catch(e){console.error('AXIVA macro error',e);try{const c=JSON.parse(localStorage.getItem('axiva_macro_cache')||'[]');if(Array.isArray(c)&&c.length)renderMacro(c);}catch(_){}}
+  try{const j=await fetchJSON(MACRO_API,3);if(!Array.isArray(j.data))throw new Error('macro_data_invalid');renderMacro(j.data);try{localStorage.setItem('axiva_macro_cache',JSON.stringify({saved_at:Date.now(),data:j.data}));}catch(_){}}
+  catch(e){console.error('AXIVA macro error',e);let used=false;try{const c=JSON.parse(localStorage.getItem('axiva_macro_cache')||'null');if(c&&Array.isArray(c.data)&&Date.now()-Number(c.saved_at||0)<=15*60*1000){renderMacro(c.data);used=true;}}catch(_){}if(!used)renderMacro([]);}
 }
 
 function setupStrategySection(){
