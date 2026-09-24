@@ -571,12 +571,11 @@ function hydrateAlert(a){
   return {...a,current_value:cv,triggered,company_name:r?.company_name||null}
 }
 async function loadAlerts(){
-  const client=window.axivaSupabase
-  if(!client){$('alertsStatus').textContent='Não foi possível carregar os alertas.';return}
+  const api=window.axivaPrivateApi
+  if(!api){$('alertsStatus').textContent='Não foi possível carregar os alertas.';return}
   try{
-    const {data,error}=await client.from('invest_user_alerts').select('id,ticker,metric,operator,threshold,active,last_triggered_at,created_at,updated_at').order('created_at',{ascending:false})
-    if(error)throw error
-    alertData=(data||[]).map(hydrateAlert)
+    const j=await api('alerts')
+    alertData=Array.isArray(j.data)?j.data:[]
     $('alertsStatus').textContent=alertData.filter(a=>a.triggered&&a.active).length+' condição(ões) atingida(s) agora.'
     renderAlerts();renderOverviewFollow()
   }catch(e){console.error('AXIVA alerts load error',e);$('alertsStatus').textContent='';showError('Não foi possível carregar os alertas. '+(e?.message||''))}
@@ -600,31 +599,26 @@ $('alertForm')?.addEventListener('submit',async e=>{
   const metric=$('alertMetric').value,operator=$('alertOperator').value
   let threshold=n($('alertThreshold').value);if(threshold==null){showError('Informe um valor válido.');return}
   if(['discount_pct','roe','roic','dividend_yield'].includes(metric))threshold/=100
-  const client=window.axivaSupabase
-  if(!client){showError('Não foi possível criar o alerta.');return}
+  const api=window.axivaPrivateApi
+  if(!api){showError('Não foi possível criar o alerta.');return}
   try{
-    const {data:{user},error:userErr}=await client.auth.getUser()
-    if(userErr||!user)throw userErr||new Error('not_authenticated')
-    const {error}=await client.from('invest_user_alerts').insert({user_id:user.id,ticker:r.ticker,metric,operator,threshold})
-    if(error)throw error
+    await api('alerts',{method:'POST',body:{action:'create',ticker:r.ticker,metric,operator,threshold}})
     e.target.reset();updateAlertHint();toast('Alerta criado.');await loadAlerts()
   }catch(err){console.error('AXIVA alert create error',err);showError('Não foi possível criar o alerta. '+(err?.message||''))}
 })
 async function toggleAlert(id,active){
-  const client=window.axivaSupabase
+  const api=window.axivaPrivateApi
   try{
-    const update={active,updated_at:new Date().toISOString()}
-    if(active)update.last_triggered_at=null
-    const {error}=await client.from('invest_user_alerts').update(update).eq('id',id)
-    if(error)throw error
+    if(!api)throw new Error('API indisponível')
+    await api('alerts',{method:'POST',body:{action:'toggle',id,active}})
     await loadAlerts()
   }catch(e){console.error('AXIVA alert toggle error',e);showError('Não foi possível alterar o alerta. '+(e?.message||''))}
 }
 async function deleteAlert(id){
-  const client=window.axivaSupabase
+  const api=window.axivaPrivateApi
   try{
-    const {error}=await client.from('invest_user_alerts').delete().eq('id',id)
-    if(error)throw error
+    if(!api)throw new Error('API indisponível')
+    await api('alerts',{method:'POST',body:{action:'delete',id}})
     await loadAlerts()
   }catch(e){console.error('AXIVA alert delete error',e);showError('Não foi possível excluir o alerta. '+(e?.message||''))}
 }
