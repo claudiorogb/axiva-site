@@ -309,3 +309,7 @@ button,input,select{font-family:inherit}
 #analysisPage .suite-result-row{cursor:pointer}
 #analysisPage .suite-result-row:hover{background:#103452}
 #analysisPage .suite-result-row:focus-visible{outline:3px solid #13beb8;outline-offset:-3px}
+
+
+/* Padronização do item Página Inicial no menu */
+.sidebar .nav-item[data-page="overview"]{padding-left:12px}
