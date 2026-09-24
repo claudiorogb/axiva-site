@@ -37,8 +37,8 @@ const defs=[
   {key:'max_net_debt_to_equity',id:'sDebt',label:'Dívida líquida / PL máxima',min:-3,max:5,step:.1,value:1,suffix:'',mode:'number'},
   {key:'min_revenue_growth_5y',id:'sGrowth',label:'Crescimento da receita 5 anos mínimo',min:-50,max:100,step:.5,value:5,suffix:'%',mode:'percent'},
   {key:'max_price',id:'sPrice',label:'Preço máximo',min:0,max:300,step:1,value:30,suffix:'',mode:'money'},
-  {key:'min_discount',id:'sTargetGap',label:'Ágio / deságio vs Preço-alvo AXIVA',min:-100,max:100,step:1,value:0,suffix:'%',mode:'percent'},
-  {key:'min_graham_discount',id:'sGrahamGap',label:'Ágio / deságio vs Preço Graham',min:-100,max:100,step:1,value:0,suffix:'%',mode:'percent'}
+  {key:'min_discount',id:'sTargetGap',label:'Ágio / deságio vs Preço-alvo AXIVA',min:-100,max:100,step:1,value:0,suffix:'%',mode:'percent',help:'Valor positivo representa o percentual de desconto desejado em relação ao Preço-alvo AXIVA.'},
+  {key:'min_graham_discount',id:'sGrahamGap',label:'Ágio / deságio vs Preço Graham',min:-100,max:100,step:1,value:0,suffix:'%',mode:'percent',help:'Valor positivo representa o percentual de desconto desejado em relação ao Preço Graham.'}
 ]
 
 function fmtDef(d,v){
@@ -53,7 +53,7 @@ function criterionCard(d){
       <output id="${d.id}Out">${fmtDef(d,d.value)}</output>
     </div>
     <input id="${d.id}" type="range" min="${d.min}" max="${d.max}" step="${d.step}" value="${d.value}" disabled>
-    ${d.key==='min_discount'||d.key==='min_graham_discount'?'<small>valor positivo = desconto em relação ao preço atual</small>':''}
+    ${d.help?'<small>'+d.help+'</small>':''}
   </div>`
 }
 function setup(){
