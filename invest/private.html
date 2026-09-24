@@ -6,7 +6,7 @@
 <title>AXIVA Invest — Área exclusiva</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="/axiva-mark.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/invest/private.css?v=10">
+<link rel="stylesheet" href="/invest/private.css?v=11">
 </head>
 <body>
 <div id="loginView" class="login-view">
@@ -50,47 +50,170 @@
 <div id="appView" class="app-view hidden">
   <aside class="sidebar">
     <div class="side-brand"><img src="/axiva-mark.svg" alt="AXIVA"><div><strong>AXIVA Invest</strong><span>Área exclusiva</span></div></div>
-    <nav>
-      <button class="nav-item active" data-page="selection">Seleção de Ações</button>
-      <button class="nav-item" data-page="analysis">Analisador</button>
+    <nav aria-label="Navegação da área exclusiva">
+      <button class="nav-item active" data-page="overview"><span class="nav-dot">●</span>Visão geral</button>
+      <button class="nav-item" data-page="selection">Seleção</button>
+      <button class="nav-item" data-page="analysis">Descobrir</button>
+      <button class="nav-item" data-page="company">Analisar</button>
+      <button class="nav-item" data-page="compare">Comparar</button>
+      <button class="nav-item" data-page="watch">Acompanhar</button>
+      <button class="nav-item" data-page="simulate">Simular</button>
       <button class="nav-item" data-page="strategies">Estratégias</button>
       <button class="nav-item" data-page="method">Metodologia</button>
       <button id="adminNav" class="nav-item hidden" data-page="admin">Administração</button>
     </nav>
     <div class="side-bottom"><span id="userEmail"></span><button id="logoutBtn">Sair</button></div>
   </aside>
-  <main class="main">
-    <header class="topbar"><div><span class="eyebrow"></span><h1 id="pageTitle">AÇÕES SELECIONADAS</h1></div><div class="access-chip" id="accessChip">Assinatura ativa</div></header>
 
-    <section id="selectionPage" class="page active">
-      <div class="intro selection-intro"><div><p class="selection-subtitle">Conforme a metodologia de qualidade + desconto.</p><p class="selection-explanation">Segundo nossa metodologia, as empresas são selecionadas pela combinação entre qualidade dos fundamentos e desconto em relação ao preço atual.<br>Consulte a página <a href="#metodo" id="selectionMethodLink">Método</a> para entender os critérios utilizados.</p></div><div class="legend">Fundamentos + valuation</div></div>
+  <main class="main">
+    <header class="topbar"><div><span class="eyebrow">AXIVA INVEST</span><h1 id="pageTitle">VISÃO GERAL</h1></div><div class="access-chip" id="accessChip">Assinatura ativa</div></header>
+
+    <section id="overviewPage" class="page active">
+      <div class="intro"><div><h2>O que você quer fazer?</h2><p>Escolha pelo objetivo. Cada ferramenta explica os dados usados e como interpretar o resultado.</p></div><span class="help-bubble" data-tip="A AXIVA organiza dados e critérios. Ela não substitui sua decisão de investimento." tabindex="0">?</span></div>
+      <div class="suite-overview-grid">
+        <article class="suite-entry"><span class="suite-icon">⌕</span><div><h3>Encontrar empresas</h3><p>Filtre por fundamentos, valuation, setor ou escreva os critérios em linguagem comum.</p></div><button class="mini-btn" data-goto="analysis">Abrir</button></article>
+        <article class="suite-entry"><span class="suite-icon">◎</span><div><h3>Entender uma empresa</h3><p>Veja Raio-X, qualidade, valuation, histórico, pares e o que mudou.</p></div><button class="mini-btn" data-goto="company">Abrir</button></article>
+        <article class="suite-entry"><span class="suite-icon">⇄</span><div><h3>Comparar empresas</h3><p>Coloque até cinco empresas lado a lado usando os mesmos indicadores.</p></div><button class="mini-btn" data-goto="compare">Abrir</button></article>
+        <article class="suite-entry"><span class="suite-icon">☆</span><div><h3>Acompanhar</h3><p>Crie sua lista e condições de alerta para preços e indicadores.</p></div><button class="mini-btn" data-goto="watch">Abrir</button></article>
+        <article class="suite-entry"><span class="suite-icon">↗</span><div><h3>Simular um preço</h3><p>Veja como P/L, P/VP, DY e margens mudariam em outro preço.</p></div><button class="mini-btn" data-goto="simulate">Abrir</button></article>
+      </div>
+      <div class="overview-stats" id="overviewStats"><div class="status">Carregando universo de análise...</div></div>
+      <div class="guide-strip"><strong>Como usar:</strong><span>1. Descubra empresas</span><span>2. Entenda os números</span><span>3. Compare</span><span>4. Salve o que quer acompanhar</span></div>
+    </section>
+
+    <section id="selectionPage" class="page">
+      <div class="intro selection-intro"><div><h2>Seleção AXIVA</h2><p class="selection-subtitle">Empresas que atendem à metodologia de qualidade + desconto.</p><p class="selection-explanation">Clique em uma empresa para abrir os detalhes. Consulte <a href="#metodo" id="selectionMethodLink">Metodologia</a> para entender os critérios e as limitações.</p></div><div class="legend">Fundamentos + valuation</div></div>
       <div id="selectionStatus" class="status">Carregando dados...</div>
       <div id="selectionTableWrap" class="table-wrap hidden"></div>
       <section id="selectionDetail" class="selection-detail hidden" aria-live="polite"></section>
-      <footer class="selection-disclaimer">*Este site possui caráter exclusivamente informativo e não constitui recomendação, indicação ou oferta de compra ou venda de ações. As decisões de investimento são de responsabilidade exclusiva do investidor.</footer>
+      <footer class="selection-disclaimer">Este conteúdo é informativo. Preço-alvo e demais métricas são referências calculadas pela metodologia AXIVA, não promessa de retorno nem indicação de compra ou venda.</footer>
     </section>
 
     <section id="analysisPage" class="page">
-      <div class="intro"><div><h2>Monte aqui seu filtro fundamentalista.</h2><p>Defina o peso de cada indicador e encontre empresas compatíveis com os parâmetros escolhidos.</p></div></div>
+      <div class="intro"><div><h2>Descobrir empresas</h2><p>Use filtros, um modelo pronto ou descreva em palavras o que procura. Todos os critérios aplicados ficam visíveis.</p></div><span class="help-bubble" data-tip="Você pode combinar filtros. Quanto mais critérios, menor tende a ser o número de empresas encontradas." tabindex="0">?</span></div>
+
+      <div class="suite-card natural-search-card">
+        <label for="naturalQuery"><strong>Busca por critérios</strong><span>Ex.: “ROE acima de 15%, P/L abaixo de 10 e DY acima de 5%”</span></label>
+        <div class="compact-input-row"><input id="naturalQuery" type="text" placeholder="Descreva os critérios que procura"><button id="naturalApplyBtn" class="mini-btn primary" type="button">Aplicar</button></div>
+        <div id="naturalFeedback" class="micro-note">A busca converte sua frase em filtros visíveis para você conferir antes de analisar.</div>
+      </div>
+
+      <div class="suite-card">
+        <div class="compact-section-head"><div><h3>Filtros prontos</h3><p>São apenas pontos de partida. Você pode alterar qualquer campo.</p></div></div>
+        <div class="preset-chips" id="presetChips">
+          <button class="chip-btn" data-preset="valor">Valor</button>
+          <button class="chip-btn" data-preset="dividendos">Dividendos</button>
+          <button class="chip-btn" data-preset="qualidade">Qualidade</button>
+          <button class="chip-btn" data-preset="rentabilidade">Rentabilidade</button>
+          <button class="chip-btn" data-preset="desconto">Desconto</button>
+        </div>
+      </div>
+
       <div class="tool-card">
         <div class="analysis-controls">
-          <label class="ticker-search">Empresa / ticker<input id="privateTicker" type="text" placeholder="Ex.: ITUB4"></label>
-          <div id="privateSliders" class="private-slider-grid"></div>
-          <div class="tool-actions"><button id="privateAnalyzeBtn">Analisar</button><button id="privateResetBtn" class="secondary">Limpar filtros</button></div>
+          <div class="filter-top-row">
+            <label class="ticker-search">Empresa / ticker<input id="privateTicker" type="text" placeholder="Ex.: ITUB4"></label>
+            <label class="suite-field">Setor<select id="advSector"><option value="">Todos os setores</option></select></label>
+            <label class="suite-field">Qualidade mínima <span class="help-bubble tiny" data-tip="Nota de 0 a 100 calculada pela metodologia AXIVA. Nem todos os ativos possuem valuation completo ainda." tabindex="0">?</span><input id="advQuality" type="number" min="0" max="100" step="1" placeholder="Ex.: 70"></label>
+            <label class="suite-field">Desconto mínimo % <span class="help-bubble tiny" data-tip="Diferença entre o preço-alvo AXIVA e a cotação atual, quando o valuation está disponível." tabindex="0">?</span><input id="advDiscount" type="number" step=".5" placeholder="Ex.: 15"></label>
+          </div>
+          <details class="advanced-filter-box">
+            <summary>Mais filtros</summary>
+            <div id="privateSliders" class="private-slider-grid"></div>
+            <div class="advanced-fields">
+              <label>Cresc. receita 5 anos mínimo %<input id="advGrowth" type="number" step=".5" placeholder="Ex.: 5"></label>
+              <label>Dívida líquida / PL máxima<input id="advDebt" type="number" step=".1" placeholder="Ex.: 1"></label>
+              <label>Preço máximo R$<input id="advPrice" type="number" step=".01" placeholder="Ex.: 30"></label>
+              <label>Margem EBIT mínima %<input id="advEbit" type="number" step=".5" placeholder="Ex.: 10"></label>
+              <label>Margem líquida mínima %<input id="advNet" type="number" step=".5" placeholder="Ex.: 8"></label>
+              <label>Liquidez corrente mínima<input id="advCurrentRatio" type="number" step=".1" placeholder="Ex.: 1,2"></label>
+            </div>
+          </details>
+          <div class="tool-actions compact-actions">
+            <button id="privateAnalyzeBtn" class="mini-btn primary">Analisar</button>
+            <button id="privateResetBtn" class="mini-btn secondary">Limpar</button>
+            <button id="saveCurrentStrategyBtn" class="mini-btn secondary" type="button">Salvar estratégia</button>
+            <button id="exportDiscoveryBtn" class="mini-btn secondary" type="button">Exportar CSV</button>
+          </div>
         </div>
+        <div id="activeCriteria" class="active-criteria"></div>
         <div id="analysisStatus" class="status">Carregando base fundamentalista...</div>
         <div id="analysisResults" class="table-wrap hidden"></div>
+        <div id="discoveryExplain" class="explain-results"></div>
+      </div>
+
+      <div class="suite-card">
+        <div class="compact-section-head"><div><h3>Mapa Qualidade × Preço</h3><p>Visualize ativos com valuation disponível. Quanto mais acima, maior a nota de qualidade; quanto mais à direita, maior o desconto calculado.</p></div><span class="help-bubble" data-tip="O gráfico não classifica investimentos como bons ou ruins. Ele apenas posiciona os ativos por duas métricas da metodologia." tabindex="0">?</span></div>
+        <div id="qualityPriceMap" class="scatter-shell"><div class="status">Carregando mapa...</div></div>
       </div>
     </section>
 
+    <section id="companyPage" class="page">
+      <div class="intro"><div><h2>Raio-X da empresa</h2><p>Selecione uma empresa para ver fundamentos, valuation, comparação com pares e histórico em uma única leitura.</p></div></div>
+      <div class="suite-card company-picker-card">
+        <label>Empresa / ticker<input id="companyTicker" list="companyTickerList" placeholder="Digite um ticker ou nome"><datalist id="companyTickerList"></datalist></label>
+        <button id="companyLoadBtn" class="mini-btn primary" type="button">Analisar</button>
+        <button id="companyWatchBtn" class="icon-btn" type="button" title="Adicionar à Minha Lista" aria-label="Adicionar à Minha Lista">☆</button>
+      </div>
+      <div id="companyStatus" class="status">Escolha uma empresa para iniciar.</div>
+      <div id="companyWorkspace" class="company-workspace hidden"></div>
+    </section>
+
+    <section id="comparePage" class="page">
+      <div class="intro"><div><h2>Comparar empresas</h2><p>Adicione de duas a cinco empresas. Os indicadores usam a mesma data-base e aparecem lado a lado.</p></div></div>
+      <div class="suite-card">
+        <div class="compare-builder">
+          <input id="compareTicker" list="companyTickerList" placeholder="Ticker ou empresa">
+          <button id="compareAddBtn" class="mini-btn primary" type="button">Adicionar</button>
+          <div id="compareSelected" class="compare-selected"></div>
+        </div>
+        <div class="compact-actions"><button id="compareExportBtn" class="mini-btn secondary" type="button">Exportar CSV</button><button id="compareClearBtn" class="mini-btn secondary" type="button">Limpar</button></div>
+      </div>
+      <div id="compareWorkspace" class="compare-workspace"><div class="status">Adicione pelo menos duas empresas.</div></div>
+    </section>
+
+    <section id="watchPage" class="page">
+      <div class="intro"><div><h2>Acompanhar</h2><p>Monte sua lista e crie condições para saber quando preço ou indicadores atingirem os valores definidos.</p></div><span class="help-bubble" data-tip="Nesta versão, os alertas são verificados quando você abre ou atualiza a área exclusiva. Eles aparecem aqui quando a condição é atingida." tabindex="0">?</span></div>
+      <div class="watch-layout">
+        <div class="suite-card">
+          <div class="compact-section-head"><div><h3>Minha Lista</h3><p>Salve as empresas que quer acompanhar sem montar uma carteira.</p></div></div>
+          <div class="compact-input-row"><input id="watchTicker" list="companyTickerList" placeholder="Ticker ou empresa"><button id="watchAddBtn" class="mini-btn primary" type="button">Adicionar</button></div>
+          <div id="watchlistStatus" class="micro-note"></div>
+          <div id="watchlistContent"></div>
+        </div>
+        <div class="suite-card">
+          <div class="compact-section-head"><div><h3>Alertas da plataforma</h3><p>Defina uma condição objetiva e acompanhe o status aqui.</p></div></div>
+          <form id="alertForm" class="alert-form">
+            <label>Empresa<input id="alertTicker" list="companyTickerList" placeholder="Ex.: ITUB4" required></label>
+            <label>Indicador<select id="alertMetric"><option value="price">Preço</option><option value="discount_pct">Desconto AXIVA</option><option value="pl">P/L</option><option value="pvp">P/VP</option><option value="roe">ROE</option><option value="roic">ROIC</option><option value="dividend_yield">DY</option><option value="quality_score">Qualidade</option></select></label>
+            <label>Condição<select id="alertOperator"><option value="lte">Menor ou igual</option><option value="gte">Maior ou igual</option></select></label>
+            <label>Valor<input id="alertThreshold" type="number" step=".01" required></label>
+            <button class="mini-btn primary" type="submit">Criar alerta</button>
+          </form>
+          <div id="alertsStatus" class="micro-note"></div>
+          <div id="alertsContent"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="simulatePage" class="page">
+      <div class="intro"><div><h2>Simulador de preço</h2><p>Escolha uma empresa e teste outro preço mantendo os fundamentos atuais constantes.</p></div><span class="help-bubble" data-tip="A simulação não prevê preço futuro. Ela recalcula múltiplos usando o preço hipotético e os fundamentos atuais." tabindex="0">?</span></div>
+      <div class="suite-card simulator-card">
+        <label>Empresa<input id="simTicker" list="companyTickerList" placeholder="Ticker ou empresa"></label>
+        <label>Preço hipotético R$<input id="simPrice" type="number" min=".01" step=".01" placeholder="Ex.: 27,00"></label>
+        <button id="simRunBtn" class="mini-btn primary" type="button">Simular</button>
+      </div>
+      <div id="simWorkspace"><div class="status">Informe uma empresa e um preço hipotético.</div></div>
+    </section>
+
     <section id="strategiesPage" class="page">
-      <div class="intro"><div><p>Crie suas próprias regras fundamentalistas e acompanhe quais empresas atendem aos critérios atuais.</p></div></div>
+      <div class="intro"><div><h2>Estratégias</h2><p>Salve seus próprios critérios e acompanhe quais empresas continuam atendendo às regras.</p></div><span class="help-bubble" data-tip="Uma estratégia salva é um conjunto de filtros, não uma recomendação automática de investimento." tabindex="0">?</span></div>
       <div class="strategy-builder-card">
-        <div class="strategy-builder-head"><div><h3 class="strategy-create-title">Criar nova estratégia</h3><p>Escolha um nome e defina os critérios.</p></div></div>
+        <div class="strategy-builder-head"><div><h3 class="strategy-create-title">Criar nova estratégia</h3><p>Escolha um nome e defina os critérios básicos. Para filtros avançados, monte a busca em “Descobrir” e use “Salvar estratégia”.</p></div></div>
         <form id="userStrategyForm">
           <label class="strategy-name-label">Nome da estratégia<input id="strategyName" type="text" minlength="2" maxlength="80" required placeholder="Ex.: Valor e rentabilidade"></label>
           <div id="strategySliders" class="private-slider-grid"></div>
-          <div class="tool-actions"><button type="submit">Salvar estratégia</button><button id="strategyResetBtn" type="button" class="secondary">Limpar</button></div>
+          <div class="tool-actions"><button type="submit" class="mini-btn primary">Salvar estratégia</button><button id="strategyResetBtn" type="button" class="mini-btn secondary">Limpar</button></div>
           <div id="strategyMessage" class="message"></div>
         </form>
       </div>
@@ -103,14 +226,24 @@
     </section>
 
     <section id="methodPage" class="page">
-      <div class="intro"><div><h2>Metodologia AXIVA</h2><p>Critérios utilizados na avaliação, qualidade e formação do preço-alvo.</p></div></div>
+      <div class="intro"><div><h2>Metodologia AXIVA</h2><p>Veja como cada resultado é formado. A regra é mostrar o cálculo, a data-base e a limitação, não apenas a nota final.</p></div></div>
       <div class="method-grid">
-        <article class="info-card"><span>01</span><h3>Preço-alvo por múltiplos</h3><p>Calculamos dois valores: LPA atual × P/L médio de 5 anos e VPA atual × P/VP médio de 5 anos.</p></article>
-        <article class="info-card"><span>02</span><h3>Preço-alvo AXIVA</h3><p>O preço-alvo é a média aritmética dos dois valores. Se um deles não for válido ou for zero, usamos apenas o outro valor válido.</p></article>
-        <article class="info-card"><span>03</span><h3>Qualidade dos fundamentos</h3><p>A nota considera rentabilidade, margens, crescimento, endividamento, liquidez e travas mínimas, adaptadas ao tipo de empresa.</p></article>
-        <article class="info-card"><span>04</span><h3>Atualização</h3><p>As cotações são atualizadas automaticamente durante o mercado. Os fundamentos e as estratégias são revisados com a atualização semanal da base fundamentalista.</p></article>
+        <article class="info-card"><span>01</span><h3>Preço-alvo por múltiplos</h3><p>Calculamos LPA atual × P/L médio histórico e VPA atual × P/VP médio histórico. Quando os dois valores são válidos, usamos a média aritmética; quando apenas um é válido, usamos o valor disponível.</p></article>
+        <article class="info-card"><span>02</span><h3>Graham</h3><p>Quando LPA e VPA são positivos, usamos a fórmula √(22,5 × LPA × VPA) como uma segunda referência de valor.</p></article>
+        <article class="info-card"><span>03</span><h3>Qualidade explicável</h3><p>A nota considera rentabilidade, margens, crescimento, endividamento e liquidez, com travas diferentes conforme a classe metodológica. No Raio-X mostramos exatamente quais itens contribuíram e quais travas não foram atendidas.</p></article>
+        <article class="info-card"><span>04</span><h3>Comparação adequada</h3><p>P/L, P/VP, ROE, ROIC e DY são comparados com o grupo disponível mais específico — segmento, subsetor ou setor — quando há amostra suficiente.</p></article>
+        <article class="info-card"><span>05</span><h3>Preço x fundamentos</h3><p>Cotações podem mudar várias vezes ao dia. Fundamentos têm outra periodicidade. A plataforma exibe as datas para evitar a impressão de que todos os dados foram atualizados ao mesmo tempo.</p></article>
+        <article class="info-card"><span>06</span><h3>Seus critérios</h3><p>Filtros e estratégias mostram quais regras foram atendidas. “Atendeu ao filtro” significa apenas compatibilidade com parâmetros escolhidos, não recomendação.</p></article>
       </div>
-      <div class="method-note"><strong>Importante</strong><p>Preço-alvo não é previsão de cotação futura e a Seleção de Ações não constitui recomendação de compra ou venda.</p></div>
+      <div class="indicator-glossary">
+        <h3>Entenda os indicadores</h3>
+        <details><summary>P/L</summary><p>Relação entre preço da ação e lucro por ação. Deve ser interpretado junto ao setor, histórico e qualidade do negócio.</p></details>
+        <details><summary>P/VP</summary><p>Relação entre preço e valor patrimonial por ação. Sua utilidade varia bastante entre setores.</p></details>
+        <details><summary>ROE</summary><p>Retorno sobre o patrimônio líquido. Ajuda a observar eficiência na geração de resultado para o capital dos acionistas.</p></details>
+        <details><summary>ROIC</summary><p>Retorno sobre o capital investido. Na metodologia AXIVA ele é usado em empresas não financeiras.</p></details>
+        <details><summary>DY</summary><p>Dividend Yield relaciona proventos e preço. Um DY elevado isoladamente não garante recorrência futura.</p></details>
+      </div>
+      <div class="method-note"><strong>Importante</strong><p>Preço-alvo não é previsão de cotação futura. Seleções, filtros, comparações e alertas têm caráter informativo e não constituem indicação de compra ou venda.</p></div>
     </section>
 
     <section id="adminPage" class="page">
@@ -130,8 +263,9 @@
   </main>
 </div>
 <script src="/invest/member-content.js?v=3"></script>
-<script type="module" src="/invest/private.js?v=8"></script>
+<script type="module" src="/invest/private.js?v=9"></script>
 <script type="module" src="/invest/selection-details.js?v=1"></script>
 <script type="module" src="/invest/user-strategies.js?v=1"></script>
+<script type="module" src="/invest/analysis-suite.js?v=1"></script>
 </body>
 </html>
