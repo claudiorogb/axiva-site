@@ -76,7 +76,7 @@ async function loadPrivateArea(){
     accessChip.textContent=currentRole==='admin'?`${email} • Administrador`:`${email} • Plano ${plan==='annual'?'anual':plan}`
     $('adminNav').classList.toggle('hidden',currentRole!=='admin')
     showApp()
-    await Promise.all([loadSelection(),loadAnalysisData(),loadStrategies()])
+    await Promise.all([loadSelection(),loadAnalysisData()])
   }catch(e){
     await supabase.auth.signOut()
     showLogin(e.status===403?'Sua conta existe, mas o acesso à área exclusiva não está ativo.':'Não foi possível validar seu acesso. Tente novamente.')
