@@ -301,3 +301,8 @@ button,input,select{font-family:inherit}
 .filter-ticker-stack>label input{display:block;width:100%;margin-top:6px;text-transform:none}
 .advanced-filter-under-ticker{width:max-content;min-width:118px;padding:0 10px;margin:0}
 .advanced-filter-under-ticker summary{padding:8px 0}
+
+
+/* Retorno contextual da página Analisar empresa */
+.company-page-back{display:flex;align-items:center;min-height:31px;margin-bottom:10px}
+.company-page-back .mini-btn{font-size:11px}
