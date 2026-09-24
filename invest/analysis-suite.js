@@ -385,7 +385,12 @@ function companyFundamentalsPanel(r){
 function companySummaryPanel(r){
   const score=n(r.quality_score)
   const discount=n(r.discount_pct)
-  return '<div class="company-summary-box">Nota de fundamento: '+(score==null?'—':num(score,0)+'/100')+' | Desconto de '+pct(discount)+' segundo nossa metodologia.</div>'
+  const note='Nota de fundamento: '+(score==null?'—':num(score,0)+'/100')
+  if(discount==null)return '<div class="company-summary-box">'+note+' | Relação com o preço-alvo indisponível.</div>'
+  const priceText=discount>=0
+    ? 'Preço '+pct(Math.abs(discount))+' abaixo do preço-alvo, segundo nossa metodologia.'
+    : 'Preço '+pct(Math.abs(discount))+' acima do preço-alvo, segundo nossa metodologia.'
+  return '<div class="company-summary-box">'+note+' | '+priceText+'</div>'
 }
 
 function sectorStats(r){
@@ -481,12 +486,12 @@ async function renderCompany(r){
   currentCompany=data
   const ws=$('companyWorkspace');ws.classList.remove('hidden')
   const sector=sectorStats(data)
-  const metric=(label,val,sub,tip='')=>'<div class="metric-mini"><span>'+label+(tip?' <span class="help-bubble tiny" data-tip="'+esc(tip)+'" tabindex="0">?</span>':'')+'</span><strong>'+val+'</strong><small>'+sub+'</small></div>'
+  const metric=(label,val,sub,tip='',valueClass='')=>'<div class="metric-mini"><span>'+label+(tip?' <span class="help-bubble tiny" data-tip="'+esc(tip)+'" tabindex="0">?</span>':'')+'</span><strong class="'+valueClass+'">'+val+'</strong><small>'+sub+'</small></div>'
   ws.innerHTML=
     '<div class="company-head-card"><div><span class="eyebrow">'+esc(data.ticker)+'</span><h2>'+esc(data.company_name||data.ticker)+'</h2><p>Setor: '+esc(data.sector||'Não informado')+'</p></div><div class="company-price"><strong>'+money(data.current_price)+'</strong><span>Cotação • '+(data.price_quoted_at?new Date(data.price_quoted_at).toLocaleString('pt-BR'):'data indisponível')+'</span></div></div>'+
     '<div class="metric-cards">'+
       metric('Preço-alvo',money(data.target_price),'AXIVA', 'Referência calculada por múltiplos históricos quando os dados necessários estão disponíveis.')+
-      metric('Desconto / ágio','<span class="discount-value '+(n(data.discount_pct)>=0?'discount-good':'discount-bad')+'">'+pct(Math.abs(n(data.discount_pct)))+'</span>',n(data.discount_pct)>=0?'abaixo do preço-alvo':'acima do preço-alvo')+
+      metric('Desconto / ágio',pct(Math.abs(n(data.discount_pct))),n(data.discount_pct)>=0?'abaixo do preço-alvo':'acima do preço-alvo','',n(data.discount_pct)>=0?'discount-good':'discount-bad')+
       metric('Qualidade',n(data.quality_score)==null?'—':num(data.quality_score,0)+'/100','metodologia AXIVA')+
       metric('P/L',num(data.pl),'setor: '+num(sector.pl.median),'Preço dividido pelo lucro por ação.')+
       metric('ROE',pct(data.roe),'setor: '+pct(sector.roe.median),'Retorno sobre patrimônio líquido.')+
