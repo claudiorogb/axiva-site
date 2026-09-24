@@ -491,8 +491,7 @@ async function renderCompany(r){
       metric('Preço Graham',money(data.graham_price),'referência de Graham','Estimativa de valor baseada na fórmula de Benjamin Graham quando LPA e VPA válidos estão disponíveis.')+
     '</div>'+
     '<div class="insight-grid"><article class="insight-card"><h3>Resumo</h3><p class="auto-summary">'+esc(autoSummary(data))+'</p><div class="result-action-bar"><button class="mini-btn secondary" id="companyExportInline">Exportar análise</button><button class="mini-btn secondary" id="companyAddWatchInline">Adicionar à minha lista</button></div></article><article class="insight-card"><h3>Margem de segurança</h3>'+safetyPanel(data)+'</article></div>'+
-    '<div class="insight-grid"><article class="insight-card"><h3>Fundamentos da empresa</h3>'+companyFundamentalsPanel(data)+'</article><article class="insight-card"><h3>Qualidade: como a nota foi formada</h3><div class="quality-breakdown">'+qualityBreakdown(data)+'</div></article></div>'+
-    '<div class="insight-grid single"><article class="insight-card"><h3>Empresa x setor</h3>'+sectorPanel(data)+'</article></div>'+
+    '<div class="insight-grid company-analysis-main"><div class="company-analysis-left"><article class="insight-card"><h3>Fundamentos da empresa</h3>'+companyFundamentalsPanel(data)+'</article><article class="insight-card"><h3>Empresa x setor</h3>'+sectorPanel(data)+'</article></div><article class="insight-card company-quality-card"><h3>Qualidade: como a nota foi formada</h3><div class="quality-breakdown">'+qualityBreakdown(data)+'</div></article></div>'+
     '<div class="insight-grid single"><article class="insight-card"><h3>Empresa x próprio histórico</h3>'+historyPanel(data)+'</article></div>'
   $('companyStatus').classList.add('hidden')
   $('companyAddWatchInline')?.addEventListener('click',()=>addWatch(data.ticker))
