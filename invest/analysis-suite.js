@@ -377,10 +377,7 @@ function companyFundamentalsPanel(r){
     ['Margem líquida',pct(r.net_margin)],
     ['P/L',num(r.pl)],
     ['P/VP',num(r.pvp)],
-    ['DY',pct(r.dividend_yield)],
-    ['Dív. líquida / EBITDA',num(r.net_debt_to_ebitda)],
-    ['Dív. líquida / patrimônio',num(r.net_debt_to_equity)],
-    ['Cresc. Rec. 5 anos',pct(r.revenue_growth_5y)]
+    ['DY',pct(r.dividend_yield)]
   ]
   return '<div class="fundamentals-grid">'+items.map(([label,value])=>'<div class="fundamental-item"><span>'+esc(label)+'</span><strong>'+value+'</strong></div>').join('')+'</div>'
 }
