@@ -220,11 +220,15 @@ $('adminUserForm').addEventListener('submit',async e=>{e.preventDefault();const 
 
 $('selectionMethodLink').addEventListener('click',e=>{e.preventDefault();document.querySelector('.nav-item[data-page="method"]')?.click()})
 
+document.querySelectorAll('[data-header-page]').forEach(link=>link.addEventListener('click',()=>{
+  document.querySelector('.nav-item[data-page="'+link.dataset.headerPage+'"]')?.click()
+}))
+
 document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click',async()=>{
   if(btn.id==='adminNav'&&currentRole!=='admin')return
   document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));btn.classList.add('active')
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(btn.dataset.page+'Page')?.classList.add('active')
-  const pageTitles={overview:'VISÃO GERAL',selection:'',analysis:'DESCOBRIR EMPRESAS',company:'ANALISAR EMPRESA',compare:'COMPARAR EMPRESAS',watch:'ACOMPANHAR',strategies:'',method:'METODOLOGIA',admin:'ADMINISTRAÇÃO'}
+  const pageTitles={overview:'PÁGINA INICIAL',selection:'',analysis:'',company:'ANALISAR EMPRESA',compare:'',watch:'MINHA LISTA E ALERTAS',strategies:'',method:'METODOLOGIA',admin:'ADMINISTRAÇÃO'}
   const pageTitle=pageTitles[btn.dataset.page]
   $('pageTitle').textContent=pageTitle!==undefined?pageTitle:btn.textContent.trim()
   if(btn.dataset.page==='admin')await loadAdminUsers()
