@@ -486,7 +486,7 @@ async function renderCompany(r){
     '<div class="company-head-card"><div><span class="eyebrow">'+esc(data.ticker)+'</span><h2>'+esc(data.company_name||data.ticker)+'</h2><p>Setor: '+esc(data.sector||'Não informado')+'</p></div><div class="company-price"><strong>'+money(data.current_price)+'</strong><span>Cotação • '+(data.price_quoted_at?new Date(data.price_quoted_at).toLocaleString('pt-BR'):'data indisponível')+'</span></div></div>'+
     '<div class="metric-cards">'+
       metric('Preço-alvo',money(data.target_price),'AXIVA', 'Referência calculada por múltiplos históricos quando os dados necessários estão disponíveis.')+
-      metric('Desconto / ágio',pct(data.discount_pct),n(data.discount_pct)>=0?'abaixo do preço-alvo':'acima do preço-alvo')+
+      metric('Desconto / ágio','<span class="discount-value '+(n(data.discount_pct)>=0?'discount-good':'discount-bad')+'">'+pct(Math.abs(n(data.discount_pct)))+'</span>',n(data.discount_pct)>=0?'abaixo do preço-alvo':'acima do preço-alvo')+
       metric('Qualidade',n(data.quality_score)==null?'—':num(data.quality_score,0)+'/100','metodologia AXIVA')+
       metric('P/L',num(data.pl),'setor: '+num(sector.pl.median),'Preço dividido pelo lucro por ação.')+
       metric('ROE',pct(data.roe),'setor: '+pct(sector.roe.median),'Retorno sobre patrimônio líquido.')+
