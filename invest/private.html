@@ -57,7 +57,6 @@
       <button class="nav-item" data-page="company">Analisar</button>
       <button class="nav-item" data-page="compare">Comparar</button>
       <button class="nav-item" data-page="watch">Minha lista</button>
-      <button class="nav-item" data-page="simulate">Simular</button>
       <button class="nav-item" data-page="strategies">Estratégias</button>
       <button class="nav-item" data-page="method">Metodologia</button>
       <button id="adminNav" class="nav-item hidden" data-page="admin">Administração</button>
@@ -75,7 +74,6 @@
         <article class="suite-entry"><span class="suite-icon">◎</span><div><h3>Entender uma empresa</h3><p>Veja Raio-X, qualidade, valuation, histórico, pares e o que mudou.</p></div><button class="mini-btn" data-goto="company">Abrir</button></article>
         <article class="suite-entry"><span class="suite-icon">⇄</span><div><h3>Comparar empresas</h3><p>Coloque até cinco empresas lado a lado usando os mesmos indicadores.</p></div><button class="mini-btn" data-goto="compare">Abrir</button></article>
         <article class="suite-entry"><span class="suite-icon">☆</span><div><h3>Acompanhar</h3><p>Crie sua lista e condições de alerta para preços e indicadores.</p></div><button class="mini-btn" data-goto="watch">Abrir</button></article>
-        <article class="suite-entry"><span class="suite-icon">↗</span><div><h3>Simular um preço</h3><p>Veja como P/L, P/VP, DY e margens mudariam em outro preço.</p></div><button class="mini-btn" data-goto="simulate">Abrir</button></article>
       </div>
       <div class="overview-stats" id="overviewStats"><div class="status">Carregando universo de análise...</div></div>
       <div class="guide-strip"><strong>Como usar:</strong><span>1. Descubra empresas</span><span>2. Entenda os números</span><span>3. Compare</span><span>4. Salve o que quer acompanhar</span></div>
@@ -201,16 +199,6 @@
       </div>
     </section>
 
-    <section id="simulatePage" class="page">
-      <div class="intro"><div><h2>Simulador de preço</h2><p>Escolha uma empresa e teste outro preço mantendo os fundamentos atuais constantes.</p></div><span class="help-bubble" data-tip="A simulação não prevê preço futuro. Ela recalcula múltiplos usando o preço hipotético e os fundamentos atuais." tabindex="0">?</span></div>
-      <div class="suite-card simulator-card">
-        <label>Empresa<input id="simTicker" list="companyTickerList" placeholder="Ticker ou empresa"></label>
-        <label>Preço hipotético R$<input id="simPrice" type="number" min=".01" step=".01" placeholder="Ex.: 27,00"></label>
-        <button id="simRunBtn" class="mini-btn primary" type="button">Simular</button>
-      </div>
-      <div id="simWorkspace"><div class="status">Informe uma empresa e um preço hipotético.</div></div>
-    </section>
-
     <section id="strategiesPage" class="page">
       <div class="intro"><div><h2>Estratégias</h2><p>Salve seus próprios critérios e acompanhe quais empresas continuam atendendo às regras.</p></div><span class="help-bubble" data-tip="Uma estratégia salva é um conjunto de filtros, não uma recomendação automática de investimento." tabindex="0">?</span></div>
       <div class="strategy-builder-card">
@@ -271,7 +259,7 @@
 <script type="module" src="/invest/private.js?v=10"></script>
 <script type="module" src="/invest/selection-details.js?v=1"></script>
 <script type="module" src="/invest/user-strategies.js?v=1"></script>
-<script type="module" src="/invest/analysis-suite.js?v=7"></script>
+<script type="module" src="/invest/analysis-suite.js?v=8"></script>
 <div id="axivaModal" class="axiva-modal hidden" role="dialog" aria-modal="true" aria-labelledby="axivaModalTitle">
   <div class="axiva-modal-card">
     <h3 id="axivaModalTitle">Aviso</h3>
