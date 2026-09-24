@@ -46,6 +46,10 @@ function fmtDef(d,v){
   if(d.mode==='money')return x.toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0})
   return x.toLocaleString('pt-BR',{minimumFractionDigits:d.step<1?1:0,maximumFractionDigits:d.step<1?1:0})+(d.suffix||'')
 }
+function paintValue(output,value){
+  if(!output)return
+  output.classList.toggle('negative-value',Number(value)<0)
+}
 function criterionCard(d){
   return `<div class="strategy-criterion" data-key="${d.key}">
     <div class="strategy-criterion-head">
@@ -66,7 +70,8 @@ function setup(){
       range.disabled=!check.checked
       range.closest('.strategy-criterion')?.classList.toggle('enabled',check.checked)
     })
-    range?.addEventListener('input',()=>{out.value=fmtDef(d,range.value)})
+    paintValue(out,range?.value)
+    range?.addEventListener('input',()=>{out.value=fmtDef(d,range.value);paintValue(out,range.value)})
   })
 }
 function reset(){
@@ -75,7 +80,7 @@ function reset(){
     const check=$(d.id+'On'),range=$(d.id),out=$(d.id+'Out')
     if(check)check.checked=false
     if(range){range.value=d.value;range.disabled=true;range.closest('.strategy-criterion')?.classList.remove('enabled')}
-    if(out)out.value=fmtDef(d,d.value)
+    if(out){out.value=fmtDef(d,d.value);paintValue(out,d.value)}
   })
   $('strategyMessage').textContent=''
 }
