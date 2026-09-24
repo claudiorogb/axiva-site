@@ -40,7 +40,21 @@ function reset(){
   $('strategyMessage').textContent=''
 }
 function criteria(s){
-  return [`P/L ≤ ${num(s.max_pl)}`,`P/VP ≤ ${num(s.max_pvp)}`,`ROE ≥ ${pct(s.min_roe)}`,`ROIC ≥ ${pct(s.min_roic)}`,`DY ≥ ${pct(s.min_dy)}`].join(' • ')
+  const parts=[]
+  if(s.sector)parts.push(`Setor: ${s.sector}`)
+  if(s.subsector)parts.push(`Subsetor: ${s.subsector}`)
+  if(s.segment)parts.push(`Segmento: ${s.segment}`)
+  if(s.max_pl!=null)parts.push(`P/L ≤ ${num(s.max_pl)}`)
+  if(s.max_pvp!=null)parts.push(`P/VP ≤ ${num(s.max_pvp)}`)
+  if(s.min_roe!=null)parts.push(`ROE ≥ ${pct(s.min_roe)}`)
+  if(s.min_roic!=null)parts.push(`ROIC ≥ ${pct(s.min_roic)}`)
+  if(s.min_dy!=null)parts.push(`DY ≥ ${pct(s.min_dy)}`)
+  if(s.min_quality!=null)parts.push(`Qualidade ≥ ${num(s.min_quality)}`)
+  if(s.min_discount!=null)parts.push(`Desconto ≥ ${pct(s.min_discount)}`)
+  if(s.min_revenue_growth_5y!=null)parts.push(`Cresc. receita 5a ≥ ${pct(s.min_revenue_growth_5y)}`)
+  if(s.max_net_debt_to_equity!=null)parts.push(`Dív./PL ≤ ${num(s.max_net_debt_to_equity)}`)
+  if(s.max_price!=null)parts.push(`Preço ≤ ${money(s.max_price)}`)
+  return parts.length?parts.join(' • '):'Critérios salvos.'
 }
 function render(items){
   const status=$('userStrategiesStatus'),wrap=$('userStrategiesContent')
