@@ -243,7 +243,8 @@ document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click'
   document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));btn.classList.add('active')
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(btn.dataset.page+'Page')?.classList.add('active')
   const pageTitles={overview:'VISÃO GERAL',selection:'',analysis:'DESCOBRIR EMPRESAS',company:'ANALISAR EMPRESA',compare:'COMPARAR EMPRESAS',watch:'ACOMPANHAR',simulate:'SIMULAR PREÇO',strategies:'ESTRATÉGIAS',method:'METODOLOGIA',admin:'ADMINISTRAÇÃO'}
-  $('pageTitle').textContent=pageTitles[btn.dataset.page]||btn.textContent.trim()
+  const pageTitle=pageTitles[btn.dataset.page]
+  $('pageTitle').textContent=pageTitle!==undefined?pageTitle:btn.textContent.trim()
   if(btn.dataset.page==='admin')await loadAdminUsers()
   if(btn.dataset.page==='strategies'&&!strategiesLoaded)await loadStrategies()
 }))
