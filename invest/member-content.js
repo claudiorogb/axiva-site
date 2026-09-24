@@ -116,7 +116,12 @@
   for (const [page,label] of [['faq','FAQ'],['important-info','Informações importantes']]) {
     if (nav.querySelector(`[data-page="${page}"]`)) continue;
     const button = document.createElement('button');
-    button.type = 'button'; button.className = 'nav-item'; button.dataset.page = page; button.textContent = label;
+    button.type = 'button';
+    button.className = 'nav-item hidden';
+    button.dataset.page = page;
+    button.textContent = label;
+    button.setAttribute('aria-hidden','true');
+    button.tabIndex = -1;
     nav.insertBefore(button, adminNav);
   }
   const style = document.createElement('style');
