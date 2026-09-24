@@ -13,7 +13,7 @@ function openDetail(index){
   const discount=pct(company.discount_pct);
   const metrics=[['Valor atual',money(company.current_price)],['Preço alvo',money(company.target_price)],['Desconto',discount],['Qualidade dos fundamentos',quality],['Preço Graham',money(company.graham_price)]];
   const indicators=[['P/L',num(company.pl)],['P/VP',num(company.pvp)],['DY',pct(company.dividend_yield)],['ROIC',pct(company.roic)],['ROE',pct(company.roe)]];
-  detail.innerHTML=`<button class="detail-back" type="button">← Voltar para a lista</button>
+  detail.innerHTML=`<div class="detail-top-actions"><button class="detail-back" type="button">← Voltar para a lista</button><button class="detail-analyze" type="button">Analisar Empresa</button></div>
     <div class="detail-hero"><h2>${esc(company.ticker)}</h2><strong>${esc(company.company_name||'')}</strong><span>Dados fundamentalistas</span></div>
     <div class="detail-metrics">${metrics.map(([label,value],i)=>`<div class="detail-metric ${i===2?'detail-discount':''}"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('')}</div>
     <h3 class="detail-heading">Indicadores fundamentalistas</h3>
@@ -26,6 +26,13 @@ function openDetail(index){
     wrap.querySelector(`[data-selection-index="${index}"]`)?.focus();
   });
   detail.querySelector('.detail-important-link').addEventListener('click',()=>document.querySelector('.nav-item[data-page="important-info"]')?.click());
+  detail.querySelector('.detail-analyze').addEventListener('click',()=>{
+    const nav=document.querySelector('.nav-item[data-page="company"]');
+    nav?.click();
+    const input=document.getElementById('companyTicker');
+    if(input)input.value=company.ticker||'';
+    document.getElementById('companyLoadBtn')?.click();
+  });
   detail.querySelector('.detail-back').focus();
 }
 wrap?.addEventListener('click',event=>{const row=event.target.closest('[data-selection-index]');if(row&&wrap.contains(row))openDetail(Number(row.dataset.selectionIndex));});
