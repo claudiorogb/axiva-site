@@ -345,10 +345,15 @@ function groupComparison(r){
     ['ROE',r.roe,r.median_roe,'return',true],
     ['ROIC',r.roic,r.median_roic,'return',true]
   ]
+  const groupPeers=rows.filter(x=>x.is_reference_ticker===true&&x.comparison_level===r.comparison_level&&x.comparable_group===r.comparable_group)
+  const zeroDy=groupPeers.filter(x=>n(x.dividend_yield)===0).length
+  const dyNote=n(r.median_dy)===0&&groupPeers.length
+    ?'<div class="micro-note">DY mediano de 0,0%: '+zeroDy+' de '+groupPeers.length+' empresas de referência do grupo estão com DY de 0,0% na base atual.</div>'
+    :''
   return '<div class="micro-note">Grupo: <b>'+esc(r.comparable_group||'—')+'</b> • '+esc(r.comparison_level||'comparação')+' • '+esc(r.comparable_count||'—')+' empresas.</div><div class="comparison-list">'+items.map(([label,val,med,kind,isPct])=>{
     const [rel,cls]=relativeText(val,med,kind)
     return '<div class="comparison-row"><b>'+label+'</b><span>Empresa '+(isPct?pct(val):num(val))+'</span><span>Mediana '+(isPct?pct(med):num(med))+'</span><strong class="'+cls+'">'+rel+'</strong></div>'
-  }).join('')+'</div>'
+  }).join('')+'</div>'+dyNote
 }
 function changesHtml(payload,r){
   const prev=payload?.previous_snapshot
