@@ -53,7 +53,7 @@ function criterionCard(d){
       <output id="${d.id}Out">${fmtDef(d,d.value)}</output>
     </div>
     <input id="${d.id}" type="range" min="${d.min}" max="${d.max}" step="${d.step}" value="${d.value}" disabled>
-    ${d.key==='min_discount'||d.key==='min_graham_discount'?'<small>Valor positivo = desconto mínimo. Valor negativo = ágio máximo permitido.</small>':''}
+    ${d.key==='min_discount'||d.key==='min_graham_discount'?'<small>valor positivo = desconto em relação ao preço atual</small>':''}
   </div>`
 }
 function setup(){
