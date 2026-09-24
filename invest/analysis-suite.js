@@ -349,9 +349,9 @@ function qualityBreakdown(r){
   addGate('Patrimônio positivo',eq!=null&&eq>0)
   addGate('ROE acima de 10%',roe!=null&&roe>.10)
   if(cls!==1)addGate('ROIC acima de 10%',roic!=null&&roic>.10)
-  addGate('Liquidez média ≥ R$ 300 milhões',liq!=null&&liq>=300000000)
+  addGate('Liquidez média ≥ R$ 1 milhão',liq!=null&&liq>=1000000)
   addGate('Crescimento de receita 5a positivo',growth!=null&&growth>0)
-  const gatesPass=(pl||0)>0&&(eq||0)>0&&(roe||0)>.10&&(liq||0)>=300000000&&(growth||0)>0&&(cls===1||(roic||0)>.10)
+  const gatesPass=(pl||0)>0&&(eq||0)>0&&(roe||0)>.10&&(liq||0)>=1000000&&(growth||0)>0&&(cls===1||(roic||0)>.10)
   if(!gatesPass)return lines.join('')+'<div class="quality-total"><span>Nota final</span><strong>'+num(score,0)+'/100</strong></div><div class="micro-note">Uma trava mínima não foi atendida; pela metodologia atual, a nota é zerada.</div>'
   const contrib=[]
   const push=(name,points)=>contrib.push('<div class="quality-line"><span>'+esc(name)+'</span><b>+'+points+' pts</b></div>')
