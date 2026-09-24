@@ -232,3 +232,24 @@ button,input,select{font-family:inherit}
   .alert-row{grid-template-columns:1fr auto}
   .alert-row .compact-actions{grid-column:1/-1}
 }
+
+
+/* Alertas full-width e modal 2026-09-24 */
+.alerts-full-card{margin-top:12px}
+#alertsContent{display:grid;gap:9px;margin-top:10px}
+.alert-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:12px;border:1px solid var(--ax-line);border-radius:10px;background:#fff}
+.alert-main{min-width:0}
+.alert-main b{display:block;font-size:12px;color:#071d34}
+.alert-main span{display:block;margin-top:4px;font-size:10px;color:#607689;line-height:1.45}
+.alert-row .compact-actions{display:flex;gap:7px;align-items:center}
+.axiva-modal{position:fixed;inset:0;z-index:1000;background:rgba(4,22,39,.45);display:flex;align-items:center;justify-content:center;padding:18px}
+.axiva-modal.hidden{display:none}
+.axiva-modal-card{width:min(420px,100%);background:#fff;border-radius:14px;padding:20px;border:1px solid #d9e3eb;box-shadow:0 20px 60px rgba(0,0,0,.22)}
+.axiva-modal-card h3{margin:0 0 8px;font-size:17px;color:#071d34}
+.axiva-modal-card p{margin:0;color:#526a7f;font-size:13px;line-height:1.5;white-space:pre-line}
+.axiva-modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+@media(max-width:700px){
+  .alert-row{grid-template-columns:1fr auto}
+  .alert-row .compact-actions{grid-column:1/-1}
+  .alerts-full-card{margin-top:10px}
+}
