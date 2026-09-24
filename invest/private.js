@@ -7,6 +7,7 @@ const FIRST_ACCESS_API=`${SUPABASE_URL}/functions/v1/invest-first-access-check`
 // Guardar o tipo do link antes de o cliente Auth limpar o fragmento da URL.
 let recoveryMode=new URLSearchParams(location.hash.slice(1)).get('type')==='recovery' || new URLSearchParams(location.search).get('type')==='recovery'
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}})
+window.axivaSupabase=supabase
 
 const $=id=>document.getElementById(id)
 const loginView=$('loginView'),appView=$('appView'),loginForm=$('loginForm'),loginMessage=$('loginMessage')
