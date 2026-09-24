@@ -182,3 +182,8 @@ button,input,select{font-family:inherit}
   .detail-top-actions .detail-back,.detail-top-actions .detail-analyze{flex:1 1 auto}
   #selectionPage .detail-hero strong{font-size:20px}
 }
+
+
+/* Unificar painel setorial 2026-09-24 */
+.insight-grid.single{grid-template-columns:1fr}
+.insight-grid.single>.insight-card{grid-column:1/-1}
