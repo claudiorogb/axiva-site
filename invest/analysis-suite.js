@@ -29,6 +29,23 @@ function toast(message){
   if(!el){el=document.createElement('div');el.className='toast';document.body.appendChild(el)}
   el.textContent=message;clearTimeout(el._t);el._t=setTimeout(()=>el.remove(),2600)
 }
+function showModal(message,{title='Aviso',confirmText='OK',cancelText=null}={}){
+  return new Promise(resolve=>{
+    const modal=$('axivaModal'),titleEl=$('axivaModalTitle'),msg=$('axivaModalMessage'),actions=$('axivaModalActions')
+    if(!modal||!actions){resolve(true);return}
+    titleEl.textContent=title
+    msg.textContent=message
+    actions.innerHTML=''
+    const close=value=>{modal.classList.add('hidden');resolve(value)}
+    if(cancelText){
+      const no=document.createElement('button');no.type='button';no.className='mini-btn secondary';no.textContent=cancelText;no.addEventListener('click',()=>close(false));actions.appendChild(no)
+    }
+    const yes=document.createElement('button');yes.type='button';yes.className='mini-btn primary';yes.textContent=confirmText;yes.addEventListener('click',()=>close(true));actions.appendChild(yes)
+    modal.classList.remove('hidden')
+    yes.focus()
+  })
+}
+function showError(message){return showModal(message,{title:'Erro'})}
 function gotoPage(page){
   const btn=document.querySelector('.nav-item[data-page="'+page+'"]')
   if(btn)btn.click()
@@ -476,7 +493,7 @@ function renderCompare(){
   ]
   ws.innerHTML='<div class="compare-table" style="--compare-count:'+selected.length+'"><div class="compare-tr head"><div class="metric-label">Indicador</div>'+selected.map(r=>'<div><b>'+esc(r.ticker)+'</b></div>').join('')+'</div>'+metrics.map(([label,fn])=>'<div class="compare-tr"><div class="metric-label">'+label+'</div>'+selected.map(r=>'<div>'+fn(r)+'</div>').join('')+'</div>').join('')+'</div>'
 }
-$('compareAddBtn')?.addEventListener('click',()=>{const r=resolveRow($('compareTicker').value);if(!r){toast('Empresa não encontrada.');return}if(compareTickers.includes(r.ticker))return;if(compareTickers.length>=5){toast('Compare até cinco empresas por vez.');return}compareTickers.push(r.ticker);$('compareTicker').value='';renderCompare()})
+$('compareAddBtn')?.addEventListener('click',()=>{const r=resolveRow($('compareTicker').value);if(!r){showError('Empresa não encontrada.');return}if(compareTickers.includes(r.ticker))return;if(compareTickers.length>=5){toast('Compare até cinco empresas por vez.');return}compareTickers.push(r.ticker);$('compareTicker').value='';renderCompare()})
 $('compareTicker')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('compareAddBtn').click()}})
 $('compareClearBtn')?.addEventListener('click',()=>{compareTickers=[];renderCompare()})
 $('compareExportBtn')?.addEventListener('click',()=>{
@@ -504,22 +521,30 @@ function renderWatch(){
 }
 async function loadWatch(){
   try{const j=await api('watchlist');watchData=Array.isArray(j.data)?j.data:[];$('watchlistStatus').textContent=watchData.length+' empresa(s) na sua lista.';renderWatch();renderOverviewFollow()}
-  catch(e){$('watchlistStatus').textContent='Não foi possível carregar sua lista.'}
+  catch(e){$('watchlistStatus').textContent='';showError('Não foi possível carregar sua lista. '+(e?.message||''))}
 }
-$('watchAddBtn')?.addEventListener('click',()=>{const r=resolveRow($('watchTicker').value);if(r){$('watchTicker').value='';addWatch(r.ticker)}else toast('Empresa não encontrada.')})
+$('watchAddBtn')?.addEventListener('click',()=>{const r=resolveRow($('watchTicker').value);if(r){$('watchTicker').value='';addWatch(r.ticker)}else showError('Empresa não encontrada.')})
 function alertFmt(metric,v){
   if(['discount_pct','roe','roic','dividend_yield'].includes(metric))return pct(v)
   if(metric==='price')return money(v)
   if(metric==='quality_score')return num(v,0)
   return num(v)
 }
+function alertConditionText(a){
+  const labels={price:'preço',discount_pct:'desconto',pl:'P/L',pvp:'P/VP',roe:'ROE',roic:'ROIC',dividend_yield:'DY',quality_score:'qualidade'}
+  const op=a.operator==='gte'?'maior ou igual a':'menor ou igual a'
+  return (labels[a.metric]||a.metric)+' '+op+' '+alertFmt(a.metric,a.threshold)
+}
 function renderAlerts(){
   const el=$('alertsContent')
   if(!alertData.length){el.innerHTML='<div class="empty-state">Nenhum alerta criado.</div>';return}
   const labels={price:'Preço',discount_pct:'Desconto',pl:'P/L',pvp:'P/VP',roe:'ROE',roic:'ROIC',dividend_yield:'DY',quality_score:'Qualidade'}
-  el.innerHTML=alertData.map(a=>'<div class="alert-row"><div><b>'+esc(a.ticker)+' • '+esc(labels[a.metric]||a.metric)+'</b><span>Atual '+alertFmt(a.metric,a.current_value)+' • '+(a.operator==='gte'?'≥ ':'≤ ')+alertFmt(a.metric,a.threshold)+'</span></div><span class="alert-status '+(!a.active?'off':a.triggered?'hit':'wait')+'">'+(!a.active?'Pausado':a.triggered?'Atingido':'Aguardando')+'</span><div class="compact-actions"><button class="mini-btn secondary" data-alert-toggle="'+a.id+'" data-active="'+(!a.active)+'">'+(a.active?'Pausar':'Reiniciar')+'</button><button class="mini-btn danger" data-alert-delete="'+a.id+'">Cancelar</button></div></div>').join('')
+  el.innerHTML=alertData.map(a=>'<div class="alert-row"><div class="alert-main"><b>'+esc(a.ticker)+' • '+esc(labels[a.metric]||a.metric)+'</b><span>Atual '+esc(String(labels[a.metric]||a.metric).toLowerCase())+': '+alertFmt(a.metric,a.current_value)+' — Alerta criado: '+esc(alertConditionText(a))+'</span></div><span class="alert-status '+(!a.active?'off':a.triggered?'hit':'wait')+'">'+(!a.active?'Pausado':a.triggered?'Atingido':'Aguardando')+'</span><div class="compact-actions"><button class="mini-btn secondary" data-alert-toggle="'+a.id+'" data-active="'+(!a.active)+'">'+(a.active?'Pausar':'Reiniciar')+'</button><button class="mini-btn danger" data-alert-delete="'+a.id+'">Cancelar</button></div></div>').join('')
   el.querySelectorAll('[data-alert-toggle]').forEach(b=>b.addEventListener('click',()=>toggleAlert(b.dataset.alertToggle,b.dataset.active==='true')))
-  el.querySelectorAll('[data-alert-delete]').forEach(b=>b.addEventListener('click',()=>deleteAlert(b.dataset.alertDelete)))
+  el.querySelectorAll('[data-alert-delete]').forEach(b=>b.addEventListener('click',async()=>{
+    const ok=await showModal('Tem certeza que deseja excluir esse alerta?',{title:'Excluir alerta',confirmText:'Sim',cancelText:'Não'})
+    if(ok)deleteAlert(b.dataset.alertDelete)
+  }))
 }
 function hydrateAlert(a){
   const r=rowMap.get(String(a.ticker||'').toUpperCase())
@@ -540,7 +565,7 @@ async function loadAlerts(){
     alertData=(data||[]).map(hydrateAlert)
     $('alertsStatus').textContent=alertData.filter(a=>a.triggered&&a.active).length+' condição(ões) atingida(s) agora.'
     renderAlerts();renderOverviewFollow()
-  }catch(e){console.error('AXIVA alerts load error',e);$('alertsStatus').textContent='Não foi possível carregar os alertas.'}
+  }catch(e){console.error('AXIVA alerts load error',e);$('alertsStatus').textContent='';showError('Não foi possível carregar os alertas. '+(e?.message||''))}
 }
 function updateAlertHint(){
   const metric=$('alertMetric')?.value
@@ -559,17 +584,17 @@ $('alertForm')?.addEventListener('submit',async e=>{
   e.preventDefault()
   const r=resolveRow($('alertTicker').value);if(!r){toast('Empresa não encontrada.');return}
   const metric=$('alertMetric').value,operator=$('alertOperator').value
-  let threshold=n($('alertThreshold').value);if(threshold==null){toast('Informe um valor válido.');return}
+  let threshold=n($('alertThreshold').value);if(threshold==null){showError('Informe um valor válido.');return}
   if(['discount_pct','roe','roic','dividend_yield'].includes(metric))threshold/=100
   const client=window.axivaSupabase
-  if(!client){toast('Não foi possível criar o alerta.');return}
+  if(!client){showError('Não foi possível criar o alerta.');return}
   try{
     const {data:{user},error:userErr}=await client.auth.getUser()
     if(userErr||!user)throw userErr||new Error('not_authenticated')
     const {error}=await client.from('invest_user_alerts').insert({user_id:user.id,ticker:r.ticker,metric,operator,threshold})
     if(error)throw error
     e.target.reset();updateAlertHint();toast('Alerta criado.');await loadAlerts()
-  }catch(err){console.error('AXIVA alert create error',err);toast('Não foi possível criar o alerta.')}
+  }catch(err){console.error('AXIVA alert create error',err);showError('Não foi possível criar o alerta. '+(err?.message||''))}
 })
 async function toggleAlert(id,active){
   const client=window.axivaSupabase
@@ -579,7 +604,7 @@ async function toggleAlert(id,active){
     const {error}=await client.from('invest_user_alerts').update(update).eq('id',id)
     if(error)throw error
     await loadAlerts()
-  }catch(e){console.error('AXIVA alert toggle error',e);toast('Não foi possível alterar o alerta.')}
+  }catch(e){console.error('AXIVA alert toggle error',e);showError('Não foi possível alterar o alerta. '+(e?.message||''))}
 }
 async function deleteAlert(id){
   const client=window.axivaSupabase
@@ -587,7 +612,7 @@ async function deleteAlert(id){
     const {error}=await client.from('invest_user_alerts').delete().eq('id',id)
     if(error)throw error
     await loadAlerts()
-  }catch(e){console.error('AXIVA alert delete error',e);toast('Não foi possível excluir o alerta.')}
+  }catch(e){console.error('AXIVA alert delete error',e);showError('Não foi possível excluir o alerta. '+(e?.message||''))}
 }
 function renderOverviewFollow(){
   const el=$('overviewStats');if(!el||!rows.length)return
