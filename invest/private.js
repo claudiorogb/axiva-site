@@ -83,7 +83,7 @@ async function loadPrivateArea(){
 }
 
 async function loadSelection(){
-  $('selectionDetail').classList.add('hidden');$('selectionPage').classList.remove('detail-open');selectionStatus.classList.remove('hidden');selectionStatus.textContent='Carregando Seleção de Ações...';selectionWrap.classList.add('hidden')
+  selectionStatus.classList.remove('hidden');selectionStatus.textContent='Carregando Seleção de Ações...';selectionWrap.classList.add('hidden')
   try{const j=await callPrivate('selection');renderSelection(Array.isArray(j.data)?j.data:[])}
   catch(e){selectionStatus.textContent=e.status===403?'Sua assinatura não está ativa.':'Não foi possível carregar os dados agora.'}
 }
