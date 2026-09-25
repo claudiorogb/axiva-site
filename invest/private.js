@@ -72,8 +72,7 @@ async function loadPrivateArea(){
     userEmail.textContent=me.user?.email||''
     currentRole=me.access?.role||'subscriber'
     const plan=me.access?.plan||'assinante'
-    const email=me.user?.email||''
-    accessChip.textContent=currentRole==='admin'?`${email} • Administrador`:`${email} • Plano ${plan==='annual'?'anual':plan}`
+    accessChip.textContent=currentRole==='admin'?'Administrador':`Plano ${plan==='annual'?'anual':plan}`
     $('adminNav').classList.toggle('hidden',currentRole!=='admin')
     showApp()
     await Promise.all([loadSelection(),loadAnalysisData()])
@@ -226,6 +225,11 @@ document.querySelectorAll('[data-header-page]').forEach(link=>link.addEventListe
 
 document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click',async()=>{
   if(btn.id==='adminNav'&&currentRole!=='admin')return
+  const previousPage=document.querySelector('.nav-item.active')?.dataset.page||null
+  if(btn.dataset.page==='company'&&previousPage&&previousPage!=='company'){
+    window.axivaCompanyOrigin=previousPage
+    $('companyBackBtn')?.classList.remove('hidden')
+  }
   document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));btn.classList.add('active')
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(btn.dataset.page+'Page')?.classList.add('active')
   const pageTitles={overview:'PÁGINA INICIAL',selection:'',analysis:'',company:'ANALISAR EMPRESA',compare:'',watch:'MINHA LISTA E ALERTAS',strategies:'',method:'METODOLOGIA',admin:'ADMINISTRAÇÃO'}
