@@ -345,14 +345,14 @@ function qualityBreakdown(r){
   const lines=[]
   const addGate=(label,pass)=>lines.push('<div class="quality-line '+(pass?'pass':'fail')+'"><span>'+esc(label)+'</span><b>'+(pass?'Atende':'Não atende')+'</b></div>')
   const pl=n(r.pl),eq=n(r.equity),roe=n(r.roe),roic=n(r.roic),liq=n(r.liquidity_2m),growth=n(r.revenue_growth_5y),ebit=n(r.ebit_margin),net=n(r.net_margin),debt=n(r.net_debt_to_equity),cr=n(r.current_ratio)
+
   addGate('P/L positivo',pl!=null&&pl>0)
   addGate('Patrimônio positivo',eq!=null&&eq>0)
   addGate('ROE acima de 10%',roe!=null&&roe>.10)
   if(cls!==1)addGate('ROIC acima de 10%',roic!=null&&roic>.10)
   addGate('Liquidez média ≥ R$ 1 milhão',liq!=null&&liq>=1000000)
   addGate('Crescimento de receita 5a positivo',growth!=null&&growth>0)
-  const gatesPass=(pl||0)>0&&(eq||0)>0&&(roe||0)>.10&&(liq||0)>=1000000&&(growth||0)>0&&(cls===1||(roic||0)>.10)
-  if(!gatesPass)return lines.join('')+'<div class="quality-total"><span>Nota final</span><strong>'+num(score,0)+'/100</strong></div><div class="micro-note">Uma trava mínima não foi atendida; pela metodologia atual, a nota é zerada.</div>'
+
   const contrib=[]
   const push=(name,points)=>contrib.push('<div class="quality-line"><span>'+esc(name)+'</span><b>+'+points+' pts</b></div>')
   if(cls===1){
@@ -368,7 +368,12 @@ function qualityBreakdown(r){
     push('Dívida líquida / PL',debt==null?0:debt<0?15:debt<=.30?13:debt<=.60?10:debt<=1?6:debt<=1.5?3:0)
     push('Liquidez corrente',cr==null||cr<.80?0:cr<=1?3:cr<=1.30?6:cr<=2?10:8)
   }
-  return lines.join('')+'<div class="micro-note">Travas mínimas atendidas. Pontos que formam a nota:</div>'+contrib.join('')+'<div class="quality-total"><span>Nota final</span><strong>'+num(score,0)+'/100</strong></div>'
+
+  const gatesPass=(pl||0)>0&&(eq||0)>0&&(roe||0)>.10&&(liq||0)>=1000000&&(growth||0)>0&&(cls===1||(roic||0)>.10)
+  const explanation='<div class="micro-note">'+(gatesPass?'Pontos que formam a nota:':'Pontos dos indicadores antes da aplicação da trava:')+'</div>'+contrib.join('')
+  const total='<div class="quality-total"><span>Nota final</span><strong>'+num(score,0)+'/100</strong></div>'
+  const gateNote=gatesPass?'':'<div class="micro-note">Uma trava mínima não foi atendida; pela metodologia atual, a nota final considera essa trava.</div>'
+  return lines.join('')+explanation+total+gateNote
 }
 function companyFundamentalsPanel(r){
   const items=[
@@ -528,8 +533,8 @@ function openCompany(ticker){
   gotoPage('company');renderCompany(r)
 }
 $('companyBackBtn')?.addEventListener('click',()=>{
-  const origin=window.axivaCompanyOrigin
-  if(!origin||origin==='company')return
+  const origin=window.axivaCompanyOrigin||'overview'
+  if(origin==='company')return
   window.axivaCompanyOrigin=null
   $('companyBackBtn')?.classList.add('hidden')
   gotoPage(origin)
