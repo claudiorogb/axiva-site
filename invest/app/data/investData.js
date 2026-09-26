@@ -5,10 +5,8 @@ export const companies = {
         sector: 'Petróleo, Gás e Biocombustíveis',
         subsector: 'Exploração, Refino e Distribuição',
         price: 47.99,
-        estimated: 54.2,
         graham: 93.22,
-        discount: -11.5,
-        quality: 4,
+        quality: 5,
         pl: 4.64,
         pvp: 1.29,
         dy: 7.6,
@@ -19,11 +17,9 @@ export const companies = {
         lpa: 10.35,
         vpa: 37.32,
         dayChange: -2.58,
-        performance6m: 23.4,
-        history6m: [38.9, 40.2, 39.6, 42.8, 45.6, 46.9, 47.99],
-        plHistory5y: [2.9, 3.7, 5.1, 4.8, 4.64],
-        roeHistory5y: [20.3, 25.7, 31.4, 28.8, 27.7],
-        notes: ['Lucro consistente', 'ROE acima de 10%', 'ROIC acima de 10%', 'Dividend yield relevante'],
+        performance6m: 0.1,
+        history6m: [49.08, 42.00, 37.80, 43.42, 45.02, 49.12],
+        notes: ['P/L positivo', 'ROE acima de 10%', 'ROIC acima de 10%', 'DY positivo', 'Liquidez elevada'],
     },
     ITUB4: {
         ticker: 'ITUB4',
@@ -31,25 +27,21 @@ export const companies = {
         sector: 'Intermediários Financeiros',
         subsector: 'Bancos',
         price: 42.13,
-        estimated: 46.8,
         graham: 42.33,
-        discount: -10.0,
-        quality: 5,
+        quality: 4,
         pl: 9.97,
         pvp: 2.24,
         dy: 7.4,
         roe: 22.4,
         roic: null,
-        margin: 0,
+        margin: null,
         growth5y: 30.3,
         lpa: 4.23,
         vpa: 18.83,
         dayChange: 0.62,
-        performance6m: 11.2,
-        history6m: [37.9, 38.6, 39.2, 40.3, 41.2, 41.7, 42.13],
-        plHistory5y: [8.3, 9.1, 10.4, 10.1, 9.97],
-        roeHistory5y: [18.2, 19.6, 21.3, 22.0, 22.4],
-        notes: ['Lucro recorrente', 'ROE acima de 20%', 'Dividend yield consistente', 'Crescimento de receita em 5 anos'],
+        performance6m: 0.0,
+        history6m: [43.19, 40.04, 42.18, 42.89, 39.52, 43.18],
+        notes: ['P/L positivo', 'ROE acima de 10%', 'DY positivo', 'Liquidez elevada'],
     },
     VALE3: {
         ticker: 'VALE3',
@@ -57,25 +49,19 @@ export const companies = {
         sector: 'Mineração',
         subsector: 'Minerais Metálicos',
         price: 70.77,
-        estimated: 66.5,
         graham: 48.29,
-        discount: 6.4,
         quality: 4,
-        pl: 30.3,
-        pvp: 1.6,
+        pl: 30.30,
+        pvp: 1.60,
         dy: 7.9,
         roe: 5.3,
         roic: 18.1,
         margin: 4.0,
         growth5y: -2.4,
         lpa: 2.34,
-        vpa: 44.3,
+        vpa: 44.30,
         dayChange: 0.16,
-        performance6m: 6.8,
-        history6m: [66.1, 67.4, 69.2, 73.5, 76.8, 72.1, 70.77],
-        plHistory5y: [4.4, 3.9, 5.2, 8.8, 30.3],
-        roeHistory5y: [21.2, 31.4, 28.1, 12.2, 5.3],
-        notes: ['Empresa cíclica', 'ROIC elevado', 'Dividend yield relevante', 'Margem líquida pressionada'],
+        notes: ['P/L positivo', 'ROIC acima de 10%', 'DY positivo', 'Liquidez elevada'],
     },
     WEGE3: {
         ticker: 'WEGE3',
@@ -83,9 +69,7 @@ export const companies = {
         sector: 'Máquinas e Equipamentos',
         subsector: 'Motores, Compressores e Outros',
         price: 51.07,
-        estimated: 48.2,
         graham: 12.27,
-        discount: 5.9,
         quality: 5,
         pl: 34.27,
         pvp: 11.36,
@@ -97,11 +81,7 @@ export const companies = {
         lpa: 1.49,
         vpa: 4.49,
         dayChange: 0.65,
-        performance6m: 21.7,
-        history6m: [42.4, 43.7, 45.9, 47.2, 49.8, 50.6, 51.07],
-        plHistory5y: [26.8, 28.4, 31.1, 33.2, 34.27],
-        roeHistory5y: [24.8, 27.6, 30.9, 32.1, 33.2],
-        notes: ['Histórico consistente', 'ROE e ROIC elevados', 'Crescimento de receita', 'Endividamento controlado'],
+        notes: ['P/L positivo', 'ROE acima de 10%', 'ROIC acima de 10%', 'DY positivo', 'Liquidez elevada'],
     },
     ABEV3: {
         ticker: 'ABEV3',
@@ -109,11 +89,9 @@ export const companies = {
         sector: 'Bebidas',
         subsector: 'Cervejas e Refrigerantes',
         price: 15.32,
-        estimated: 14.7,
-        graham: 11.6,
-        discount: 4.2,
-        quality: 3,
-        pl: 14.6,
+        graham: 11.60,
+        quality: 5,
+        pl: 14.60,
         pvp: 2.69,
         dy: 5.6,
         roe: 18.4,
@@ -121,13 +99,9 @@ export const companies = {
         margin: 19.0,
         growth5y: 3.9,
         lpa: 1.05,
-        vpa: 5.7,
+        vpa: 5.70,
         dayChange: -0.13,
-        performance6m: 9.6,
-        history6m: [13.4, 13.7, 14.1, 14.4, 14.9, 15.1, 15.32],
-        plHistory5y: [16.4, 15.9, 15.3, 14.9, 14.6],
-        roeHistory5y: [15.1, 16.4, 17.8, 18.0, 18.4],
-        notes: ['Negócio previsível', 'Boa geração de caixa', 'ROIC forte', 'Crescimento moderado'],
+        notes: ['P/L positivo', 'ROE acima de 10%', 'ROIC acima de 10%', 'DY positivo', 'Liquidez elevada'],
     },
 };
 export const comparisonTickers = ['PETR4', 'ITUB4', 'VALE3'];
@@ -138,21 +112,22 @@ export function getCompany(ticker) {
     return companies[ticker];
 }
 export function formatCurrency(value) {
-    return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    return value == null ? 'N/D' : value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 export function formatNumber(value, digits = 1) {
-    return value.toLocaleString('pt-BR', {
+    return value == null ? 'N/D' : value.toLocaleString('pt-BR', {
         minimumFractionDigits: digits,
         maximumFractionDigits: digits,
     });
 }
 export function formatPercent(value, digits = 1) {
-    return `${value.toLocaleString('pt-BR', {
+    return value == null ? 'N/D' : `${value.toLocaleString('pt-BR', {
         minimumFractionDigits: digits,
         maximumFractionDigits: digits,
     })}%`;
 }
 export function formatSignedPercent(value, digits = 1) {
+    if (value == null) return 'N/D';
     const signal = value > 0 ? '+' : '';
     return `${signal}${formatPercent(value, digits)}`;
 }
