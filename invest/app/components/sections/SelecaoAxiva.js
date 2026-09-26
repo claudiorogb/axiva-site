@@ -21,7 +21,7 @@ export default function SelecaoAxiva() {
             React.createElement("div", { className: "grid items-center gap-12 lg:grid-cols-2 lg:gap-16" },
                 React.createElement("div", { className: "flex flex-col gap-5" },
                     React.createElement("div", { className: "flex items-center gap-2" },
-                        React.createElement("span", { className: "h-px w-6 bg-axiva-green" }),
+                        
                         React.createElement("span", { className: "text-xs font-medium uppercase tracking-wider text-axiva-green" }, "Seleção AXIVA")),
                     React.createElement("h2", { className: "text-2xl font-semibold text-axiva-navy sm:text-3xl" }, "Quer um ponto de partida?"),
                     React.createElement("p", { className: "text-base leading-relaxed text-axiva-gray" }, "A Seleção AXIVA aplica critérios da nossa metodologia para destacar empresas que merecem uma análise mais aprofundada."),
