@@ -20,12 +20,12 @@ const pillars = [
 export default function PlatformOverview() {
     return (React.createElement("section", { id: "plataforma", className: "bg-axiva-bg py-16 lg:py-24" },
         React.createElement("div", { className: "mx-auto max-w-container px-4 lg:px-8" },
-            React.createElement("div", { className: "mb-12 max-w-2xl" },
+            React.createElement("div", { className: "mb-12" },
                 React.createElement("div", { className: "flex items-center gap-2" },
                     
                     React.createElement("span", { className: "text-xs font-medium uppercase tracking-wider text-axiva-green" }, "A plataforma")),
                 React.createElement("h2", { className: "mt-3 text-2xl font-semibold text-axiva-navy sm:text-3xl" }, "Mais clareza para analisar."),
-                React.createElement("p", { className: "mt-4 text-base text-axiva-gray" }, "Da descoberta de empresas ao acompanhamento da sua estratégia, reúna as principais etapas da análise em um único ambiente.")),
+                React.createElement("p", { className: "mt-4 text-base text-axiva-gray axiva-nowrap-desktop" }, "Da descoberta de empresas ao acompanhamento da sua estratégia, reúna as principais etapas da análise em um único ambiente.")),
             React.createElement("div", { className: "grid gap-10 sm:grid-cols-3 lg:gap-12" }, pillars.map((pillar) => (React.createElement("div", { key: pillar.title, className: "flex flex-col gap-3" },
                 React.createElement(pillar.icon, { className: "h-5 w-5 text-axiva-green", strokeWidth: 1.5 }),
                 
