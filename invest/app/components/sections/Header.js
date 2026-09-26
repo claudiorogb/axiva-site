@@ -13,10 +13,10 @@ const navLinks = [
     { label: 'FAQ', href: '#faq' },
 ];
 const fmtMoney = (value) => value == null
-    ? ','
+    ? 'N/D'
     : Number(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 const fmtPct = (value) => value == null
-    ? ','
+    ? 'N/D'
     : `${(Number(value) * 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`;
 export default function Header() {
     const [menuOpen, setMenuOpen] = useState(false);
