@@ -8,7 +8,7 @@ export default function CustomCriteria() {
         React.createElement("div", { className: "mx-auto max-w-container px-4 lg:px-8" },
             React.createElement("div", { className: "mb-10 max-w-2xl" },
                 React.createElement("div", { className: "flex items-center gap-2" },
-                    React.createElement("span", { className: "h-px w-6 bg-axiva-green" }),
+                    
                     React.createElement("span", { className: "text-xs font-medium uppercase tracking-wider text-axiva-green" }, "Personalização")),
                 React.createElement("h2", { className: "mt-3 text-2xl font-semibold text-axiva-navy sm:text-3xl" }, "Crie os seus critérios."),
                 React.createElement("p", { className: "mt-4 text-base text-axiva-gray" }, "Organize sua própria forma de acompanhar empresas com listas, critérios e estratégias que façam sentido para você.")),
