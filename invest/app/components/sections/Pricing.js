@@ -44,8 +44,8 @@ export default function Pricing() {
             React.createElement("div", { className: "mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4" }, plans.map((plan) => (React.createElement("article", { key: plan.name, className: "relative flex min-h-[390px] flex-col overflow-hidden rounded-[28px] border border-[#21b8b7] bg-[#08243f] p-8 text-white" },
                 plan.featured && (React.createElement("span", { className: "absolute right-0 top-0 rounded-bl-[20px] bg-[#28b7b6] px-5 py-3 text-xs font-extrabold text-black" }, "MAIOR ECONOMIA")),
                 React.createElement("h3", { className: "text-2xl font-bold sm:text-3xl" }, plan.name),
-                plan.installments && React.createElement("p", { className: "mt-5 text-sm sm:text-base" }, plan.installments),
-                React.createElement("div", { className: `${plan.installments ? 'mt-2' : 'mt-5'} text-4xl font-extrabold tracking-tight sm:text-5xl` }, plan.price),
-                React.createElement("p", { className: "mt-4 whitespace-pre-line text-sm leading-8 sm:text-base" }, plan.detail),
-                React.createElement("a", { href: plan.href, target: "_blank", rel: "noopener noreferrer", className: "mt-10 inline-flex min-h-14 items-center justify-center rounded-2xl bg-gradient-to-r from-[#2cbab9] to-[#61d5d3] px-4 text-center text-sm font-extrabold text-black transition-opacity hover:opacity-90 sm:text-base" }, plan.button))))))));
+                React.createElement("p", { className: "mt-5 min-h-[24px] text-sm sm:text-base" }, plan.installments || "\u00a0"),
+                React.createElement("div", { className: "mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl" }, plan.price),
+                React.createElement("p", { className: "mt-4 min-h-[64px] whitespace-pre-line text-sm leading-8 sm:text-base" }, plan.detail),
+                React.createElement("a", { href: plan.href, target: "_blank", rel: "noopener noreferrer", className: "mt-6 inline-flex min-h-14 items-center justify-center rounded-2xl bg-gradient-to-r from-[#2cbab9] to-[#61d5d3] px-4 text-center text-sm font-extrabold text-black transition-opacity hover:opacity-90 sm:text-base" }, plan.button))))))));
 }
