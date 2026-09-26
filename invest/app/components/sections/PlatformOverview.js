@@ -28,7 +28,7 @@ export default function PlatformOverview() {
                 React.createElement("p", { className: "mt-4 text-base text-axiva-gray" }, "Da descoberta de empresas ao acompanhamento da sua estratégia, reúna as principais etapas da análise em um único ambiente.")),
             React.createElement("div", { className: "grid gap-10 sm:grid-cols-3 lg:gap-12" }, pillars.map((pillar) => (React.createElement("div", { key: pillar.title, className: "flex flex-col gap-3" },
                 React.createElement(pillar.icon, { className: "h-5 w-5 text-axiva-green", strokeWidth: 1.5 }),
-                React.createElement("div", { className: "h-px w-10 bg-axiva-green" }),
+                
                 React.createElement("h3", { className: "text-lg font-semibold text-axiva-navy" }, pillar.title),
                 React.createElement("p", { className: "text-sm leading-relaxed text-axiva-gray" }, pillar.text))))))));
 }
