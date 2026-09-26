@@ -350,3 +350,5 @@ html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smo
   .lg\:border-b-0{border-bottom-width:0}
   .lg\:border-r{border-right-width:1px}
 }
+
+@media (min-width:64rem){.axiva-nowrap-desktop{white-space:nowrap}}
