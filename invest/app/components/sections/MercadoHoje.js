@@ -50,22 +50,25 @@ export default function MercadoHoje() {
         };
         load();
         const timer = window.setInterval(load, 120000);
-        return () => { active = false; window.clearInterval(timer); };
+        return () => {
+            active = false;
+            window.clearInterval(timer);
+        };
     }, []);
-    return (React.createElement("section", { id: "mercado", className: "border-y border-slate-200 bg-white" },
-        React.createElement("div", { className: "mx-auto max-w-container px-4 py-12 lg:px-8 lg:py-16" },
-            React.createElement("div", { className: "mb-6 flex items-center gap-2" },
+    return (React.createElement("section", { id: "mercado", className: "bg-axiva-navy py-16 lg:py-20" },
+        React.createElement("div", { className: "mx-auto max-w-container px-4 lg:px-8" },
+            React.createElement("div", { className: "mb-8 flex items-center gap-2" },
                 React.createElement("span", { className: "h-px w-6 bg-axiva-green" }),
                 React.createElement("h2", { className: "text-xs font-medium uppercase tracking-wider text-axiva-green" }, "Mercado Hoje")),
-            React.createElement("div", { className: "grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-slate-200 bg-slate-200 lg:grid-cols-4" }, items.map((item) => {
+            React.createElement("div", { className: "grid grid-cols-2 gap-4 lg:grid-cols-4" }, items.map((item) => {
                 const change = item.key === 'CDI' || item.change_pct == null ? null : Number(item.change_pct);
                 const positive = change != null && change > 0;
                 const negative = change != null && change < 0;
-                return (React.createElement("div", { key: item.key, className: "bg-white p-4" },
-                    React.createElement("span", { className: "block text-[11px] font-medium uppercase tracking-wide text-slate-500" }, labels[item.key] ?? item.label ?? item.key),
-                    React.createElement("span", { className: "mt-1 block text-lg font-semibold text-axiva-navy" }, formatValue(item)),
-                    item.key !== 'CDI' && (React.createElement("div", { className: "mt-1 flex items-center gap-1" },
-                        positive ? (React.createElement(TrendingUp, { className: "h-3 w-3 text-axiva-green" })) : negative ? (React.createElement(TrendingDown, { className: "h-3 w-3 text-red-500" })) : null,
-                        React.createElement("span", { className: `text-xs font-medium ${positive ? 'text-axiva-green' : negative ? 'text-red-500' : 'text-slate-500'}` }, formatChange(change))))));
+                return (React.createElement("div", { key: item.key, className: "rounded-xl border border-slate-700 bg-axiva-navy-light p-4 shadow-sm" },
+                    React.createElement("span", { className: "block text-[11px] font-medium uppercase tracking-wide text-slate-300" }, labels[item.key] ?? item.label ?? item.key),
+                    React.createElement("span", { className: "mt-2 block text-xl font-semibold text-white" }, formatValue(item)),
+                    item.key !== 'CDI' && (React.createElement("div", { className: "mt-2 flex items-center gap-1.5" },
+                        positive ? React.createElement(TrendingUp, { className: "h-3.5 w-3.5 text-axiva-green-light" }) : negative ? React.createElement(TrendingDown, { className: "h-3.5 w-3.5 text-red-400" }) : null,
+                        React.createElement("span", { className: `text-sm font-medium ${positive ? 'text-axiva-green-light' : negative ? 'text-red-400' : 'text-slate-400'}` }, formatChange(change))))));
             })))));
 }
