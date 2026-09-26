@@ -9,7 +9,7 @@ export default function CompanyAnalysis() {
             React.createElement("div", { className: "grid items-center gap-12 lg:grid-cols-[45%_55%] lg:gap-16" },
                 React.createElement("div", { className: "flex flex-col gap-5" },
                     React.createElement("div", { className: "flex items-center gap-2" },
-                        React.createElement("span", { className: "h-px w-6 bg-axiva-green" }),
+                        
                         React.createElement("span", { className: "text-xs font-medium uppercase tracking-wider text-axiva-green" }, "Análise de empresas")),
                     React.createElement("h2", { className: "text-2xl font-semibold text-axiva-navy sm:text-3xl lg:text-[2.25rem]" }, "Entenda a empresa antes de olhar apenas para o preço."),
                     React.createElement("p", { className: "text-base leading-relaxed text-axiva-gray" }, "Reúna os principais dados fundamentalistas, indicadores de qualidade, valuation e histórico em uma visão organizada para facilitar sua análise."),
