@@ -7,12 +7,12 @@ export default function FindCompanies() {
     const companies = researchTickers.map((ticker) => getCompany(ticker));
     return (React.createElement("section", { id: "pesquisa", className: "bg-axiva-bg py-16 lg:py-24" },
         React.createElement("div", { className: "mx-auto max-w-container px-4 lg:px-8" },
-            React.createElement("div", { className: "mb-10 max-w-3xl" },
+            React.createElement("div", { className: "mb-10" },
                 React.createElement("div", { className: "flex items-center gap-2" },
                     
                     React.createElement("span", { className: "text-xs font-medium uppercase tracking-wider text-axiva-green" }, "Pesquisa de empresas")),
-                React.createElement("h2", { className: "mt-3 text-2xl font-semibold text-axiva-navy sm:text-3xl" }, "Encontre empresas que fazem sentido para o que você procura."),
-                React.createElement("p", { className: "mt-4 text-base text-axiva-gray" }, "Use filtros e critérios para explorar o mercado sem precisar analisar empresa por empresa desde o início.")),
+                React.createElement("h2", { className: "mt-3 text-2xl font-semibold text-axiva-navy sm:text-3xl axiva-nowrap-desktop" }, "Encontre empresas que fazem sentido para o que você procura."),
+                React.createElement("p", { className: "mt-4 text-base text-axiva-gray axiva-nowrap-desktop" }, "Use filtros e critérios para explorar o mercado sem precisar analisar empresa por empresa desde o início.")),
             React.createElement("div", { className: "rounded-xl border border-slate-200 bg-white shadow-sm" },
                 React.createElement("div", { className: "p-5 sm:p-6" },
                     React.createElement("div", { className: "mb-5 flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3" },
