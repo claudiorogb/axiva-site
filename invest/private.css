@@ -348,8 +348,8 @@ button,input,select{font-family:inherit}
 }
 
 .watch-row{
-  grid-template-columns:minmax(180px,1.5fr) minmax(100px,.75fr) minmax(75px,.55fr) minmax(105px,.75fr) auto;
-  gap:12px;
+  grid-template-columns:minmax(190px,1fr) 90px 64px 86px 220px;
+  gap:4px;
   align-items:center;
 }
 
@@ -393,7 +393,8 @@ button,input,select{font-family:inherit}
   display:flex;
   flex-wrap:nowrap;
   justify-content:flex-end;
-  gap:8px!important;
+  gap:6px!important;
+  min-width:220px;
 }
 
 .alert-form{
