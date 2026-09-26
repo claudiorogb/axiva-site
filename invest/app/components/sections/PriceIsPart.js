@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { MiniBarChart, MiniLineChart, MockupStat, QualityIndicator } from '/invest/app/components/shared/MockupElements.js';
+import { MiniLineChart, MockupStat, QualityIndicator } from '/invest/app/components/shared/MockupElements.js';
 import { comparisonTickers, getCompany, formatCurrency, formatNumber, formatPercent, formatSignedPercent } from '/invest/app/data/investData.js';
 const tabs = ['Valor', 'Qualidade', 'Fundamentos', 'Histórico', 'Comparação'];
 export default function PriceIsPart() {
@@ -23,8 +23,8 @@ export default function PriceIsPart() {
                         React.createElement("span", { className: "text-xs text-slate-400" }, company.name)),
                     active === 'Valor' && (React.createElement("div", { className: "animate-fade-in grid gap-5 sm:grid-cols-2 lg:grid-cols-4" },
                         React.createElement(MockupStat, { label: "Preço atual", value: formatCurrency(company.price), dark: true }),
-                        React.createElement(MockupStat, { label: "Valor estimado", value: formatCurrency(company.estimated), dark: true }),
-                        React.createElement(MockupStat, { label: company.discount <= 0 ? 'Desconto' : 'Ágio', value: formatSignedPercent(company.discount), hint: "vs. valor estimado", dark: true }),
+                        React.createElement(MockupStat, { label: "VPA", value: formatCurrency(company.vpa), dark: true }),
+                        React.createElement(MockupStat, { label: "P/VP", value: formatNumber(company.pvp, 2), dark: true }),
                         React.createElement(MockupStat, { label: "Graham", value: formatCurrency(company.graham), dark: true }),
                         React.createElement("div", { className: "sm:col-span-2 lg:col-span-4" },
                             React.createElement("div", { className: "mb-2 text-[11px] font-medium text-slate-400" }, "Preço em 6 meses"),
@@ -46,13 +46,12 @@ export default function PriceIsPart() {
                     ].map((stat) => (React.createElement("div", { key: stat.label, className: "rounded-lg border border-slate-700 px-3 py-3" },
                         React.createElement("div", { className: "text-[10px] font-medium uppercase tracking-wide text-slate-500" }, stat.label),
                         React.createElement("div", { className: "mt-1 text-sm font-semibold text-white" }, stat.value)))))),
-                    active === 'Histórico' && (React.createElement("div", { className: "animate-fade-in flex flex-col gap-5" },
-                        React.createElement("div", null,
-                            React.createElement("div", { className: "mb-2 text-[11px] font-medium text-slate-400" }, "Evolução do P/L, 5 anos"),
-                            React.createElement(MiniBarChart, { values: company.plHistory5y ?? [], className: "h-20" })),
-                        React.createElement("div", null,
-                            React.createElement("div", { className: "mb-2 text-[11px] font-medium text-slate-400" }, "Evolução do ROE, 5 anos"),
-                            React.createElement(MiniBarChart, { values: company.roeHistory5y ?? [], className: "h-20" })))),
+                    active === 'Histórico' && (React.createElement("div", { className: "animate-fade-in" },
+                        React.createElement("div", { className: "mb-2 flex items-center justify-between" },
+                            React.createElement("div", { className: "text-[11px] font-medium text-slate-400" }, "Fechamentos mensais, 6 meses"),
+                            React.createElement("div", { className: `text-xs font-medium ${company.performance6m >= 0 ? 'text-axiva-green-light' : 'text-red-400'}` }, formatSignedPercent(company.performance6m))),
+                        React.createElement(MiniLineChart, { values: company.history6m, className: "h-24 w-full" }),
+                        React.createElement("div", { className: "mt-2 text-[10px] text-slate-400" }, "Fonte: Digrin."))),
                     active === 'Comparação' && (React.createElement("div", { className: "animate-fade-in overflow-x-auto" },
                         React.createElement("table", { className: "w-full text-sm" },
                             React.createElement("thead", null,
@@ -61,7 +60,9 @@ export default function PriceIsPart() {
                                     comparisons.map((item) => (React.createElement("th", { key: item.ticker, className: "pb-2 px-4 text-left text-[11px] font-medium uppercase tracking-wide text-slate-400" }, item.ticker))))),
                             React.createElement("tbody", null, [
                                 { label: 'Preço', key: 'price' },
-                                { label: 'Valor estimado', key: 'estimated' },
+                                { label: 'VPA', key: 'vpa' },
+                                { label: 'Graham', key: 'graham' },
+                                { label: 'P/VP', key: 'pvp' },
                                 { label: 'P/L', key: 'pl' },
                                 { label: 'ROE', key: 'roe' },
                                 { label: 'DY', key: 'dy' },
@@ -70,7 +71,9 @@ export default function PriceIsPart() {
                                 comparisons.map((item) => {
                                     let value = 'N/D';
                                     if (row.key === 'price') value = formatCurrency(item.price);
-                                    if (row.key === 'estimated') value = formatCurrency(item.estimated);
+                                    if (row.key === 'vpa') value = formatCurrency(item.vpa);
+                                    if (row.key === 'graham') value = formatCurrency(item.graham);
+                                    if (row.key === 'pvp') value = formatNumber(item.pvp, 2);
                                     if (row.key === 'pl') value = formatNumber(item.pl, 2);
                                     if (row.key === 'roe') value = formatPercent(item.roe);
                                     if (row.key === 'dy') value = formatPercent(item.dy);
