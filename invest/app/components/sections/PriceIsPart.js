@@ -1,8 +1,8 @@
 import React from 'react';
 import { useState } from 'react';
 import { MiniLineChart, MockupStat, QualityIndicator } from '/invest/app/components/shared/MockupElements.js';
-import { comparisonTickers, getCompany, formatCurrency, formatNumber, formatPercent, formatSignedPercent } from '/invest/app/data/investData.js';
-const tabs = ['Valor', 'Qualidade', 'Fundamentos', 'Histórico', 'Comparação'];
+import { comparisonTickers, getCompany, formatCurrency, formatNumber, formatPercent } from '/invest/app/data/investData.js';
+const tabs = ['Valor', 'Qualidade', 'Fundamentos', 'Comparação'];
 export default function PriceIsPart() {
     const [active, setActive] = useState('Valor');
     const company = getCompany('PETR4');
@@ -23,11 +23,11 @@ export default function PriceIsPart() {
                         React.createElement("span", { className: "text-xs text-slate-400" }, company.name)),
                     active === 'Valor' && (React.createElement("div", { className: "animate-fade-in grid gap-5 sm:grid-cols-2 lg:grid-cols-4" },
                         React.createElement(MockupStat, { label: "Preço atual", value: formatCurrency(company.price), dark: true }),
-                        React.createElement(MockupStat, { label: "VPA", value: formatCurrency(company.vpa), dark: true }),
+                        React.createElement(MockupStat, { label: "P/L", value: formatNumber(company.pl, 2), dark: true }),
                         React.createElement(MockupStat, { label: "P/VP", value: formatNumber(company.pvp, 2), dark: true }),
                         React.createElement(MockupStat, { label: "Graham", value: formatCurrency(company.graham), dark: true }),
                         React.createElement("div", { className: "sm:col-span-2 lg:col-span-4" },
-                            React.createElement("div", { className: "mb-2 text-[11px] font-medium text-slate-400" }, "Preço em 6 meses"),
+                            React.createElement("div", { className: "mb-2 text-[11px] font-medium text-slate-400" }, "Preço 6 meses"),
                             React.createElement(MiniLineChart, { values: company.history6m, className: "h-20 w-full" })))),
                     active === 'Qualidade' && (React.createElement("div", { className: "animate-fade-in flex flex-col gap-5" },
                         React.createElement("div", { className: "flex items-center justify-between" },
@@ -46,12 +46,7 @@ export default function PriceIsPart() {
                     ].map((stat) => (React.createElement("div", { key: stat.label, className: "rounded-lg border border-slate-700 px-3 py-3" },
                         React.createElement("div", { className: "text-[10px] font-medium uppercase tracking-wide text-slate-500" }, stat.label),
                         React.createElement("div", { className: "mt-1 text-sm font-semibold text-white" }, stat.value)))))),
-                    active === 'Histórico' && (React.createElement("div", { className: "animate-fade-in" },
-                        React.createElement("div", { className: "mb-2 flex items-center justify-between" },
-                            React.createElement("div", { className: "text-[11px] font-medium text-slate-400" }, "Fechamentos mensais, 6 meses"),
-                            React.createElement("div", { className: `text-xs font-medium ${company.performance6m >= 0 ? 'text-axiva-green-light' : 'text-red-400'}` }, formatSignedPercent(company.performance6m))),
-                        React.createElement(MiniLineChart, { values: company.history6m, className: "h-24 w-full" }),
-                        React.createElement("div", { className: "mt-2 text-[10px] text-slate-400" }, "Fonte: Digrin."))),
+
                     active === 'Comparação' && (React.createElement("div", { className: "animate-fade-in overflow-x-auto" },
                         React.createElement("table", { className: "w-full text-sm" },
                             React.createElement("thead", null,
@@ -60,7 +55,6 @@ export default function PriceIsPart() {
                                     comparisons.map((item) => (React.createElement("th", { key: item.ticker, className: "pb-2 px-4 text-left text-[11px] font-medium uppercase tracking-wide text-slate-400" }, item.ticker))))),
                             React.createElement("tbody", null, [
                                 { label: 'Preço', key: 'price' },
-                                { label: 'VPA', key: 'vpa' },
                                 { label: 'Graham', key: 'graham' },
                                 { label: 'P/VP', key: 'pvp' },
                                 { label: 'P/L', key: 'pl' },
@@ -71,7 +65,6 @@ export default function PriceIsPart() {
                                 comparisons.map((item) => {
                                     let value = 'N/D';
                                     if (row.key === 'price') value = formatCurrency(item.price);
-                                    if (row.key === 'vpa') value = formatCurrency(item.vpa);
                                     if (row.key === 'graham') value = formatCurrency(item.graham);
                                     if (row.key === 'pvp') value = formatNumber(item.pvp, 2);
                                     if (row.key === 'pl') value = formatNumber(item.pl, 2);
