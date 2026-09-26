@@ -24,7 +24,7 @@ export default function SelecaoAxiva() {
                         
                         React.createElement("span", { className: "text-xs font-medium uppercase tracking-wider text-axiva-green" }, "Seleção AXIVA")),
                     React.createElement("h2", { className: "text-2xl font-semibold text-axiva-navy sm:text-3xl" }, "Quer um ponto de partida?"),
-                    React.createElement("p", { className: "text-base leading-relaxed text-axiva-gray" }, "A Seleção AXIVA aplica critérios da nossa metodologia para destacar empresas que merecem uma análise mais aprofundada."),
+                    React.createElement("p", { className: "text-base leading-relaxed text-axiva-gray" }, "Toda semana selecionamos até 20 ações aplicando critérios da nossa metodologia para destacar empresas que merecem uma análise mais aprofundada."),
                     React.createElement("p", { className: "text-sm text-axiva-gray" }, "Não é uma recomendação de compra. É uma forma de reduzir o universo de empresas para começar sua análise com mais estrutura."),
                     React.createElement("a", { href: "#metodologia", className: "inline-flex w-fit items-center gap-1.5 text-sm font-medium text-axiva-green transition-colors hover:text-axiva-green-dark" },
                         "Entender os critérios utilizados",
