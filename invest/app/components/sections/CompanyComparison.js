@@ -1,11 +1,11 @@
 import React from 'react';
 import { QualityIndicator } from '/invest/app/components/shared/MockupElements.js';
-import { comparisonTickers, getCompany, formatCurrency, formatNumber, formatPercent, formatSignedPercent } from '/invest/app/data/investData.js';
+import { comparisonTickers, getCompany, formatCurrency, formatNumber, formatPercent } from '/invest/app/data/investData.js';
 const companies = comparisonTickers.map((ticker) => getCompany(ticker));
 const metrics = [
     { key: 'price', label: 'Preço' },
-    { key: 'estimated', label: 'Valor estimado' },
-    { key: 'discount', label: 'Desconto/Ágio' },
+    { key: 'vpa', label: 'VPA' },
+    { key: 'graham', label: 'Graham' },
     { key: 'quality', label: 'Qualidade' },
     { key: 'pl', label: 'P/L' },
     { key: 'pvp', label: 'P/VP' },
@@ -44,14 +44,13 @@ export default function CompanyComparison() {
                                         }
                                         let value = 'N/D';
                                         if (metric.key === 'price') value = formatCurrency(c.price);
-                                        if (metric.key === 'estimated') value = formatCurrency(c.estimated);
-                                        if (metric.key === 'discount') value = formatSignedPercent(c.discount);
+                                        if (metric.key === 'vpa') value = formatCurrency(c.vpa);
+                                        if (metric.key === 'graham') value = formatCurrency(c.graham);
                                         if (metric.key === 'pl') value = formatNumber(c.pl, 2);
                                         if (metric.key === 'pvp') value = formatNumber(c.pvp, 2);
                                         if (metric.key === 'roe') value = formatPercent(c.roe);
                                         if (metric.key === 'roic') value = c.roic == null ? 'N/D' : formatPercent(c.roic);
                                         if (metric.key === 'dy') value = formatPercent(c.dy);
-                                        const isDiscount = metric.key === 'discount';
-                                        return (React.createElement("td", { key: c.ticker, className: `py-3 px-4 text-sm font-medium ${isDiscount ? (c.discount <= 0 ? 'text-axiva-green' : 'text-red-500') : 'text-axiva-navy'}` }, value));
+                                        return (React.createElement("td", { key: c.ticker, className: "py-3 px-4 text-sm font-medium text-axiva-navy" }, value));
                                     })))))))))))));
 }
