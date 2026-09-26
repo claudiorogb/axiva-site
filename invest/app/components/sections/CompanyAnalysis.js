@@ -1,0 +1,56 @@
+import React from 'react';
+import BrowserFrame from '../shared/BrowserFrame.js';
+import { MockupStat, MiniLineChart, QualityIndicator, MockupBadge } from '../shared/MockupElements.js';
+export default function CompanyAnalysis() {
+    return (React.createElement("section", { id: "analise", className: "bg-white py-16 lg:py-28" },
+        React.createElement("div", { className: "mx-auto max-w-container px-4 lg:px-8" },
+            React.createElement("div", { className: "grid items-center gap-12 lg:grid-cols-[45%_55%] lg:gap-16" },
+                React.createElement("div", { className: "flex flex-col gap-5" },
+                    React.createElement("div", { className: "flex items-center gap-2" },
+                        React.createElement("span", { className: "h-px w-6 bg-axiva-green" }),
+                        React.createElement("span", { className: "text-xs font-medium uppercase tracking-wider text-axiva-green" }, "Análise de empresas")),
+                    React.createElement("h2", { className: "text-2xl font-semibold text-axiva-navy sm:text-3xl lg:text-[2.25rem]" }, "Entenda a empresa antes de olhar apenas para o preço."),
+                    React.createElement("p", { className: "text-base leading-relaxed text-axiva-gray" }, "Reúna os principais dados fundamentalistas, indicadores de qualidade, valuation e histórico em uma visão organizada para facilitar sua análise."),
+                    React.createElement("ul", { className: "mt-2 flex flex-col gap-3" }, [
+                        'Indicadores de qualidade e valuation em uma única tela',
+                        'Histórico de preço e indicadores ao longo do tempo',
+                        'Dados fundamentalistas organizados por categoria',
+                    ].map((item) => (React.createElement("li", { key: item, className: "flex items-start gap-2.5 text-sm text-axiva-navy" },
+                        React.createElement("span", { className: "mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-axiva-green" }),
+                        item))))),
+                React.createElement("div", null,
+                    React.createElement(BrowserFrame, { url: "axivainvest.com.br/analise/ITUB4" },
+                        React.createElement("div", { className: "p-5 sm:p-6" },
+                            React.createElement("div", { className: "mb-5 flex items-start justify-between" },
+                                React.createElement("div", null,
+                                    React.createElement("div", { className: "flex items-center gap-2" },
+                                        React.createElement("span", { className: "text-lg font-bold text-axiva-navy" }, "ITUB4"),
+                                        React.createElement(MockupBadge, null, "MOCKUP")),
+                                    React.createElement("span", { className: "text-xs text-slate-400" }, "Itaú Unibanco PN")),
+                                React.createElement(QualityIndicator, { score: 5 })),
+                            React.createElement("div", { className: "mb-5 grid grid-cols-2 gap-4 sm:grid-cols-4" },
+                                React.createElement(MockupStat, { label: "Preço atual", value: "R$ 33,20" }),
+                                React.createElement(MockupStat, { label: "Valor estimado", value: "R$ 36,80" }),
+                                React.createElement(MockupStat, { label: "Ágio", value: "-9,8%", hint: "sobre valor estimado" }),
+                                React.createElement(MockupStat, { label: "Graham", value: "R$ 38,50" })),
+                            React.createElement("div", { className: "mb-5 rounded-lg border border-slate-200 p-3" },
+                                React.createElement("div", { className: "mb-2 flex items-center justify-between" },
+                                    React.createElement("span", { className: "text-[11px] font-medium text-slate-400" }, "Histórico de preço, 12 meses"),
+                                    React.createElement("span", { className: "text-[11px] font-medium text-axiva-green" }, "+18,5%")),
+                                React.createElement(MiniLineChart, { className: "h-20 w-full" })),
+                            React.createElement("div", { className: "mb-5" },
+                                React.createElement("span", { className: "mb-2 block text-[11px] font-medium uppercase tracking-wide text-slate-400" }, "Indicadores fundamentalistas"),
+                                React.createElement("div", { className: "grid grid-cols-3 gap-2 sm:grid-cols-6" }, [
+                                    { label: 'P/L', value: '8,2' },
+                                    { label: 'P/VP', value: '1,8' },
+                                    { label: 'ROE', value: '22,1%' },
+                                    { label: 'ROIC', value: '15,3%' },
+                                    { label: 'DY', value: '6,8%' },
+                                    { label: 'Crescimento', value: '12,4%' },
+                                ].map((stat) => (React.createElement("div", { key: stat.label, className: "rounded-lg border border-slate-100 bg-slate-50 px-2.5 py-2" },
+                                    React.createElement("div", { className: "text-[10px] font-medium uppercase tracking-wide text-slate-400" }, stat.label),
+                                    React.createElement("div", { className: "mt-0.5 text-sm font-semibold text-axiva-navy" }, stat.value)))))),
+                            React.createElement("div", { className: "flex gap-2 border-b border-slate-200" }, ['Visão geral', 'Fundamentos', 'Valuation', 'Qualidade', 'Histórico'].map((tab, i) => (React.createElement("button", { key: tab, className: `rounded-t-lg px-3 py-2 text-xs font-medium transition-colors ${i === 1
+                                    ? 'border-b-2 border-axiva-green text-axiva-navy'
+                                    : 'text-slate-400 hover:text-axiva-gray'}` }, tab)))))))))));
+}
