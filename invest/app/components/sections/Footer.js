@@ -15,7 +15,7 @@ export default function Footer() {
         React.createElement("div", { className: "mx-auto max-w-container px-4 py-12 lg:px-8" },
             React.createElement("div", { className: "grid gap-10 lg:grid-cols-[1fr_2fr]" },
                 React.createElement("div", { className: "flex flex-col gap-3" },
-                    React.createElement(Logo, null),
+                    React.createElement(Logo, { variant: "footer" }),
                     React.createElement("p", { className: "max-w-xs text-sm text-axiva-gray" }, "Análise que encontra valor.")),
                 React.createElement("div", { className: "grid grid-cols-2 gap-4 sm:grid-cols-4" }, footerLinks.map((link) => (React.createElement("a", { key: link.label, href: link.href, className: "text-sm text-axiva-gray transition-colors hover:text-axiva-navy" }, link.label))))),
             React.createElement("div", { id: "informacoes", className: "mt-12 border-t border-slate-200 pt-8" },
