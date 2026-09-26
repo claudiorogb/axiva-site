@@ -9,7 +9,7 @@ export default function FindCompanies() {
         React.createElement("div", { className: "mx-auto max-w-container px-4 lg:px-8" },
             React.createElement("div", { className: "mb-10 max-w-3xl" },
                 React.createElement("div", { className: "flex items-center gap-2" },
-                    React.createElement("span", { className: "h-px w-6 bg-axiva-green" }),
+                    
                     React.createElement("span", { className: "text-xs font-medium uppercase tracking-wider text-axiva-green" }, "Pesquisa de empresas")),
                 React.createElement("h2", { className: "mt-3 text-2xl font-semibold text-axiva-navy sm:text-3xl" }, "Encontre empresas que fazem sentido para o que você procura."),
                 React.createElement("p", { className: "mt-4 text-base text-axiva-gray" }, "Use filtros e critérios para explorar o mercado sem precisar analisar empresa por empresa desde o início.")),
