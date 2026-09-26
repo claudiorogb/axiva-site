@@ -6,7 +6,7 @@
 <title>AXIVA Invest — Área exclusiva</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="/axiva-mark.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/invest/private.css?v=31">
+<link rel="stylesheet" href="/invest/private.css?v=32">
 </head>
 <body>
 <div id="loginView" class="login-view">
@@ -56,7 +56,8 @@
       <button class="nav-item" data-page="analysis">Buscar empresas</button>
       <button class="nav-item" data-page="company">Analisar empresa</button>
       <button class="nav-item" data-page="compare">Comparar empresas</button>
-      <button class="nav-item" data-page="watch">Minha lista e alertas</button>
+      <button class="nav-item" data-page="watch">Minha Lista</button>
+      <button class="nav-item" data-page="alerts">Meus Alertas</button>
       <button class="nav-item" data-page="strategies">Minhas estratégias</button>
       <button class="nav-item hidden" data-page="method" aria-hidden="true" tabindex="-1">Metodologia</button>
       <button id="adminNav" class="nav-item hidden" data-page="admin">Administração</button>
@@ -83,7 +84,8 @@
         <article class="suite-entry"><span class="suite-icon">⌕</span><div><h3>Encontrar empresas</h3><p>Filtre por fundamentos, valuation, setor ou escreva os critérios em linguagem comum.</p></div><button class="mini-btn" data-goto="analysis">Abrir</button></article>
         <article class="suite-entry"><span class="suite-icon">◎</span><div><h3>Analisar empresa</h3><p>Veja Raio-X, qualidade, valuation, histórico, pares e o que mudou.</p></div><button class="mini-btn" data-goto="company">Abrir</button></article>
         <article class="suite-entry"><span class="suite-icon">⇄</span><div><h3>Comparar empresas</h3><p>Coloque até cinco empresas lado a lado usando os mesmos indicadores.</p></div><button class="mini-btn" data-goto="compare">Abrir</button></article>
-        <article class="suite-entry"><span class="suite-icon">☆</span><div><h3>Minha lista e Alertas</h3><p>Crie sua lista e condições de alerta para preços e indicadores.</p></div><button class="mini-btn" data-goto="watch">Abrir</button></article>
+        <article class="suite-entry"><span class="suite-icon">☆</span><div><h3>Minha Lista</h3><p>Salve as empresas que deseja acompanhar.</p></div><button class="mini-btn" data-goto="watch">Abrir</button></article>
+        <article class="suite-entry"><span class="suite-icon">!</span><div><h3>Meus Alertas</h3><p>Crie condições para acompanhar preços e indicadores.</p></div><button class="mini-btn" data-goto="alerts">Abrir</button></article>
         <article class="suite-entry"><span class="suite-icon">◇</span><div><h3>Estratégias</h3><p>Crie critérios próprios e acompanhe quais empresas atendem às regras definidas.</p></div><button class="mini-btn" data-goto="strategies">Abrir</button></article>
       </div>
       <div class="guide-strip hidden"></div>
@@ -183,28 +185,30 @@
     </section>
 
     <section id="watchPage" class="page">
-      <div class="intro"><div><p>Monte sua lista e crie condições para saber quando preço ou indicadores atingirem os valores definidos.</p></div><span class="help-bubble" data-tip="Os alertas são verificados automaticamente e podem gerar um e-mail quando a condição definida for atingida." tabindex="0">?</span></div>
-      <div class="watch-layout">
-        <div class="suite-card">
-          <div class="compact-section-head"><div><h3>Minha Lista</h3><p>Salve as empresas que quer acompanhar.</p></div></div>
-          <div class="compact-input-row"><input id="watchTicker" list="companyTickerList" placeholder="Ticker ou empresa"><button id="watchAddBtn" class="mini-btn primary" type="button">Adicionar</button></div>
-          <div id="watchlistStatus" class="micro-note"></div>
-          <div id="watchlistContent"></div>
-        </div>
-        <div class="suite-card">
-          <div class="compact-section-head"><div><h3>Alertas da plataforma</h3><p>Defina uma condição. Quando ela for atingida, você recebe um e-mail para esse alerta.</p></div></div>
-          <form id="alertForm" class="alert-form">
-            <label>Empresa<input id="alertTicker" list="companyTickerList" placeholder="Ex.: ITUB4" required></label>
-            <label>Indicador<select id="alertMetric"><option value="price">Preço</option><option value="discount_pct">Desconto AXIVA</option><option value="pl">P/L</option><option value="pvp">P/VP</option><option value="roe">ROE</option><option value="roic">ROIC</option><option value="dividend_yield">DY</option><option value="quality_score">Qualidade</option></select></label>
-            <label>Condição<select id="alertOperator"><option value="lte">Menor ou igual</option><option value="gte">Maior ou igual</option></select></label>
-            <label>Valor<input id="alertThreshold" type="number" step=".01" required placeholder="Ex.: 30,00"></label>
-            <button class="mini-btn primary" type="submit">Criar alerta</button>
-          </form>
-          <div id="alertValueHint" class="micro-note">Para preço, informe o valor em reais.</div>
-        </div>
+      <div class="intro"><div><p>Salve as empresas que deseja acompanhar e acesse rapidamente a análise de cada uma.</p></div><span class="help-bubble" data-tip="As empresas adicionadas aqui ficam disponíveis na sua lista pessoal para acompanhamento." tabindex="0">?</span></div>
+      <div class="suite-card watchlist-page-card">
+        <div class="compact-section-head"><div><h3>Minha Lista</h3><p>Adicione ou remova empresas da sua lista de acompanhamento.</p></div></div>
+        <div class="compact-input-row watchlist-add-row"><input id="watchTicker" list="companyTickerList" placeholder="Ticker ou empresa"><button id="watchAddBtn" class="mini-btn primary" type="button">Adicionar</button></div>
+        <div id="watchlistStatus" class="micro-note"></div>
+        <div id="watchlistContent"></div>
+      </div>
+    </section>
+
+    <section id="alertsPage" class="page">
+      <div class="intro"><div><p>Crie condições para acompanhar preços e indicadores das empresas e gerencie os alertas já cadastrados.</p></div><span class="help-bubble" data-tip="Os alertas são verificados automaticamente e podem gerar um e-mail quando a condição definida for atingida." tabindex="0">?</span></div>
+      <div class="suite-card alerts-create-card">
+        <div class="compact-section-head"><div><h3>Criar alerta</h3><p>Defina a empresa, o indicador e a condição que deseja acompanhar.</p></div></div>
+        <form id="alertForm" class="alert-form alert-form-two-rows">
+          <label>Empresa<input id="alertTicker" list="companyTickerList" placeholder="Ex.: ITUB4" required></label>
+          <label>Indicador<select id="alertMetric"><option value="price">Preço</option><option value="discount_pct">Desconto AXIVA</option><option value="pl">P/L</option><option value="pvp">P/VP</option><option value="roe">ROE</option><option value="roic">ROIC</option><option value="dividend_yield">DY</option><option value="quality_score">Qualidade</option></select></label>
+          <label>Condição<select id="alertOperator"><option value="lte">Menor ou igual</option><option value="gte">Maior ou igual</option></select></label>
+          <label>Valor<input id="alertThreshold" type="number" step=".01" required placeholder="Ex.: 30,00"></label>
+          <button class="mini-btn primary" type="submit">Criar alerta</button>
+        </form>
+        <div id="alertValueHint" class="micro-note">Para preço, informe o valor em reais.</div>
       </div>
       <div class="suite-card alerts-full-card">
-        <div class="compact-section-head"><div><h3>Alertas criados</h3><p>Acompanhe, pause, reinicie ou cancele seus alertas.</p></div></div>
+        <div class="compact-section-head"><div><h3>Meus Alertas</h3><p>Acompanhe, pause, reinicie ou cancele seus alertas.</p></div></div>
         <div id="alertsStatus" class="micro-note"></div>
         <div id="alertsContent"></div>
       </div>
