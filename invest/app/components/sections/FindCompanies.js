@@ -1,8 +1,8 @@
 import React from 'react';
 import { Search, ChevronDown } from 'lucide-react';
 import { QualityIndicator } from '/invest/app/components/shared/MockupElements.js';
-import { getCompany, researchTickers, formatNumber, formatPercent, formatSignedPercent } from '/invest/app/data/investData.js';
-const filters = ['Ticker', 'Setor', 'P/L', 'P/VP', 'DY', 'ROE', 'ROIC', 'Qualidade', 'Desconto/Ágio'];
+import { getCompany, researchTickers, formatCurrency, formatNumber, formatPercent } from '/invest/app/data/investData.js';
+const filters = ['Ticker', 'Setor', 'P/L', 'P/VP', 'DY', 'ROE', 'ROIC', 'Qualidade', 'Preço'];
 export default function FindCompanies() {
     const companies = researchTickers.map((ticker) => getCompany(ticker));
     return (React.createElement("section", { id: "pesquisa", className: "bg-axiva-bg py-16 lg:py-24" },
@@ -24,7 +24,7 @@ export default function FindCompanies() {
                     React.createElement("div", { className: "overflow-x-auto" },
                         React.createElement("table", { className: "w-full text-sm" },
                             React.createElement("thead", null,
-                                React.createElement("tr", { className: "border-b border-slate-200" }, ['Ticker', 'Empresa', 'Setor', 'P/L', 'P/VP', 'DY', 'ROE', 'ROIC', 'Qualidade', 'Desconto/Ágio'].map((header) => (React.createElement("th", { key: header, className: "whitespace-nowrap py-2.5 pr-4 text-left text-[11px] font-medium uppercase tracking-wide text-slate-400" }, header))))),
+                                React.createElement("tr", { className: "border-b border-slate-200" }, ['Ticker', 'Empresa', 'Setor', 'P/L', 'P/VP', 'DY', 'ROE', 'ROIC', 'Qualidade', 'Preço'].map((header) => (React.createElement("th", { key: header, className: "whitespace-nowrap py-2.5 pr-4 text-left text-[11px] font-medium uppercase tracking-wide text-slate-400" }, header))))),
                             React.createElement("tbody", null, companies.map((c) => (React.createElement("tr", { key: c.ticker, className: "border-b border-slate-100 transition-colors hover:bg-slate-50" },
                                 React.createElement("td", { className: "whitespace-nowrap py-3 pr-4 text-sm font-semibold text-axiva-navy" }, c.ticker),
                                 React.createElement("td", { className: "whitespace-nowrap py-3 pr-4 text-sm text-axiva-gray" }, c.name),
@@ -36,5 +36,5 @@ export default function FindCompanies() {
                                 React.createElement("td", { className: "whitespace-nowrap py-3 pr-4 text-sm text-axiva-navy" }, c.roic == null ? 'N/D' : formatPercent(c.roic)),
                                 React.createElement("td", { className: "whitespace-nowrap py-3 pr-4" },
                                     React.createElement(QualityIndicator, { score: c.quality })),
-                                React.createElement("td", { className: `whitespace-nowrap py-3 pr-4 text-sm font-medium ${c.discount <= 0 ? 'text-axiva-green' : 'text-red-500'}` }, formatSignedPercent(c.discount)))))))))))));
+                                React.createElement("td", { className: "whitespace-nowrap py-3 pr-4 text-sm font-medium text-axiva-navy" }, formatCurrency(c.price)))))))))))));
 }
