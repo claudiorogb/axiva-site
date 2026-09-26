@@ -12,7 +12,7 @@ const labels = {
 function formatValue(item) {
     const value = item.value == null ? null : Number(item.value);
     if (value == null || !Number.isFinite(value))
-        return ',';
+        return 'N/D';
     if (item.unit === 'BRL') {
         return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 3, maximumFractionDigits: 3 });
     }
