@@ -11,7 +11,7 @@ export default function TrackChanges() {
             React.createElement("div", { className: "grid items-center gap-12 lg:grid-cols-2 lg:gap-16" },
                 React.createElement("div", { className: "flex flex-col gap-5" },
                     React.createElement("div", { className: "flex items-center gap-2" },
-                        React.createElement("span", { className: "h-px w-6 bg-axiva-green" }),
+                        
                         React.createElement("span", { className: "text-xs font-medium uppercase tracking-wider text-axiva-green" }, "Acompanhamento")),
                     React.createElement("h2", { className: "text-2xl font-semibold text-axiva-navy sm:text-3xl" }, "Não precisa recomeçar sua análise todos os dias."),
                     React.createElement("p", { className: "text-base leading-relaxed text-axiva-gray" }, "Acompanhe mudanças relevantes nas empresas e concentre sua atenção no que realmente mudou.")),
