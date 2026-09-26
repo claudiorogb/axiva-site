@@ -26,7 +26,7 @@ function formatValue(item) {
 }
 function formatChange(value) {
     if (value == null || !Number.isFinite(Number(value)))
-        return ',';
+        return 'N/D';
     return `${(Number(value) * 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`;
 }
 export default function MercadoHoje() {
