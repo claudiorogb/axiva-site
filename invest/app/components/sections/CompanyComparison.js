@@ -4,7 +4,6 @@ import { comparisonTickers, getCompany, formatCurrency, formatNumber, formatPerc
 const companies = comparisonTickers.map((ticker) => getCompany(ticker));
 const metrics = [
     { key: 'price', label: 'Preço' },
-    { key: 'vpa', label: 'VPA' },
     { key: 'graham', label: 'Graham' },
     { key: 'quality', label: 'Qualidade' },
     { key: 'pl', label: 'P/L' },
@@ -21,7 +20,7 @@ export default function CompanyComparison() {
                     React.createElement("div", { className: "flex items-center gap-2" },
                         
                         React.createElement("span", { className: "text-xs font-medium uppercase tracking-wider text-axiva-green" }, "Comparação")),
-                    React.createElement("h2", { className: "text-2xl font-semibold text-axiva-navy sm:text-3xl" }, "Compare antes de escolher o que analisar mais a fundo."),
+                    React.createElement("h2", { className: "text-2xl font-semibold text-axiva-navy sm:text-3xl" }, "Compare antes de escolher qual ação analisar mais a fundo."),
                     React.createElement("p", { className: "text-base leading-relaxed text-axiva-gray" }, "Coloque empresas lado a lado para enxergar diferenças de valuation, qualidade e fundamentos com mais facilidade.")),
                 React.createElement("div", { className: "rounded-xl border border-slate-200 bg-white shadow-sm" },
                     React.createElement("div", { className: "p-5 sm:p-6" },
@@ -44,7 +43,6 @@ export default function CompanyComparison() {
                                         }
                                         let value = 'N/D';
                                         if (metric.key === 'price') value = formatCurrency(c.price);
-                                        if (metric.key === 'vpa') value = formatCurrency(c.vpa);
                                         if (metric.key === 'graham') value = formatCurrency(c.graham);
                                         if (metric.key === 'pl') value = formatNumber(c.pl, 2);
                                         if (metric.key === 'pvp') value = formatNumber(c.pvp, 2);
