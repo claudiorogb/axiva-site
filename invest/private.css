@@ -579,3 +579,59 @@ button,input,select{font-family:inherit}
     width:100%;
   }
 }
+
+
+/* Meus Alertas em uma linha — 2026-09-26 */
+#alertsPage .alerts-create-card{
+  width:100%;
+  max-width:none;
+}
+
+#alertsPage .alert-form-two-rows{
+  display:grid;
+  grid-template-columns:minmax(170px,1.25fr) minmax(150px,1fr) minmax(170px,1.05fr) minmax(120px,.75fr) auto;
+  gap:12px;
+  align-items:end;
+  margin-top:12px;
+}
+
+#alertsPage .alert-form-two-rows label{
+  grid-column:auto!important;
+  min-width:0;
+}
+
+#alertsPage .alert-form-two-rows input,
+#alertsPage .alert-form-two-rows select{
+  width:100%;
+  min-width:0;
+  box-sizing:border-box;
+}
+
+#alertsPage .alert-form-two-rows .mini-btn{
+  grid-column:auto!important;
+  width:auto;
+  min-width:130px;
+  justify-self:stretch;
+  white-space:nowrap;
+}
+
+@media(max-width:900px){
+  #alertsPage .alert-form-two-rows{
+    grid-template-columns:1fr 1fr;
+  }
+  #alertsPage .alert-form-two-rows .mini-btn{
+    grid-column:1/-1!important;
+    justify-self:start;
+    width:auto;
+  }
+}
+
+@media(max-width:520px){
+  #alertsPage .alert-form-two-rows{
+    grid-template-columns:1fr;
+  }
+  #alertsPage .alert-form-two-rows .mini-btn{
+    grid-column:auto!important;
+    width:100%;
+  }
+}
