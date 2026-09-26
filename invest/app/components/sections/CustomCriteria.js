@@ -6,12 +6,12 @@ export default function CustomCriteria() {
     const items = customListTickers.map((ticker) => getCompany(ticker));
     return (React.createElement("section", { id: "criterios", className: "bg-white py-16 lg:py-24" },
         React.createElement("div", { className: "mx-auto max-w-container px-4 lg:px-8" },
-            React.createElement("div", { className: "mb-10 max-w-2xl" },
+            React.createElement("div", { className: "mb-10" },
                 React.createElement("div", { className: "flex items-center gap-2" },
                     
                     React.createElement("span", { className: "text-xs font-medium uppercase tracking-wider text-axiva-green" }, "Personalização")),
                 React.createElement("h2", { className: "mt-3 text-2xl font-semibold text-axiva-navy sm:text-3xl" }, "Crie os seus critérios."),
-                React.createElement("p", { className: "mt-4 text-base text-axiva-gray" }, "Organize sua própria forma de acompanhar empresas com listas, critérios e estratégias que façam sentido para você.")),
+                React.createElement("p", { className: "mt-4 text-base text-axiva-gray axiva-nowrap-desktop" }, "Organize sua própria forma de acompanhar empresas com listas, critérios e estratégias que façam sentido para você.")),
             React.createElement("div", { className: "overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm" },
                 React.createElement("div", { className: "grid lg:grid-cols-[220px_1fr]" },
                     React.createElement("div", { className: "border-b border-slate-200 p-4 lg:border-b-0 lg:border-r" },
