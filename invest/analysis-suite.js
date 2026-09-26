@@ -690,4 +690,5 @@ function setRows(data){
 window.addEventListener('axiva:analysis-ready',e=>setRows(e.detail?.rows||[]))
 if(Array.isArray(window.axivaAnalysisRows)&&window.axivaAnalysisRows.length)setRows(window.axivaAnalysisRows)
 
-document.querySelectorAll('.nav-item[data-page="watch"]').forEach(b=>b.addEventListener('click',()=>{loadWatch();loadAlerts()}))
+document.querySelectorAll('.nav-item[data-page="watch"]').forEach(b=>b.addEventListener('click',()=>{loadWatch()}))
+document.querySelectorAll('.nav-item[data-page="alerts"]').forEach(b=>b.addEventListener('click',()=>{loadAlerts()}))
