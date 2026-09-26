@@ -11,7 +11,7 @@ export default function PriceIsPart() {
         React.createElement("div", { className: "mx-auto max-w-container px-4 lg:px-8" },
             React.createElement("div", { className: "mb-12 max-w-2xl" },
                 React.createElement("div", { className: "flex items-center gap-2" },
-                    React.createElement("span", { className: "h-px w-6 bg-axiva-green" }),
+                    
                     React.createElement("span", { className: "text-xs font-medium uppercase tracking-wider text-axiva-green" }, "Múltiplas dimensões")),
                 React.createElement("h2", { className: "mt-3 text-2xl font-semibold text-white sm:text-3xl" }, "Preço é apenas uma parte da análise."),
                 React.createElement("p", { className: "mt-4 text-base text-slate-300" }, "Entenda diferentes dimensões da empresa antes de formar sua própria conclusão.")),
