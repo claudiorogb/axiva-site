@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { QualityIndicator } from '/invest/app/components/shared/MockupElements.js';
-import { getCompany, selectionTickers, formatSignedPercent } from '/invest/app/data/investData.js';
+import { getCompany, selectionTickers, formatPercent } from '/invest/app/data/investData.js';
 const criteriaMap = {
     ITUB4: 'Qualidade + Valuation',
     WEGE3: 'Qualidade + Crescimento',
@@ -45,5 +45,5 @@ export default function SelecaoAxiva() {
                                     React.createElement("div", { className: "text-[10px] text-slate-400" }, "Critério"),
                                     React.createElement("div", { className: "text-[11px] text-axiva-gray" }, item.criteria)),
                                 React.createElement(QualityIndicator, { score: item.quality }),
-                                React.createElement("span", { className: `text-sm font-medium ${item.discount <= 0 ? 'text-axiva-green' : 'text-red-500'}` }, formatSignedPercent(item.discount)))))))))))));
+                                React.createElement("div", { className: "text-right" }, React.createElement("div", { className: "text-[10px] text-slate-400" }, "DY"), React.createElement("span", { className: "text-sm font-medium text-axiva-green" }, formatPercent(item.dy))))))))))))));
 }
