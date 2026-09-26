@@ -1,7 +1,7 @@
 import React from 'react';
 import { List, Bell, SlidersHorizontal } from 'lucide-react';
 import { QualityIndicator } from '/invest/app/components/shared/MockupElements.js';
-import { customListTickers, getCompany, formatSignedPercent } from '/invest/app/data/investData.js';
+import { customListTickers, getCompany, formatPercent } from '/invest/app/data/investData.js';
 export default function CustomCriteria() {
     const items = customListTickers.map((ticker) => getCompany(ticker));
     return (React.createElement("section", { id: "criterios", className: "bg-white py-16 lg:py-24" },
@@ -36,7 +36,7 @@ export default function CustomCriteria() {
                                 React.createElement("div", { className: "text-sm font-semibold text-axiva-navy" }, item.ticker),
                                 React.createElement("div", { className: "text-[11px] text-slate-400" }, item.name)),
                             React.createElement("div", { className: "flex items-center gap-4" },
-                                React.createElement("span", { className: `hidden text-xs font-medium sm:block ${item.discount <= 0 ? 'text-axiva-green' : 'text-red-500'}` }, formatSignedPercent(item.discount)),
+                                React.createElement("span", { className: "hidden text-xs font-medium text-axiva-green sm:block" }, `DY ${formatPercent(item.dy)}`),
                                 React.createElement(QualityIndicator, { score: item.quality })))))),
                         React.createElement("div", { className: "mt-5 rounded-lg border border-axiva-green/20 bg-axiva-green-soft/30 p-4" },
                             React.createElement("div", { className: "flex items-center gap-2" },
