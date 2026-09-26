@@ -8,10 +8,10 @@ export function MockupLabel({ children, className = '' }) {
 export function MockupValue({ children, className = '' }) {
     return React.createElement("span", { className: `text-sm font-semibold text-axiva-navy ${className}` }, children);
 }
-export function MockupStat({ label, value, hint, dark = false }) {
+export function MockupStat({ label, value, hint, dark = false, valueStyle }) {
     return (React.createElement("div", { className: "flex flex-col gap-0.5" },
         React.createElement("span", { className: `text-[10px] font-medium uppercase tracking-wide ${dark ? 'text-slate-300' : 'text-slate-400'}` }, label),
-        React.createElement("span", { className: `text-sm font-semibold ${dark ? 'text-white' : 'text-axiva-navy'}` }, value),
+        React.createElement("span", { className: `text-sm font-semibold ${dark ? 'text-white' : 'text-axiva-navy'}`, style: valueStyle }, value),
         hint && React.createElement("span", { className: `text-[10px] ${dark ? 'text-slate-300' : 'text-slate-400'}` }, hint)));
 }
 export function MiniLineChart({ values, positive, className = '' }) {
