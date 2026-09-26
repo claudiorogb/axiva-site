@@ -58,7 +58,7 @@ export default function MercadoHoje() {
     return (React.createElement("section", { id: "mercado", className: "bg-axiva-navy py-16 lg:py-20" },
         React.createElement("div", { className: "mx-auto max-w-container px-4 lg:px-8" },
             React.createElement("div", { className: "mb-8 flex items-center gap-2" },
-                React.createElement("span", { className: "h-px w-6 bg-axiva-green" }),
+                
                 React.createElement("h2", { className: "text-xs font-medium uppercase tracking-wider text-axiva-green" }, "Mercado Hoje")),
             React.createElement("div", { className: "grid grid-cols-2 gap-4 lg:grid-cols-4" }, items.map((item) => {
                 const change = item.key === 'CDI' || item.change_pct == null ? null : Number(item.change_pct);
