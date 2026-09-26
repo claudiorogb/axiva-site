@@ -13,8 +13,8 @@ export default function TrackChanges() {
                     React.createElement("div", { className: "flex items-center gap-2" },
                         
                         React.createElement("span", { className: "text-xs font-medium uppercase tracking-wider text-axiva-green" }, "Acompanhamento")),
-                    React.createElement("h2", { className: "text-2xl font-semibold text-axiva-navy sm:text-3xl" }, "Não precisa recomeçar sua análise todos os dias."),
-                    React.createElement("p", { className: "text-base leading-relaxed text-axiva-gray" }, "Acompanhe mudanças relevantes nas empresas e concentre sua atenção no que realmente mudou.")),
+                    React.createElement("h2", { className: "text-2xl font-semibold text-axiva-navy sm:text-3xl" }, "Receba alertas diários em seu e-mail."),
+                    React.createElement("p", { className: "text-base leading-relaxed text-axiva-gray" }, "Crie alertas e acompanhe mudanças relevantes nas empresas. Concentre sua atenção no que realmente mudou.")),
                 React.createElement("div", { className: "rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm" },
                     React.createElement("div", { className: "mb-5 flex items-center justify-between" },
                         React.createElement("span", { className: "text-sm font-semibold text-axiva-navy" }, "O que mudou hoje"),
