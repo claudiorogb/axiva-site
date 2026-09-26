@@ -19,7 +19,7 @@ export default function WhoIsItFor() {
             React.createElement("div", { className: "mb-12 max-w-2xl" },
                 React.createElement("h2", { className: "text-2xl font-semibold text-axiva-navy sm:text-3xl" }, "Para quem quer analisar investimentos com mais estrutura.")),
             React.createElement("div", { className: "grid gap-8 sm:grid-cols-3 lg:gap-12" }, audiences.map((audience) => (React.createElement("div", { key: audience.title, className: "flex flex-col gap-2" },
-                React.createElement("div", { className: "h-px w-10 bg-axiva-green" }),
+                
                 React.createElement("h3", { className: "text-base font-semibold text-axiva-navy" }, audience.title),
                 React.createElement("p", { className: "text-sm leading-relaxed text-axiva-gray" }, audience.text))))))));
 }
