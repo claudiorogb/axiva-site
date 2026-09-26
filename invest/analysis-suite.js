@@ -574,7 +574,7 @@ function renderWatch(){
   if(!watchData.length){el.innerHTML='<div class="empty-state">Sua lista está vazia. Adicione uma empresa para começar.</div>';return}
   el.innerHTML=watchData.map(r=>{
     const day=n(r.day_change_pct)
-    return '<div class="watch-row"><div><b>'+esc(r.ticker)+'</b><span>'+esc(r.company_name||'')+'</span></div><div><span>Cotação</span><b>'+money(r.current_price)+'</b></div><div><span>Dia</span><b class="watch-change '+(day>0?'change-pos':day<0?'change-neg':'')+'">'+(day==null?'—':pct(day))+'</b></div><div><span>Desconto</span><b>'+pct(r.discount_pct)+'</b></div><div class="compact-actions"><button class="mini-btn secondary" data-watch-open="'+esc(r.ticker)+'">Analisar</button><button class="mini-btn danger" data-watch-remove="'+esc(r.ticker)+'">Remover</button></div></div>'
+    return '<div class="watch-row"><div><b>'+esc(r.ticker)+'</b><span>'+esc(r.company_name||'')+'</span></div><div><span>Cotação</span><b>'+money(r.current_price)+'</b></div><div><span>Variação no dia</span><b class="watch-change '+(day>0?'change-pos':day<0?'change-neg':'')+'">'+(day==null?'—':pct(day))+'</b></div><div><span>Desconto</span><b>'+pct(r.discount_pct)+'</b></div><div class="compact-actions"><button class="mini-btn secondary" data-watch-open="'+esc(r.ticker)+'">Analisar</button><button class="mini-btn danger" data-watch-remove="'+esc(r.ticker)+'">Remover</button></div></div>'
   }).join('')
   el.querySelectorAll('[data-watch-open]').forEach(b=>b.addEventListener('click',()=>openCompany(b.dataset.watchOpen)))
   el.querySelectorAll('[data-watch-remove]').forEach(b=>b.addEventListener('click',()=>removeWatch(b.dataset.watchRemove)))
