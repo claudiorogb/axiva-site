@@ -467,3 +467,115 @@ button,input,select{font-family:inherit}
   .alert-form .mini-btn{grid-column:auto;width:100%}
 }
 
+
+
+/* Páginas separadas — Minha Lista / Meus Alertas — 2026-09-26 */
+.watchlist-page-card{
+  width:100%;
+}
+
+.watchlist-add-row{
+  max-width:760px;
+}
+
+#watchPage .watch-row{
+  display:grid;
+  grid-template-columns:minmax(220px,2fr) minmax(100px,.75fr) minmax(85px,.6fr) minmax(100px,.7fr) auto;
+  gap:14px;
+  align-items:center;
+}
+
+#watchPage .watch-row>div{
+  min-width:0;
+}
+
+#watchPage .watch-row>div:first-child{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:3px;
+}
+
+#watchPage .watch-row>div:first-child span{
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+
+#watchPage .watch-row>div:not(:first-child):not(.compact-actions){
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:3px;
+}
+
+#watchPage .watch-row .compact-actions{
+  display:flex;
+  flex-wrap:nowrap;
+  justify-content:flex-end;
+  gap:8px!important;
+  min-width:0;
+}
+
+.alerts-create-card{
+  max-width:760px;
+}
+
+#alertsPage .alert-form-two-rows{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px 14px;
+  align-items:end;
+  margin-top:12px;
+}
+
+#alertsPage .alert-form-two-rows label{
+  display:grid;
+  grid-column:auto;
+  min-width:0;
+  gap:5px;
+}
+
+#alertsPage .alert-form-two-rows input,
+#alertsPage .alert-form-two-rows select{
+  width:100%;
+  min-width:0;
+  box-sizing:border-box;
+}
+
+#alertsPage .alert-form-two-rows .mini-btn{
+  grid-column:1/-1;
+  width:auto;
+  justify-self:start;
+  min-width:120px;
+}
+
+#alertsPage .alerts-full-card{
+  margin-top:12px;
+}
+
+@media(max-width:760px){
+  #watchPage .watch-row{
+    grid-template-columns:1fr 1fr;
+    gap:10px 14px;
+  }
+  #watchPage .watch-row .compact-actions{
+    grid-column:1/-1;
+    justify-content:flex-start;
+  }
+}
+
+@media(max-width:520px){
+  #watchPage .watch-row{
+    grid-template-columns:1fr;
+  }
+  #watchPage .watch-row .compact-actions{
+    grid-column:auto;
+  }
+  #alertsPage .alert-form-two-rows{
+    grid-template-columns:1fr;
+  }
+  #alertsPage .alert-form-two-rows .mini-btn{
+    grid-column:auto;
+    width:100%;
+  }
+}
