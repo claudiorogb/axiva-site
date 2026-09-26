@@ -2,9 +2,10 @@ import React from 'react';
 import { useState } from 'react';
 import { formatCurrency, formatNumber, formatPercent, formatSignedPercent } from '/invest/app/data/investData.js';
 import { MiniLineChart, MockupStat, QualityIndicator } from '/invest/app/components/shared/MockupElements.js';
-const tabs = ['Visão geral', 'Fundamentos', 'Valuation', 'Histórico'];
+const tabs = ['Visão geral', 'Fundamentos', 'Valuation'];
 export default function CompanyPreview({ company, compact = false }) {
     const [active, setActive] = useState('Visão geral');
+    const compactValueStyle = compact ? { fontSize: '1rem', lineHeight: '1.25rem' } : undefined;
     return (React.createElement("div", { className: "p-5 sm:p-6" },
         React.createElement("div", { className: "mb-5 flex items-start justify-between gap-4" },
             React.createElement("div", null,
@@ -12,16 +13,15 @@ export default function CompanyPreview({ company, compact = false }) {
                 React.createElement("div", { className: "text-xs text-slate-400" }, company.name)),
             React.createElement(QualityIndicator, { score: company.quality })),
         React.createElement("div", { className: "mb-5 grid grid-cols-2 gap-4 sm:grid-cols-4" },
-            React.createElement(MockupStat, { label: "Preço atual", value: formatCurrency(company.price) }),
-            React.createElement(MockupStat, { label: "VPA", value: formatCurrency(company.vpa) }),
-            React.createElement(MockupStat, { label: "P/VP", value: formatNumber(company.pvp, 2) }),
-            React.createElement(MockupStat, { label: "Graham", value: formatCurrency(company.graham) })),
+            React.createElement(MockupStat, { label: "Preço atual", value: formatCurrency(company.price), valueStyle: compactValueStyle }),
+            React.createElement(MockupStat, { label: "P/L", value: formatNumber(company.pl, 2), valueStyle: compactValueStyle }),
+            React.createElement(MockupStat, { label: "P/VP", value: formatNumber(company.pvp, 2), valueStyle: compactValueStyle }),
+            React.createElement(MockupStat, { label: "Graham", value: formatCurrency(company.graham), valueStyle: compactValueStyle })),
         React.createElement("div", { className: "mb-5 rounded-lg border border-slate-200 p-3" },
             React.createElement("div", { className: "mb-2 flex items-center justify-between" },
                 React.createElement("span", { className: "text-[11px] font-medium text-slate-400" }, "Histórico mensal de preço, 6 meses"),
                 React.createElement("span", { className: `text-[11px] font-medium ${company.performance6m >= 0 ? 'text-axiva-green' : 'text-red-500'}` }, formatSignedPercent(company.performance6m))),
-            React.createElement(MiniLineChart, { values: company.history6m, className: `${compact ? 'h-16' : 'h-20'} w-full` }),
-            React.createElement("div", { className: "mt-2 text-[10px] text-slate-400" }, "Fonte: Digrin, fechamentos mensais. Indicadores e cotação: Fundamentus.")),
+            React.createElement(MiniLineChart, { values: company.history6m, className: `${compact ? 'h-16' : 'h-20'} w-full` })),
         active === 'Visão geral' && (React.createElement("div", { className: "animate-fade-in grid grid-cols-3 gap-3 sm:grid-cols-6" }, [
             { label: 'P/L', value: formatNumber(company.pl, 2) },
             { label: 'P/VP', value: formatNumber(company.pvp, 2) },
@@ -36,7 +36,7 @@ export default function CompanyPreview({ company, compact = false }) {
             { label: 'Setor', value: company.sector },
             { label: 'Subsetor', value: company.subsector ?? 'N/D' },
             { label: 'LPA', value: formatNumber(company.lpa, 2) },
-            { label: 'VPA', value: formatNumber(company.vpa, 2) },
+            { label: 'P/L', value: formatNumber(company.pl, 2) },
             { label: 'Margem líquida', value: formatPercent(company.margin) },
             { label: 'Crescimento 5a', value: formatSignedPercent(company.growth5y) },
         ].map((stat) => (React.createElement("div", { key: stat.label, className: "rounded-lg border border-slate-100 bg-slate-50 px-3 py-3" },
@@ -45,26 +45,21 @@ export default function CompanyPreview({ company, compact = false }) {
         active === 'Valuation' && (React.createElement("div", { className: "animate-fade-in grid gap-3 sm:grid-cols-2" },
             React.createElement("div", { className: "rounded-lg border border-slate-200 p-4" },
                 React.createElement("div", { className: "mb-2 text-[11px] font-medium uppercase tracking-wide text-slate-400" }, "Referências de valuation"),
-                React.createElement("div", { className: "flex items-end justify-between gap-4" },
+                React.createElement("div", { className: "grid grid-cols-3 gap-3" },
                     React.createElement("div", null,
                         React.createElement("div", { className: "text-xs text-slate-400" }, "Preço atual"),
-                        React.createElement("div", { className: "text-lg font-semibold text-axiva-navy" }, formatCurrency(company.price))),
+                        React.createElement("div", { className: "text-base font-semibold text-axiva-navy" }, formatCurrency(company.price))),
                     React.createElement("div", null,
-                        React.createElement("div", { className: "text-xs text-slate-400" }, "VPA"),
-                        React.createElement("div", { className: "text-lg font-semibold text-axiva-navy" }, formatCurrency(company.vpa))),
+                        React.createElement("div", { className: "text-xs text-slate-400" }, "P/L"),
+                        React.createElement("div", { className: "text-base font-semibold text-axiva-navy" }, formatNumber(company.pl, 2))),
                     React.createElement("div", null,
                         React.createElement("div", { className: "text-xs text-slate-400" }, "Graham"),
-                        React.createElement("div", { className: "text-lg font-semibold text-axiva-navy" }, formatCurrency(company.graham))))),
+                        React.createElement("div", { className: "text-base font-semibold text-axiva-navy" }, formatCurrency(company.graham))))),
             React.createElement("div", { className: "rounded-lg border border-slate-200 p-4" },
                 React.createElement("div", { className: "mb-2 text-[11px] font-medium uppercase tracking-wide text-slate-400" }, "Critérios observados"),
                 React.createElement("div", { className: "flex flex-col gap-2" }, company.notes?.map((note) => (React.createElement("div", { key: note, className: "flex items-start gap-2 text-sm text-axiva-gray" },
                     React.createElement("span", { className: "mt-1 h-1.5 w-1.5 rounded-full bg-axiva-green" }),
                     React.createElement("span", null, note)))))))),
-        active === 'Histórico' && (React.createElement("div", { className: "animate-fade-in rounded-lg border border-slate-200 p-4" },
-            React.createElement("div", { className: "mb-2 flex items-center justify-between" },
-                React.createElement("div", { className: "text-[11px] font-medium uppercase tracking-wide text-slate-400" }, "Fechamentos mensais"),
-                React.createElement("div", { className: `text-xs font-medium ${company.performance6m >= 0 ? 'text-axiva-green' : 'text-red-500'}` }, formatSignedPercent(company.performance6m))),
-            React.createElement(MiniLineChart, { values: company.history6m, className: "h-24 w-full" }),
-            React.createElement("div", { className: "mt-2 text-[10px] text-slate-400" }, "Fonte: Digrin."))),
+
         React.createElement("div", { className: "mt-5 flex gap-2 overflow-x-auto border-b border-slate-200 pb-0" }, tabs.map((tab) => (React.createElement("button", { key: tab, onClick: () => setActive(tab), className: `shrink-0 rounded-t-lg px-3 py-2 text-xs font-medium transition-colors ${active === tab ? 'border-b-2 border-axiva-green text-axiva-navy' : 'text-slate-400 hover:text-axiva-gray'}` }, tab))))));
 }
