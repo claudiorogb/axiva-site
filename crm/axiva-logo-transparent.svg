@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1482 506" role="img" aria-labelledby="title desc">
+  <title id="title">AXIVA</title>
+  <desc id="desc">Logotipo AXIVA em branco e turquesa com fundo transparente</desc>
+  <path d="M66 109H130L253 238L376 109H440L295 266H211Z" fill="#ffffff"/>
+  <path d="M66 445H130L253 316L376 445H440L295 289H211Z" fill="#20b7b5"/>
+  <g fill="#ffffff">
+    <path d="M567 333L657 193H679L764 333H724L668 237L608 333Z"/>
+    <path d="M778 193H817L865 248L913 193H952L887 266L952 333H913L865 284L817 333H778L843 266Z"/>
+    <rect x="988" y="193" width="31" height="140"/>
+    <path d="M1041 193H1080L1138 293L1196 193H1235L1156 333H1120Z"/>
+    <path d="M1218 333L1308 193H1330L1415 333H1375L1319 237L1259 333Z"/>
+  </g>
+</svg>
