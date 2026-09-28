@@ -4,14 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#07111f" />
-  <meta name="description" content="AXIVA — soluções digitais para análise de investimentos e gestão comercial." />
+  <meta name="description" content="AXIVA — duas soluções digitais: AXIVA CRM para organizar vendas e AXIVA Invest para analisar investimentos." />
   <link rel="icon" href="/axiva-mark.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
   <link rel="stylesheet" href="/styles.css" />
-  <link rel="stylesheet" href="/cta-compact.css?v=1" />
-  <title>AXIVA | Soluções digitais</title>
+  <link rel="stylesheet" href="/home.css?v=1" />
+  <title>AXIVA | Duas soluções. Mais clareza para agir.</title>
 </head>
-<body>
-  <nav class="nav">
+<body class="home">
+  <nav class="nav" aria-label="Principal">
     <div class="container nav-inner">
       <a class="brand" href="/" aria-label="AXIVA"><img src="/crm/axiva-logo-transparent.svg?v=2" alt="AXIVA" style="width:auto;height:50px;max-width:280px;object-fit:contain;border-radius:0;display:block"></a>
       <div class="nav-links">
@@ -20,80 +23,285 @@
         <a class="btn btn-primary" href="https://crm.axiva.com.br/">Acessar CRM AXIVA</a>
         <a class="btn btn-primary" href="https://axiva.com.br/invest/private">Acessar AXIVA Invest</a>
       </div>
+      <details class="nav-mobile">
+        <summary aria-label="Abrir menu"><span></span></summary>
+        <div class="nav-mobile-panel">
+          <a href="/crm/">Conheça o CRM AXIVA</a>
+          <a href="/invest/">Conheça o AXIVA Invest</a>
+          <a class="btn btn-primary" href="https://crm.axiva.com.br/">Acessar CRM AXIVA</a>
+          <a class="btn btn-primary" href="https://axiva.com.br/invest/private">Acessar AXIVA Invest</a>
+        </div>
+      </details>
     </div>
   </nav>
 
   <main>
-    <section class="hero">
-      <div class="container hero-grid">
-        <div>
-          <span class="eyebrow">Tecnologia aplicada a decisões melhores</span>
-          <h1>Menos ruído.<br>Mais clareza para agir.</h1>
-          <p>A AXIVA cria soluções digitais para transformar informação em ação, da prospecção comercial à análise de investimentos.</p>
-        </div>
-        
-<div class="visual" aria-hidden="true">
-  
-<img
-  src="/axiva-home-nova.png.png"
-  alt=""
-  style="width:100%;height:auto;max-height:400px;object-fit:cover;object-position:center top;display:block;border-radius:24px;mask-image:linear-gradient(to right,transparent 0%,black 8%,black 92%,transparent 100%);"
->
-</div>
-      </div>
-    </section>
-
-    <section id="solucoes" class="section alt">
+    <!-- 1. Hero -->
+    <section class="h-hero">
       <div class="container">
-        <span class="eyebrow">Ecossistema AXIVA</span>
-        <h2>Duas soluções. Uma mesma ideia: tornar decisões complexas mais simples.</h2>
-        <p class="section-intro wide-intro">Produtos independentes, com a mesma identidade: objetividade, organização e informação útil para quem precisa agir.</p>
-        <div class="solutions">
-          <article class="solution-card">
-            <span class="badge">Gestão comercial</span>
-            <h3>CRM AXIVA</h3>
-            <p>Encontre empresas, organize leads, acompanhe contatos, negociações, clientes e vendas em um único fluxo.</p>
-            <div class="feature-list"><span>Captação de leads</span><span>Campanhas</span><span>Histórico</span><span>Funil de vendas</span><span>Follow-ups</span><span>Clientes e vendas</span></div>
-            <a class="btn btn-primary solution-cta" href="/crm/">Conhecer CRM AXIVA</a>
-          </article>
-          <article class="solution-card">
-            <span class="badge">Análise de investimentos</span>
-            <h3>AXIVA Invest</h3>
-            <p>Fundamentos, valuation e critérios objetivos para encontrar empresas de qualidade e acompanhar oportunidades com mais clareza.</p>
-            <div class="feature-list"><span>Fundamentos</span><span>Preço-alvo</span><span>Qualidade</span><span>Valuation</span><span>Comparação</span><span>Monitoramento</span></div>
-            <a class="btn btn-primary solution-cta" href="/invest/">Conhecer AXIVA Invest</a>
-          </article>
+        <div class="h-hero-copy">
+          <span class="eyebrow">AXIVA CRM · AXIVA Invest</span>
+          <h1 style="margin-top:18px">Duas soluções.<br><em>Mais clareza para agir.</em></h1>
+          <p class="h-hero-lead">A AXIVA desenvolve ferramentas digitais para dois desafios diferentes: organizar vendas e analisar investimentos.</p>
+          <p class="h-hero-sub">Escolha a solução que faz sentido para você.</p>
+          <div class="h-hero-actions">
+            <a class="btn btn-primary btn-lg" href="/crm/">Conhecer AXIVA CRM</a>
+            <a class="btn btn-ghost btn-lg" href="/invest/">Conhecer AXIVA Invest</a>
+          </div>
+        </div>
+
+        <div class="h-stage" role="img" aria-label="Telas do AXIVA CRM (funil de vendas) e do AXIVA Invest (análise de empresa) lado a lado">
+          <span class="h-stage-tag crm" aria-hidden="true"><i></i>AXIVA CRM</span>
+          <span class="h-stage-tag invest" aria-hidden="true"><i></i>AXIVA Invest</span>
+
+          <div class="win win-crm" aria-hidden="true">
+            <div class="win-bar"><b></b><b></b><b></b></div>
+            <div class="crm-app">
+              <aside class="crm-side">
+                <div class="crm-logo">AXIVA</div>
+                <a>Painel</a><a class="on">Leads</a><a>Clientes</a><a>Campanhas</a><a>E-mail MKT</a><a>Relatórios</a>
+              </aside>
+              <div class="crm-main">
+                <div class="crm-top"><div class="crm-search">Buscar leads, empresas ou contatos...</div><div class="crm-avatar">CA</div></div>
+                <div class="kanban">
+                  <div class="k-col">
+                    <div class="k-head">Interessado <small>R$ 68 mil</small></div>
+                    <div class="k-card"><em>Reunião agendada</em><p>Delícias Corporativas</p><strong>R$ 12.000</strong></div>
+                    <div class="k-card"><em>Orçamento solicitado</em><p>Buffet Elegance</p><strong>R$ 8.500</strong></div>
+                    <div class="k-card"><em>Em andamento</em><p>Sabor &amp; Eventos</p><strong>R$ 6.000</strong></div>
+                  </div>
+                  <div class="k-col">
+                    <div class="k-head">Proposta <small>R$ 132 mil</small></div>
+                    <div class="k-card"><em>Proposta enviada</em><p>Alimentos Práticos</p><strong>R$ 18.000</strong></div>
+                    <div class="k-card warm"><em>Em negociação</em><p>Grupo Vitta</p><strong>R$ 25.000</strong></div>
+                    <div class="k-card"><em>Ajuste de proposta</em><p>Sabor e Saúde</p><strong>R$ 15.000</strong></div>
+                  </div>
+                  <div class="k-col">
+                    <div class="k-head">Negociação <small>R$ 290 mil</small></div>
+                    <div class="k-card"><em>Alinhamento</em><p>Indústria Delta</p><strong>R$ 45.000</strong></div>
+                    <div class="k-card warm"><em>Aguardando retorno</em><p>UniAlimentos</p><strong>R$ 65.000</strong></div>
+                  </div>
+                  <div class="k-col">
+                    <div class="k-head">Ganho <small>R$ 450 mil</small></div>
+                    <div class="k-card won"><em>Contrato assinado</em><p>Prefeitura Municipal</p><strong>R$ 120.000</strong></div>
+                    <div class="k-card won"><em>Venda realizada</em><p>Grupo Horizonte</p><strong>R$ 200.000</strong></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="win win-invest" aria-hidden="true">
+            <div class="win-bar"><b></b><b></b><b></b></div>
+            <div class="inv-app">
+              <div class="inv-top"><b>AXIVA</b><nav><span>Seleção</span><span class="on">Analisar</span><span>Comparar</span><span>Minha lista</span></nav></div>
+              <div class="inv-body">
+                <div class="inv-company"><div><h4>RENT3</h4><p>Localiza</p></div><span class="inv-badge">31,4% de desconto</span></div>
+                <div class="inv-kpis">
+                  <div class="inv-kpi"><small>Preço atual</small><strong>R$ 37,53</strong></div>
+                  <div class="inv-kpi"><small>Preço-alvo</small><strong>R$ 54,75</strong></div>
+                  <div class="inv-kpi"><small>Desconto</small><strong class="pos">31,4%</strong></div>
+                  <div class="inv-kpi"><small>Qualidade</small><strong>54/100</strong></div>
+                </div>
+                <div class="inv-chart">
+                  <div class="inv-chart-head">Evolução do preço <small>12 meses</small></div>
+                  <svg viewBox="0 0 300 80" preserveAspectRatio="none"><defs><linearGradient id="g1" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#20b7b5" stop-opacity=".25"/><stop offset="1" stop-color="#20b7b5" stop-opacity="0"/></linearGradient></defs><path d="M0 30 L25 26 L50 34 L75 28 L100 40 L125 46 L150 42 L175 52 L200 48 L225 58 L250 54 L275 62 L300 56 L300 80 L0 80Z" fill="url(#g1)"/><polyline points="0,30 25,26 50,34 75,28 100,40 125,46 150,42 175,52 200,48 225,58 250,54 275,62 300,56" fill="none" stroke="#20b7b5" stroke-width="2" vector-effect="non-scaling-stroke"/><line x1="0" x2="300" y1="14" y2="14" stroke="#082451" stroke-dasharray="4 4" stroke-opacity=".35" vector-effect="non-scaling-stroke"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <!-- 2. Escolha sua solução -->
+    <section id="solucoes" class="h-section">
       <div class="container">
-        <span class="eyebrow">Nossa abordagem</span>
-        <h2>Ferramentas feitas para facilitar, não para criar mais trabalho.</h2>
-        <div class="grid-3">
-          <article class="card"><h3>Clareza</h3><p>Informação organizada para que o próximo passo seja evidente.</p></article>
-          <article class="card"><h3>Objetividade</h3><p>Menos telas e controles desnecessários. Mais foco no que move o resultado.</p></article>
-          <article class="card"><h3>Execução</h3><p>Produtos pensados para transformar análise e organização em resultado.</p></article>
+        <div class="h-head center">
+          <span class="eyebrow">Escolha sua solução</span>
+          <h2>Qual problema você quer resolver?</h2>
+        </div>
+
+        <div class="choose">
+          <article class="p-card">
+            <div class="p-card-copy">
+              <span class="p-label">Gestão comercial</span>
+              <h3>AXIVA CRM</h3>
+              <p>Encontre leads, organize contatos, acompanhe negociações e mantenha clientes e vendas em um único lugar.</p>
+            </div>
+            <div class="p-shot" role="img" aria-label="Lista de leads do AXIVA CRM com status de contato">
+              <div class="leads" aria-hidden="true">
+                <div class="leads-head">Leads captados <small>+24 hoje</small></div>
+                <div class="lead"><div class="lead-av">IC</div><div><b>Indústria Delta</b><span>Carlos · São Paulo</span></div><span class="chip wa">WhatsApp</span></div>
+                <div class="lead"><div class="lead-av">GV</div><div><b>Grupo Vitta</b><span>Patrícia · Campinas</span></div><span class="chip neg">Negociação</span></div>
+                <div class="lead"><div class="lead-av">BE</div><div><b>Buffet Elegance</b><span>Mariana · Santos</span></div><span class="chip new">Novo lead</span></div>
+                <div class="lead"><div class="lead-av">CF</div><div><b>Colégio Futura</b><span>Alex · Sorocaba</span></div><span class="chip wa">Campanha</span></div>
+              </div>
+            </div>
+            <div class="p-card-foot">
+              <ul class="p-list">
+                <li>Captação de leads</li>
+                <li>Campanhas por e-mail e whatsapp</li>
+                <li>Funil de vendas</li>
+                <li>Clientes e vendas</li>
+              </ul>
+              <a class="btn btn-primary" href="/crm/">Conhecer AXIVA CRM</a>
+            </div>
+          </article>
+
+          <article class="p-card">
+            <div class="p-card-copy">
+              <span class="p-label">Análise de investimentos</span>
+              <h3>AXIVA Invest</h3>
+              <p>Analise empresas com fundamentos, valuation, qualidade e comparação em uma única plataforma.</p>
+            </div>
+            <div class="p-shot" role="img" aria-label="Comparação de qualidade entre empresas no AXIVA Invest">
+              <div class="inv-app" style="border-radius:10px;overflow:hidden" aria-hidden="true">
+                <div class="inv-body">
+                  <div class="inv-company"><div><h4>Comparação</h4><p>Qualidade AXIVA · até 4 empresas</p></div><span class="inv-badge">Atualizado</span></div>
+                  <div class="inv-panel">
+                    <div class="cmp"><b>WEGE3</b><i style="--w:91%"></i><span>91/100</span></div>
+                    <div class="cmp"><b>ITUB4</b><i style="--w:75%"></i><span>75/100</span></div>
+                    <div class="cmp"><b>ABEV3</b><i style="--w:73%"></i><span>73/100</span></div>
+                    <div class="cmp"><b>RENT3</b><i style="--w:54%"></i><span>54/100</span></div>
+                  </div>
+                  <div class="inv-kpis">
+                    <div class="inv-kpi"><small>P/L</small><strong>10,11</strong></div>
+                    <div class="inv-kpi"><small>P/VP</small><strong>2,27</strong></div>
+                    <div class="inv-kpi"><small>DY</small><strong>7,29%</strong></div>
+                    <div class="inv-kpi"><small>ROE</small><strong class="pos">22,45%</strong></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="p-card-foot">
+              <ul class="p-list">
+                <li>Dados fundamentalistas</li>
+                <li>Valor justo</li>
+                <li>Qualidade</li>
+                <li>Comparação e monitoramento</li>
+              </ul>
+              <a class="btn btn-primary" href="/invest/">Conhecer AXIVA Invest</a>
+            </div>
+          </article>
         </div>
       </div>
     </section>
 
-    <div class="cta-stack">
-      <section class="cta cta-compact">
-        <div class="container cta-box">
-          <div><h2>Conheça o CRM AXIVA.</h2><p>Prospecção, relacionamento e vendas em um só lugar.</p></div>
-          <a class="btn btn-primary" href="/crm/">Ver solução</a>
+    <!-- 3. Sobre a AXIVA -->
+    <section class="h-section about">
+      <div class="container about-grid">
+        <div class="h-head">
+          <span class="eyebrow">Sobre a AXIVA</span>
+          <h2>Tecnologia para simplificar decisões.</h2>
+          <p>A AXIVA cria ferramentas objetivas para organizar informações, reduzir tarefas desnecessárias e ajudar o usuário a enxergar com clareza o próximo passo.</p>
         </div>
-      </section>
+        <div class="pillars">
+          <div class="pillar"><h3>Clareza</h3><p>Informação<br>organizada e<br>fácil de entender.</p></div>
+          <div class="pillar"><h3>Controle</h3><p>Tudo o que importa reunido em um só lugar.</p></div>
+          <div class="pillar"><h3>Ação</h3><p>Dados pensados para facilitar sua tomada de decisão.</p></div>
+        </div>
+      </div>
+    </section>
 
-      <section class="cta cta-compact">
-        <div class="container cta-box">
-          <div><h2>Conheça o AXIVA Invest.</h2><p>Análise, valuation e critérios objetivos para decisões de investimento mais claras.</p></div>
-          <a class="btn btn-primary" href="/invest/">Ver solução</a>
+    <!-- 4. Showcase dos produtos -->
+    <section class="h-section">
+      <div class="container">
+        <div class="show">
+          <div class="show-copy">
+            <span class="eyebrow">AXIVA CRM</span>
+            <h2>Seu comercial em um único fluxo.</h2>
+            <p>Da prospecção à venda, acompanhe cada oportunidade sem depender de planilhas espalhadas.</p>
+            <a class="btn btn-primary" href="/crm/">Ver AXIVA CRM</a>
+          </div>
+          <div class="show-visual" role="img" aria-label="Funil de vendas do AXIVA CRM com etapas Interessado, Proposta, Negociação e Ganho">
+            <div class="win" aria-hidden="true">
+              <div class="win-bar"><b></b><b></b><b></b></div>
+              <div class="crm-app no-side">
+                <div class="crm-main">
+                  <div class="crm-top"><div class="crm-search">Funil de vendas</div><div class="crm-avatar">CA</div></div>
+                  <div class="kanban">
+                    <div class="k-col">
+                      <div class="k-head">Interessado <small>12</small></div>
+                      <div class="k-card"><em>Reunião agendada</em><p>Delícias Corporativas</p><strong>R$ 12.000</strong></div>
+                      <div class="k-card"><em>Orçamento</em><p>Buffet Elegance</p><strong>R$ 8.500</strong></div>
+                    </div>
+                    <div class="k-col">
+                      <div class="k-head">Proposta <small>8</small></div>
+                      <div class="k-card"><em>Proposta enviada</em><p>Alimentos Práticos</p><strong>R$ 18.000</strong></div>
+                      <div class="k-card warm"><em>Em negociação</em><p>Grupo Vitta</p><strong>R$ 25.000</strong></div>
+                    </div>
+                    <div class="k-col">
+                      <div class="k-head">Negociação <small>6</small></div>
+                      <div class="k-card"><em>Análise interna</em><p>Rede Corporativa</p><strong>R$ 80.000</strong></div>
+                      <div class="k-card warm"><em>Aguardando</em><p>UniAlimentos</p><strong>R$ 65.000</strong></div>
+                    </div>
+                    <div class="k-col">
+                      <div class="k-head">Ganho <small>4</small></div>
+                      <div class="k-card won"><em>Implantação</em><p>Colégio Futura</p><strong>R$ 130.000</strong></div>
+                      <div class="k-card won"><em>Venda realizada</em><p>Grupo Horizonte</p><strong>R$ 200.000</strong></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </section>
-    </div>
+
+        <div class="show rev">
+          <div class="show-copy">
+            <span class="eyebrow">AXIVA Invest</span>
+            <h2>Sua análise em uma única visão.</h2>
+            <p>Compare empresas, acompanhe valuation e visualize os principais indicadores sem alternar entre vários sites.</p>
+            <a class="btn btn-primary" href="/invest/">Ver AXIVA Invest</a>
+          </div>
+          <div class="show-visual" role="img" aria-label="Visão da empresa ITUB4 no AXIVA Invest com preço, preço-alvo, qualidade e indicadores">
+            <div class="win" aria-hidden="true">
+              <div class="win-bar"><b></b><b></b><b></b></div>
+              <div class="inv-app">
+                <div class="inv-top"><b>AXIVA</b><nav><span>Seleção</span><span class="on">Analisar</span><span>Comparar</span><span>Estratégias</span></nav></div>
+                <div class="inv-body">
+                  <div class="inv-company"><div><h4>ITUB4</h4><p>Itaú Unibanco</p></div><span class="inv-badge over">25,2% acima do alvo</span></div>
+                  <div class="inv-kpis">
+                    <div class="inv-kpi"><small>Preço atual</small><strong>R$ 42,13</strong></div>
+                    <div class="inv-kpi"><small>Preço-alvo</small><strong>R$ 33,66</strong></div>
+                    <div class="inv-kpi"><small>Qualidade</small><strong class="pos">75/100</strong></div>
+                    <div class="inv-kpi"><small>DY</small><strong>7,29%</strong></div>
+                  </div>
+                  <div class="inv-grid">
+                    <div class="inv-chart">
+                      <div class="inv-chart-head">Evolução do preço <small>12 meses</small></div>
+                      <svg viewBox="0 0 300 110" preserveAspectRatio="none"><defs><linearGradient id="g2" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#20b7b5" stop-opacity=".25"/><stop offset="1" stop-color="#20b7b5" stop-opacity="0"/></linearGradient></defs><path d="M0 90 L25 84 L50 86 L75 74 L100 70 L125 72 L150 58 L175 52 L200 56 L225 40 L250 34 L275 28 L300 22 L300 110 L0 110Z" fill="url(#g2)"/><polyline points="0,90 25,84 50,86 75,74 100,70 125,72 150,58 175,52 200,56 225,40 250,34 275,28 300,22" fill="none" stroke="#20b7b5" stroke-width="2" vector-effect="non-scaling-stroke"/><line x1="0" x2="300" y1="62" y2="62" stroke="#082451" stroke-dasharray="4 4" stroke-opacity=".35" vector-effect="non-scaling-stroke"/></svg>
+                    </div>
+                    <div class="inv-panel">
+                      <h5>Indicadores</h5>
+                      <div class="ind"><span>P/L</span><b>10,11</b></div>
+                      <div class="ind"><span>P/VP</span><b>2,27</b></div>
+                      <div class="ind"><span>DY</span><b>7,29%</b></div>
+                      <div class="ind"><span>ROE</span><b>22,45%</b></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. CTA final -->
+    <section class="final">
+      <div class="container">
+        <div class="final-box">
+          <h2>Escolha a solução que faz sentido para você.</h2>
+          <p>Gestão comercial ou análise de investimentos. Conheça as soluções da AXIVA.</p>
+          <div class="h-hero-actions">
+            <a class="btn btn-primary btn-lg" href="/crm/">AXIVA CRM</a>
+            <a class="btn btn-ghost btn-lg" href="/invest/">AXIVA Invest</a>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="footer"><div class="container footer-inner"><span>© 2026 AXIVA</span><div class="footer-links"><a href="/newsletter/">Newsletter AXIVA</a><a href="/privacidade">Política de Privacidade</a><a href="/termos">Termos de Serviço</a><span>axiva.com.br</span></div></div></footer>
