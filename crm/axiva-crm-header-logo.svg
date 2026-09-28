@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1482 528" role="img" aria-labelledby="t d">
+  <title id="t">AXIVA CRM</title><desc id="d">Logotipo AXIVA CRM com o slogan Mais controle sobre suas vendas.</desc>
+  <rect width="1482" height="528" fill="#000"/>
+  <path d="M56 89 L119 89 L240 221 L361 89 L424 89 L280 247 L200 247 Z" fill="#fff"/>
+  <path d="M56 427 L119 427 L240 295 L361 427 L424 427 L280 269 L200 269 Z" fill="#20B7B5"/>
+  <g fill="#fff">
+    <path d="M496 291 L589 164 L627 164 L701 291 L665 291 L608 195 L534 291 Z"/>
+    <path d="M611 164 L645 164 L684 211 L723 164 L757 164 L702 230 L702 239 L757 291 L723 291 L684 258 L645 291 L611 291 L666 239 L666 230 Z"/>
+    <rect x="801" y="164" width="31" height="127"/>
+    <path d="M857 164 L894 164 L959 268 L1024 164 L1061 164 L977 291 L941 291 Z"/>
+    <path d="M1037 291 L1130 164 L1168 164 L1242 291 L1206 291 L1149 195 L1075 291 Z"/>
+  </g>
+  <text x="1268" y="270" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-size="72" font-weight="700">CRM</text>
+  <text x="495" y="365" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-size="48" font-weight="500">Mais controle sobre suas vendas.</text>
+</svg>
