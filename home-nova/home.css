@@ -129,15 +129,15 @@
 .cmp span{text-align:right;color:#5d7090}
 
 /* 2. Escolha sua solução */
-.choose{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-.p-card{position:relative;display:flex;flex-direction:column;border-radius:28px;background:linear-gradient(180deg,#0e1f34,#0a1728);border:1px solid var(--line);overflow:hidden;transition:border-color .25s ease,transform .25s ease}
+.choose{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:stretch}
+.p-card{position:relative;display:flex;flex-direction:column;height:100%;border-radius:28px;background:linear-gradient(180deg,#0e1f34,#0a1728);border:1px solid var(--line);overflow:hidden;transition:border-color .25s ease,transform .25s ease}
 .p-card:hover{border-color:rgba(94,224,214,.35);transform:translateY(-2px)}
-.p-card-copy{padding:36px 36px 0}
+.p-card-copy{padding:36px 36px 0;min-height:210px}
 .p-label{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal2)}
 .p-card h3{font-size:clamp(28px,3vw,36px);letter-spacing:-.03em;line-height:1.1;margin:12px 0 12px}
 .p-card-copy>p{color:var(--muted);font-size:16.5px;margin:0;max-width:460px}
-.p-shot{margin:30px 36px 0;padding:14px;border-radius:18px 18px 0 0;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-bottom:0}
-.p-card-foot{padding:28px 36px 36px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:24px}
+.p-shot{margin:30px 36px 0;padding:14px;min-height:260px;display:flex;align-items:stretch;border-radius:18px 18px 0 0;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-bottom:0}
+.p-card-foot{padding:28px 36px 36px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:24px;margin-top:auto}
 .p-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:12px 18px}
 .p-list li{display:flex;align-items:center;gap:10px;font-size:15px;color:#dce6f2}
 .p-list li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0}
@@ -184,6 +184,8 @@
 }
 @media(max-width:900px){
   .choose{grid-template-columns:1fr}
+  .p-card-copy{min-height:0}
+  .p-shot{min-height:0}
   .h-section{padding:88px 0}
 }
 @media(max-width:720px){
