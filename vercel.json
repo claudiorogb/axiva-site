@@ -2,20 +2,35 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/crm", "destination": "/crm/index.html" },
-    { "source": "/crm/contato", "destination": "/crm/contato/index.html" },
-    { "source": "/crm/o-que-e-crm", "destination": "/crm/o-que-e-crm/index.html" },
-    { "source": "/invest", "destination": "https://pixel-perfect-canvas-9013.lovable.app/" },
-    { "source": "/invest/:path*", "destination": "https://pixel-perfect-canvas-9013.lovable.app/:path*" },
-    { "source": "/assets/:path*", "destination": "https://pixel-perfect-canvas-9013.lovable.app/assets/:path*" },
-    { "source": "/_build/:path*", "destination": "https://pixel-perfect-canvas-9013.lovable.app/_build/:path*" }
+    {
+      "source": "/crm",
+      "destination": "/crm/index.html"
+    },
+    {
+      "source": "/crm/contato",
+      "destination": "/crm/contato/index.html"
+    },
+    {
+      "source": "/crm/o-que-e-crm",
+      "destination": "/crm/o-que-e-crm/index.html"
+    },
+    {
+      "source": "/invest",
+      "destination": "/invest/index.html"
+    }
   ],
   "headers": [
     {
       "source": "/crm-funil-real.svg",
       "headers": [
-        { "key": "Content-Type", "value": "image/jpeg" },
-        { "key": "Cache-Control", "value": "public, max-age=3600" }
+        {
+          "key": "Content-Type",
+          "value": "image/jpeg"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600"
+        }
       ]
     }
   ]
