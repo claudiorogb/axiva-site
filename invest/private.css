@@ -1164,3 +1164,7 @@ body:has(#educationPage.active) .topbar-title{display:none}
   .ax-quick-card{min-height:0}
   .ax-home-main-grid{gap:10px}
 }
+
+
+/* Correção: nunca exibir a área exclusiva enquanto estiver oculta pelo fluxo de autenticação. */
+.app-view.hidden{display:none!important}
