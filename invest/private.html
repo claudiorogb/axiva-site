@@ -1,4 +1,14 @@
-<!DOCTYPE html>
+      <section class="axedu-home-preview" aria-labelledby="educationHomeTitle">
+        <div class="axedu-section-head">
+          <div>
+            <p class="axedu-kicker">Biblioteca</p>
+            <h2 id="educationHomeTitle">AXIVA Educação</h2>
+            <p>Aprenda a interpretar os principais indicadores e conceitos usados na análise de ações.</p>
+          </div>
+          <button type="button" class="axedu-library-link" data-goto="education">Ver biblioteca completa <span aria-hidden="true">→</span></button>
+        </div>
+        <div id="educationHomePreview"></div>
+      </section><!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -6,7 +16,10 @@
 <title>AXIVA Invest — Área exclusiva</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="/axiva-mark.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/invest/private.css?v=39">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="/invest/private.css?v=40">
 </head>
 <body>
 <div id="loginView" class="login-view">
@@ -59,7 +72,7 @@
       <button class="nav-item" data-page="watch">Minha Lista</button>
       <button class="nav-item" data-page="alerts">Meus Alertas</button>
       <button class="nav-item" data-page="strategies">Minhas estratégias</button>
-      <button class="nav-item hidden" data-page="education" aria-hidden="true" tabindex="-1">AXIVA Educação</button>
+      <button class="nav-item" data-page="education">AXIVA Educação</button>
       <button class="nav-item hidden" data-page="method" aria-hidden="true" tabindex="-1">Metodologia</button>
       <button id="adminNav" class="nav-item hidden" data-page="admin">Administração</button>
     </nav>
@@ -248,9 +261,8 @@
       <div id="userStrategiesContent"></div>
     </section>
 
-    <section id="educationPage" class="page">
-      <div class="education-page-toolbar"><button id="educationBackBtn" type="button" class="mini-btn secondary">← Voltar para Página Inicial</button></div>
-      <div id="educationContent" class="education-page-content"></div>
+    <section id="educationPage" class="page axedu-page">
+      <div id="educationContent" class="axedu-content"></div>
     </section>
 
     <section id="methodPage" class="page">
@@ -292,7 +304,7 @@
 </div>
 <script src="/invest/member-content.js?v=4"></script>
 <script src="/invest/education-content.js?v=1"></script>
-<script type="module" src="/invest/private.js?v=20"></script>
+<script type="module" src="/invest/private.js?v=21"></script>
 <script type="module" src="/invest/selection-details.js?v=3"></script>
 <script type="module" src="/invest/user-strategies.js?v=3"></script>
 <script type="module" src="/invest/analysis-suite.js?v=20"></script>
