@@ -6,7 +6,7 @@
 <title>AXIVA Invest — Área exclusiva</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="/axiva-mark.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/invest/private.css?v=36">
+<link rel="stylesheet" href="/invest/private.css?v=37">
 </head>
 <body>
 <div id="loginView" class="login-view">
@@ -59,6 +59,7 @@
       <button class="nav-item" data-page="watch">Minha Lista</button>
       <button class="nav-item" data-page="alerts">Meus Alertas</button>
       <button class="nav-item" data-page="strategies">Minhas estratégias</button>
+      <button class="nav-item hidden" data-page="education" aria-hidden="true" tabindex="-1">AXIVA Educação</button>
       <button class="nav-item hidden" data-page="method" aria-hidden="true" tabindex="-1">Metodologia</button>
       <button id="adminNav" class="nav-item hidden" data-page="admin">Administração</button>
     </nav>
@@ -88,6 +89,23 @@
         <article class="suite-entry"><span class="suite-icon">!</span><div><h3>Meus Alertas</h3><p>Crie condições para acompanhar preços e indicadores.</p></div><button class="mini-btn" data-goto="alerts">Abrir</button></article>
         <article class="suite-entry"><span class="suite-icon">◇</span><div><h3>Estratégias</h3><p>Crie critérios próprios e acompanhe quais empresas atendem às regras definidas.</p></div><button class="mini-btn" data-goto="strategies">Abrir</button></article>
       </div>
+      <section class="education-home-section" aria-labelledby="educationHomeTitle">
+        <div class="education-home-head">
+          <div><h2 id="educationHomeTitle">AXIVA Educação</h2><p>Conteúdos rápidos para entender os principais conceitos usados na análise de ações.</p></div>
+        </div>
+        <div class="education-home-grid">
+          <button type="button" class="education-home-btn" data-education-topic="analisar-acao">Como analisar uma ação</button>
+          <button type="button" class="education-home-btn" data-education-topic="valuation">Valuation</button>
+          <button type="button" class="education-home-btn" data-education-topic="preco-justo">Preço justo de uma ação</button>
+          <button type="button" class="education-home-btn" data-education-topic="roic">ROIC</button>
+          <button type="button" class="education-home-btn" data-education-topic="roe">ROE</button>
+          <button type="button" class="education-home-btn" data-education-topic="pl">P/L</button>
+          <button type="button" class="education-home-btn" data-education-topic="pvp">P/VP</button>
+          <button type="button" class="education-home-btn" data-education-topic="dy">DY</button>
+          <button type="button" class="education-home-btn" data-education-topic="ebitda">EBITDA</button>
+          <button type="button" class="education-home-btn" data-education-topic="margem-ebit">Margem EBIT</button>
+        </div>
+      </section>
       <div class="guide-strip hidden"></div>
       <footer class="overview-note">A AXIVA organiza dados e critérios. Ela não substitui sua decisão de investimento.</footer>
     </section>
@@ -230,6 +248,11 @@
       <div id="userStrategiesContent"></div>
     </section>
 
+    <section id="educationPage" class="page">
+      <div class="education-page-toolbar"><button id="educationBackBtn" type="button" class="mini-btn secondary">← Voltar para Página Inicial</button></div>
+      <div id="educationContent" class="education-page-content"></div>
+    </section>
+
     <section id="methodPage" class="page">
       <div class="intro"><div><h2>Metodologia AXIVA</h2><p>Veja como cada resultado é formado. A regra é mostrar o cálculo, a data-base e a limitação, não apenas a nota final.</p></div></div>
       <div class="method-grid">
@@ -268,7 +291,7 @@
   </main>
 </div>
 <script src="/invest/member-content.js?v=4"></script>
-<script type="module" src="/invest/private.js?v=17"></script>
+<script type="module" src="/invest/private.js?v=18"></script>
 <script type="module" src="/invest/selection-details.js?v=3"></script>
 <script type="module" src="/invest/user-strategies.js?v=3"></script>
 <script type="module" src="/invest/analysis-suite.js?v=20"></script>
