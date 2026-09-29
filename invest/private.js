@@ -4,6 +4,7 @@ const SUPABASE_URL='https://zbtijblvkzkeposvkfob.supabase.co'
 const SUPABASE_KEY='sb_publishable_1hWexWrd_y-m36-DaXF5Hw_p33Ginm_'
 const PRIVATE_API=`${SUPABASE_URL}/functions/v1/invest-private-data`
 const FIRST_ACCESS_API=`${SUPABASE_URL}/functions/v1/invest-first-access-check`
+const MACRO_API=`${SUPABASE_URL}/functions/v1/invest-macro-market`
 // Guardar o tipo do link antes de o cliente Auth limpar o fragmento da URL.
 let recoveryMode=new URLSearchParams(location.hash.slice(1)).get('type')==='recovery' || new URLSearchParams(location.search).get('type')==='recovery'
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}})
@@ -74,16 +75,97 @@ async function loadPrivateArea(){
   try{
     const me=await callPrivate('me')
     userEmail.textContent=me.user?.email||''
+    const overviewName=$('overviewUserName')
+    if(overviewName){
+      const metaName=me.user?.user_metadata?.full_name||me.user?.user_metadata?.name||''
+      const emailName=(me.user?.email||'').split('@')[0].replace(/[._-]+/g,' ')
+      const chosen=String(metaName||emailName||'investidor').trim()
+      overviewName.textContent=chosen ? chosen.replace(/\b\w/g,ch=>ch.toUpperCase()) : 'investidor'
+    }
     currentRole=me.access?.role||'subscriber'
     const plan=me.access?.plan||'assinante'
     accessChip.textContent=currentRole==='admin'?'Administrador':`Plano ${plan==='annual'?'anual':plan}`
     $('adminNav').classList.toggle('hidden',currentRole!=='admin')
     accessValidated=true
     showApp()
-    await Promise.all([loadSelection(),loadAnalysisData()])
+    await Promise.all([loadSelection(),loadAnalysisData(),loadOverviewStrategies(),loadOverviewMarket()])
   }catch(e){
     await supabase.auth.signOut()
     showLogin(e.status===403?'Sua conta existe, mas o acesso à área exclusiva não está ativo.':'Não foi possível validar seu acesso. Tente novamente.')
+  }
+}
+
+
+function renderOverviewHighlights(rows){
+  const discountHost=$('overviewDiscounts'),qualityHost=$('overviewQuality')
+  if(!discountHost&&!qualityHost)return
+  const valid=Array.isArray(rows)?rows:[]
+  const name=r=>esc(r.company_name||'')
+  const rowHtml=(r,value)=>`<div class="ax-highlight-row"><div><b>${esc(r.ticker||'—')}</b><span>${name(r)}</span></div><strong>${value}</strong></div>`
+  if(discountHost){
+    const items=valid.filter(r=>n(r.discount_pct)!=null).sort((a,b)=>n(b.discount_pct)-n(a.discount_pct)).slice(0,3)
+    discountHost.innerHTML=items.length?items.map(r=>rowHtml(r,pct(r.discount_pct))).join(''):'<div class="ax-home-empty">Nenhum dado disponível.</div>'
+  }
+  if(qualityHost){
+    const items=valid.filter(r=>n(r.quality_score)!=null).sort((a,b)=>n(b.quality_score)-n(a.quality_score)).slice(0,3)
+    qualityHost.innerHTML=items.length?items.map(r=>rowHtml(r,`${Math.round(Number(r.quality_score))}/100`)).join(''):'<div class="ax-home-empty">Nenhum dado disponível.</div>'
+  }
+}
+
+async function loadOverviewStrategies(){
+  const host=$('overviewStrategies')
+  if(!host)return
+  host.innerHTML='<div class="ax-home-loading">Carregando suas estratégias...</div>'
+  try{
+    const j=await callPrivate('user-strategies')
+    const items=Array.isArray(j.data)?j.data:[]
+    if(!items.length){host.innerHTML='<div class="ax-home-empty">Você ainda não criou nenhuma estratégia.</div>';return}
+    host.innerHTML='<div class="ax-strategy-list">'+items.slice(0,4).map(s=>{
+      const count=s.match_count??(Array.isArray(s.matches)?s.matches.length:0)
+      return `<div class="ax-strategy-row"><b>${esc(s.name||'Estratégia')}</b><span>${Number(count)||0} empresas</span></div>`
+    }).join('')+'</div>'
+  }catch(e){
+    host.innerHTML='<div class="ax-home-empty">Não foi possível carregar suas estratégias agora.</div>'
+  }
+}
+
+function formatOverviewMarketValue(item){
+  const value=n(item?.value)
+  if(value==null)return 'N/D'
+  if(item.unit==='BRL')return value.toLocaleString('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:3,maximumFractionDigits:3})
+  if(item.unit==='PTS')return value.toLocaleString('pt-BR',{maximumFractionDigits:0})+' pts'
+  if(item.key==='CDI'&&item.unit==='% a.d.'){
+    const annual=(Math.pow(1+value/100,252)-1)*100
+    return annual.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%'
+  }
+  return value.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})
+}
+async function loadOverviewMarket(){
+  const host=$('overviewMarket')
+  if(!host)return
+  try{
+    const r=await fetch(`${MACRO_API}?_=${Date.now()}`,{cache:'no-store'})
+    if(!r.ok)throw new Error(`http_${r.status}`)
+    const j=await r.json()
+    const rows=Array.isArray(j?.data)?j.data:[]
+    const byKey=new Map(rows.map(item=>[String(item.key),item]))
+    host.querySelectorAll('[data-market-key]').forEach(card=>{
+      const item=byKey.get(card.dataset.marketKey)
+      if(!item)return
+      const strong=card.querySelector('strong'),small=card.querySelector('small')
+      if(strong)strong.textContent=formatOverviewMarketValue(item)
+      if(small){
+        small.classList.remove('pos','neg')
+        if(item.key==='CDI'){small.textContent='';return}
+        const change=n(item.change_pct)
+        if(change==null){small.textContent='N/D';return}
+        small.textContent=(change*100).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%'
+        if(change>0)small.classList.add('pos')
+        if(change<0)small.classList.add('neg')
+      }
+    })
+  }catch(e){
+    host.querySelectorAll('small').forEach(el=>{if(!el.textContent||el.textContent==='—')el.textContent='N/D'})
   }
 }
 
@@ -95,6 +177,7 @@ async function loadSelection(){
 function renderSelection(rows){
   if(!rows.length){selectionStatus.textContent='Nenhuma empresa disponível na seleção atual.';return}
   window.axivaSelectionRows=rows
+  renderOverviewHighlights(rows)
   const body=rows.map((r,index)=>{const d=n(r.discount_pct),dcls=d==null?'':d>=0?'pos':'neg';return `<div class="private-row selection-clickable" data-selection-index="${index}" role="button" tabindex="0" aria-label="Ver detalhes de ${esc(r.ticker)}"><div class="ticker"><b>${esc(r.ticker)}</b><span>${esc(r.company_name||'')}</span></div><div>${money(r.current_price)}</div><div>${money(r.target_price)}</div><div class="discount ${dcls}">${pct(r.discount_pct)}</div><div>${money(r.graham_price)}</div><div><span class="quality">${r.quality_score==null?'—':Math.round(Number(r.quality_score))}</span></div></div>`}).join('')
   selectionWrap.innerHTML=`<div class="private-table"><div class="private-row private-head"><div>Empresa</div><div>Cotação</div><div>Preço-alvo</div><div>Desconto</div><div>Graham</div><div>Qualidade</div></div>${body}</div>`
   selectionStatus.classList.add('hidden');selectionWrap.classList.remove('hidden')
