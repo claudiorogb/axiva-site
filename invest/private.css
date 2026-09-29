@@ -1168,3 +1168,24 @@ body:has(#educationPage.active) .topbar-title{display:none}
 
 /* Correção: nunca exibir a área exclusiva enquanto estiver oculta pelo fluxo de autenticação. */
 .app-view.hidden{display:none!important}
+
+
+/* Ajustes visuais da home — 2026-09-29 */
+.ax-home-main-grid{margin-top:30px}
+
+/* Menu lateral: permitir acesso a todos os itens sem cortar o rodapé. */
+@media (min-width:901px){
+  .sidebar nav{
+    flex:1;
+    min-height:0;
+    overflow-y:auto;
+    overflow-x:hidden;
+    padding-right:3px;
+    scrollbar-width:thin;
+    scrollbar-color:#45657e transparent;
+  }
+  .sidebar nav::-webkit-scrollbar{width:6px}
+  .sidebar nav::-webkit-scrollbar-track{background:transparent}
+  .sidebar nav::-webkit-scrollbar-thumb{background:#45657e;border-radius:999px}
+  .sidebar nav::-webkit-scrollbar-thumb:hover{background:#62849d}
+}
