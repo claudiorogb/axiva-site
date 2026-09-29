@@ -225,30 +225,128 @@ $('adminUserForm').addEventListener('submit',async e=>{e.preventDefault();const 
 $('selectionMethodLink').addEventListener('click',e=>{e.preventDefault();document.querySelector('.nav-item[data-page="method"]')?.click()})
 
 
-const educationTopics=window.AXIVA_EDUCATION_CONTENT||{}
 
-function openEducationTopic(topic){
+const educationTopics=window.AXIVA_EDUCATION_CONTENT||{}
+const educationMeta={
+  'analisar-acao':{title:'Como analisar uma ação',category:'Fundamentos',description:'Um roteiro completo, do negócio ao valuation, para estudar uma empresa com método e sem atalhos.',level:'Essencial',minutes:11,featured:true,icon:'◎'},
+  'valuation':{title:'Valuation',category:'Valuation',description:'Entenda como estimar valor e por que nenhuma metodologia deve ser tratada como certeza.',level:'Essencial',minutes:8,icon:'◇'},
+  'preco-justo':{title:'Preço justo de uma ação',category:'Valuation',description:'Preço de mercado, valor estimado, desconto, ágio e margem de segurança.',level:'Essencial',minutes:7,icon:'⊙'},
+  'roic':{title:'ROIC',category:'Rentabilidade',description:'Como avaliar o retorno gerado sobre o capital investido no negócio.',level:'Essencial',minutes:6,icon:'↗'},
+  'roe':{title:'ROE',category:'Rentabilidade',description:'Como interpretar o retorno sobre o patrimônio dos acionistas.',level:'Essencial',minutes:5,icon:'R'},
+  'pl':{title:'P/L',category:'Valuation',description:'O que a relação entre preço e lucro realmente diz — e o que não diz.',level:'Essencial',minutes:5,icon:'P'},
+  'pvp':{title:'P/VP',category:'Valuation',description:'Como interpretar preço em relação ao patrimônio e em quais setores ele é mais útil.',level:'Essencial',minutes:5,icon:'V'},
+  'dy':{title:'Dividend Yield (DY)',category:'Dividendos',description:'Como interpretar dividendos em relação ao preço e avaliar a sustentabilidade dos proventos.',level:'Essencial',minutes:6,icon:'%'},
+  'ebitda':{title:'EBITDA',category:'Resultados',description:'O que mede, para que serve e por que EBITDA não deve ser confundido com fluxo de caixa.',level:'Intermediário',minutes:6,icon:'E'},
+  'margem-ebit':{title:'Margem EBIT',category:'Resultados',description:'Como interpretar eficiência operacional, tendência de margens e comparação entre empresas.',level:'Intermediário',minutes:5,icon:'M'}
+}
+const educationOrder=['analisar-acao','valuation','preco-justo','roic','roe','pl','pvp','dy','ebitda','margem-ebit']
+const educationCategories=['Todos','Fundamentos','Valuation','Rentabilidade','Resultados','Dividendos']
+let educationFilter='Todos'
+
+function educationCard(topic,compact=false){
+  const m=educationMeta[topic],item=educationTopics[topic]
+  if(!m||!item)return ''
+  return '<button type="button" class="axedu-card'+(compact?' axedu-card-compact':'')+'" data-education-topic="'+topic+'">'+
+    '<span class="axedu-card-top"><span class="axedu-icon">'+m.icon+'</span><span class="axedu-arrow">↗</span></span>'+
+    '<span class="axedu-card-category">'+m.category+'</span>'+
+    '<strong>'+esc(m.title)+'</strong>'+
+    '<span class="axedu-card-description">'+esc(m.description)+'</span>'+
+    '<span class="axedu-card-meta">'+m.minutes+' min de leitura <i></i> '+m.level+'</span>'+
+  '</button>'
+}
+
+function featuredEducationCard(){
+  const topic='analisar-acao',m=educationMeta[topic]
+  return '<button type="button" class="axedu-featured" data-education-topic="'+topic+'">'+
+    '<span class="axedu-featured-copy">'+
+      '<span class="axedu-featured-tags"><b>Comece por aqui</b><em>'+m.category+'</em></span>'+
+      '<strong>'+m.title+'</strong>'+
+      '<span class="axedu-featured-desc">'+m.description+'</span>'+
+      '<span class="axedu-featured-stats"><span><small>Jornada</small><b>11 etapas</b></span><span><small>Leitura</small><b>'+m.minutes+' min</b></span><span><small>Nível</small><b>'+m.level+'</b></span></span>'+
+      '<span class="axedu-featured-cta">Começar a jornada →</span>'+
+    '</span>'+
+    '<span class="axedu-featured-art" aria-hidden="true"><i class="axedu-ring r1"></i><i class="axedu-ring r2"></i><i class="axedu-bar b1"></i><i class="axedu-bar b2"></i><i class="axedu-bar b3"></i><i class="axedu-line"></i></span>'+
+  '</button>'
+}
+
+function renderEducationHomePreview(){
+  const el=$('educationHomePreview')
+  if(!el)return
+  el.innerHTML=featuredEducationCard()+
+    '<div class="axedu-home-mini-grid">'+['valuation','roic','roe'].map(t=>educationCard(t,true)).join('')+'</div>'
+}
+
+function renderEducationLibrary(filter=educationFilter){
   if(!accessValidated){showLogin('Faça login para acessar a área exclusiva.');return}
-  const item=educationTopics[topic]
-  if(!item)return
-  document.querySelector('.nav-item[data-page="education"]')?.click()
+  educationFilter=filter
   const content=$('educationContent')
   if(!content)return
+  const visible=educationOrder.filter(t=>!educationMeta[t].featured&&(filter==='Todos'||educationMeta[t].category===filter))
+  const showFeatured=filter==='Todos'||educationMeta['analisar-acao'].category===filter
+  const total=educationOrder.reduce((sum,t)=>sum+educationMeta[t].minutes,0)
   content.innerHTML=
-    '<div class="education-guide-hero"><h2>'+item.title+'</h2><p>'+item.intro+'</p></div>'+
-    '<div class="education-guide-layout"><aside class="education-guide-toc ig-toc">'+item.toc+'</aside><article class="education-guide-article">'+item.article+'</article></div>'+
-    '<p class="education-disclaimer">Conteúdo educacional e informativo. Não constitui recomendação de compra ou venda de ativos.</p>'
+    '<div class="axedu-library">'+
+      '<button type="button" class="axedu-back" data-education-overview>← Voltar para Página Inicial</button>'+
+      '<header class="axedu-library-head"><p class="axedu-kicker">Biblioteca</p><h2>AXIVA Educação</h2><p>Aprenda a interpretar os principais indicadores e conceitos usados na análise de ações.</p>'+
+        '<dl><div><dt>Conteúdos</dt><dd>'+educationOrder.length+'</dd></div><div><dt>Temas</dt><dd>'+(educationCategories.length-1)+'</dd></div><div><dt>Leitura total</dt><dd>'+total+' min</dd></div></dl>'+
+      '</header>'+
+      '<div class="axedu-filters">'+educationCategories.map(f=>'<button type="button" data-education-filter="'+f+'" class="'+(f===filter?'active':'')+'">'+f+' <span>'+educationOrder.filter(t=>f==='Todos'||educationMeta[t].category===f).length+'</span></button>').join('')+'</div>'+
+      '<div class="axedu-library-list">'+(showFeatured?featuredEducationCard():'')+
+        (visible.length?'<div class="axedu-library-grid">'+visible.map(t=>educationCard(t)).join('')+'</div>':'<div class="axedu-empty">Nenhum conteúdo nesta categoria.</div>')+
+      '</div>'+
+      '<aside class="axedu-disclaimer"><b>i</b><p><strong>Conteúdo de caráter exclusivamente informativo e educacional.</strong> Não constitui recomendação de compra, venda ou manutenção de ativos. Os exemplos são ilustrativos e rentabilidade passada não é garantia de resultados futuros.</p></aside>'+
+    '</div>'
   $('pageTitle').textContent=''
   window.scrollTo({top:0,behavior:'smooth'})
 }
 
+function openEducationTopic(topic){
+  if(!accessValidated){showLogin('Faça login para acessar a área exclusiva.');return}
+  const item=educationTopics[topic],m=educationMeta[topic]
+  if(!item||!m)return
+  document.querySelector('.nav-item[data-page="education"]')?.click()
+  const content=$('educationContent')
+  if(!content)return
+  const isJourney=topic==='analisar-acao'
+  content.innerHTML=
+    '<div class="axedu-article">'+
+      '<button type="button" class="axedu-back" data-education-library>← Voltar para AXIVA Educação</button>'+
+      '<details class="axedu-mobile-toc"><summary>'+(isJourney?'Sua jornada':'Nesta página')+'</summary><div>'+item.toc+'</div></details>'+
+      '<div class="axedu-article-grid">'+
+        '<article class="axedu-article-main">'+
+          '<header class="axedu-article-head"><p class="axedu-kicker">'+m.category+'</p><h2>'+esc(item.title)+'</h2><p>'+esc(item.intro)+'</p>'+
+            '<ul><li>◷ Leitura: '+m.minutes+' min</li><li>◉ Nível '+m.level.toLowerCase()+'</li>'+(isJourney?'<li>≡ 11 etapas</li>':'')+'</ul>'+
+          '</header>'+
+          '<div class="axedu-article-body">'+item.article+'</div>'+
+        '</article>'+
+        '<aside class="axedu-article-toc">'+item.toc+'</aside>'+
+      '</div>'+
+      '<aside class="axedu-disclaimer"><b>i</b><p><strong>Conteúdo de caráter exclusivamente informativo e educacional.</strong> Não constitui recomendação de compra, venda ou manutenção de ativos.</p></aside>'+
+    '</div>'
+  $('pageTitle').textContent=''
+  window.scrollTo({top:0,behavior:'smooth'})
+}
+
+renderEducationHomePreview()
+
+document.querySelector('.nav-item[data-page="education"]')?.addEventListener('click',()=>renderEducationLibrary())
 document.querySelectorAll('[data-education-topic]').forEach(btn=>btn.addEventListener('click',()=>openEducationTopic(btn.dataset.educationTopic)))
-$('educationBackBtn')?.addEventListener('click',()=>document.querySelector('.nav-item[data-page="overview"]')?.click())
+
+$('educationHomePreview')?.addEventListener('click',e=>{
+  const topic=e.target.closest('[data-education-topic]')
+  if(topic)openEducationTopic(topic.dataset.educationTopic)
+})
+
 $('educationContent')?.addEventListener('click',e=>{
-  const topicLink=e.target.closest('[data-education-topic]')
-  if(topicLink){e.preventDefault();openEducationTopic(topicLink.dataset.educationTopic);return}
-  const homeLink=e.target.closest('[data-education-home]')
-  if(homeLink){e.preventDefault();document.querySelector('.nav-item[data-page="overview"]')?.click()}
+  const topic=e.target.closest('[data-education-topic]')
+  if(topic){e.preventDefault();openEducationTopic(topic.dataset.educationTopic);return}
+  const filter=e.target.closest('[data-education-filter]')
+  if(filter){renderEducationLibrary(filter.dataset.educationFilter);return}
+  if(e.target.closest('[data-education-library]')){renderEducationLibrary();return}
+  if(e.target.closest('[data-education-overview]')||e.target.closest('[data-education-home]')){
+    e.preventDefault()
+    document.querySelector('.nav-item[data-page="overview"]')?.click()
+  }
 })
 
 document.querySelectorAll('[data-header-page]').forEach(link=>link.addEventListener('click',()=>{
