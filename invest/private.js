@@ -14,6 +14,7 @@ const loginView=$('loginView'),appView=$('appView'),loginForm=$('loginForm'),log
 const emailInput=$('email'),passwordInput=$('password'),userEmail=$('userEmail'),accessChip=$('accessChip')
 const selectionStatus=$('selectionStatus'),selectionWrap=$('selectionTableWrap')
 let currentRole='subscriber'
+let accessValidated=false
 let analysisRows=[]
 let strategiesLoaded=false
 
@@ -23,11 +24,14 @@ const pct=v=>v==null?'—':(Number(v)*100).toLocaleString('pt-BR',{minimumFracti
 const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))
 const n=v=>{if(v===null||v===undefined||v==='')return null;const x=Number(v);return Number.isFinite(x)?x:null}
 
-function showLogin(msg=''){loginView.classList.remove('hidden');appView.classList.add('hidden');$('resetView').classList.add('hidden');loginMessage.textContent=msg}
-function showApp(){if(recoveryMode){showResetView();return}loginView.classList.add('hidden');$('resetView').classList.add('hidden');appView.classList.remove('hidden')}
+function showLogin(msg=''){accessValidated=false;loginView.classList.remove('hidden');appView.classList.add('hidden');$('resetView').classList.add('hidden');loginMessage.textContent=msg}
+function showApp(){if(recoveryMode){showResetView();return}if(!accessValidated){showLogin('Faça login para acessar a área exclusiva.');return}loginView.classList.add('hidden');$('resetView').classList.add('hidden');appView.classList.remove('hidden')}
 function showResetView(){loginView.classList.add('hidden');appView.classList.add('hidden');$('resetView').classList.remove('hidden')}
 // O link de recuperação cria uma sessão temporária; não significa que a senha já foi alterada.
-supabase.auth.onAuthStateChange((event)=>{if(event==='PASSWORD_RECOVERY'){recoveryMode=true;showResetView()}})
+supabase.auth.onAuthStateChange((event)=>{
+  if(event==='PASSWORD_RECOVERY'){recoveryMode=true;accessValidated=false;showResetView();return}
+  if(event==='SIGNED_OUT'){accessValidated=false;showLogin()}
+})
 $('resetForm').addEventListener('submit',async e=>{
   e.preventDefault()
   const pass=$('newPassword').value,confirmPass=$('confirmPassword').value
@@ -74,6 +78,7 @@ async function loadPrivateArea(){
     const plan=me.access?.plan||'assinante'
     accessChip.textContent=currentRole==='admin'?'Administrador':`Plano ${plan==='annual'?'anual':plan}`
     $('adminNav').classList.toggle('hidden',currentRole!=='admin')
+    accessValidated=true
     showApp()
     await Promise.all([loadSelection(),loadAnalysisData()])
   }catch(e){
@@ -219,11 +224,132 @@ $('adminUserForm').addEventListener('submit',async e=>{e.preventDefault();const 
 
 $('selectionMethodLink').addEventListener('click',e=>{e.preventDefault();document.querySelector('.nav-item[data-page="method"]')?.click()})
 
+
+const educationTopics={
+  'analisar-acao':{
+    title:'Como analisar uma ação',
+    intro:'Analisar uma ação significa entender primeiro a empresa e depois avaliar se o preço pago faz sentido diante dos fundamentos.',
+    sections:[
+      ['1. Entenda o negócio','Veja como a empresa ganha dinheiro, em quais mercados atua, quais são seus principais produtos, clientes, concorrentes e riscos. Um bom número isolado não compensa um negócio que você não entende.'],
+      ['2. Observe rentabilidade e eficiência','ROE e ROIC ajudam a avaliar a capacidade de transformar capital em resultado. Compare com o histórico da própria empresa e com negócios semelhantes.'],
+      ['3. Analise margens e crescimento','Margem EBIT e margem líquida mostram quanto da receita permanece após diferentes grupos de despesas. Crescimento de receita ajuda a entender se a operação está expandindo.'],
+      ['4. Verifique endividamento e liquidez','Dívida deve ser analisada em conjunto com capacidade de geração de resultado e caixa. Empresas muito endividadas podem ficar mais vulneráveis em cenários adversos.'],
+      ['5. Compare preço e valor','P/L, P/VP, múltiplos do setor, preço-alvo e outras técnicas de valuation ajudam a avaliar quanto o mercado está cobrando pelo negócio. Nenhum indicador deve ser usado sozinho.'],
+      ['6. Compare com setor e histórico','Um múltiplo aparentemente alto ou baixo pode ser normal para determinado setor. A comparação com pares e com o próprio histórico adiciona contexto.'],
+      ['7. Revise os riscos','Antes de decidir, considere governança, concentração de receita, regulação, ciclos econômicos, competição e o que pode fazer sua análise estar errada.']
+    ]
+  },
+  valuation:{
+    title:'Valuation',
+    intro:'Valuation é o processo de estimar uma referência de valor para uma empresa ou ação a partir de seus resultados, patrimônio, geração de caixa, crescimento e outras premissas.',
+    sections:[
+      ['O que o valuation responde','Ele procura responder quanto um negócio pode valer de acordo com uma metodologia. O resultado não é uma cotação futura garantida.'],
+      ['Principais abordagens','É possível usar fluxo de caixa descontado, múltiplos comparáveis, múltiplos históricos, valor patrimonial e outras metodologias. Cada abordagem tem vantagens e limitações.'],
+      ['Como a AXIVA usa valuation','A AXIVA utiliza referências calculadas a partir de múltiplos históricos quando há dados suficientes e também apresenta Graham como uma referência adicional quando LPA e VPA são positivos.'],
+      ['Por que o resultado muda','Mudanças em lucros, patrimônio, juros, risco, crescimento, múltiplos e preço de mercado alteram a relação entre preço e valor estimado.']
+    ]
+  },
+  'preco-justo':{
+    title:'Preço justo de uma ação',
+    intro:'Preço justo é uma referência estimada de valor, não um preço que o mercado seja obrigado a atingir.',
+    sections:[
+      ['Preço de mercado x preço justo','O preço de mercado é o valor negociado naquele momento. O preço justo depende da metodologia e das premissas utilizadas na análise.'],
+      ['Desconto','Quando a cotação está abaixo da referência de valor, existe desconto em relação àquela metodologia. Isso não significa que a ação necessariamente subirá.'],
+      ['Ágio','Quando a cotação está acima da referência, há ágio em relação àquela metodologia. Uma empresa de alta qualidade pode negociar com ágio por longos períodos.'],
+      ['Uso correto','Utilize preço justo junto com qualidade do negócio, rentabilidade, crescimento, endividamento, riscos e comparação com empresas semelhantes.']
+    ]
+  },
+  roic:{
+    title:'ROIC',
+    intro:'ROIC significa Return on Invested Capital, ou retorno sobre o capital investido.',
+    sections:[
+      ['O que mede','Mostra a eficiência da empresa para gerar resultado operacional a partir do capital necessário para financiar suas operações.'],
+      ['Como interpretar','Em geral, ROIC mais elevado e consistente indica melhor eficiência no uso do capital. A comparação deve considerar setor, ciclo do negócio e histórico da empresa.'],
+      ['Por que é importante','Uma empresa que consegue reinvestir capital a retornos elevados pode criar valor ao longo do tempo, especialmente quando há oportunidades de crescimento.'],
+      ['Limitação','O cálculo pode variar conforme a definição de capital investido e resultado operacional. Na metodologia AXIVA, o ROIC não é utilizado como trava para instituições financeiras.']
+    ]
+  },
+  roe:{
+    title:'ROE',
+    intro:'ROE significa Return on Equity, ou retorno sobre o patrimônio líquido.',
+    sections:[
+      ['O que mede','Relaciona o resultado gerado pela empresa ao patrimônio líquido dos acionistas. É uma medida de rentabilidade sobre o capital próprio.'],
+      ['Como interpretar','ROE elevado pode indicar boa rentabilidade, mas deve ser analisado junto com dívida, margens, crescimento e recorrência dos resultados.'],
+      ['Atenção ao endividamento','Uma empresa muito alavancada pode apresentar ROE elevado porque possui uma base menor de patrimônio. Por isso, ROE não deve ser analisado isoladamente.']
+    ]
+  },
+  pl:{
+    title:'P/L',
+    intro:'P/L é a relação entre o preço da ação e o lucro por ação.',
+    sections:[
+      ['O que significa','De forma simplificada, mostra quanto o mercado paga por cada unidade de lucro atual da empresa.'],
+      ['P/L baixo','Pode indicar uma ação relativamente barata, mas também pode refletir risco, lucro temporariamente elevado ou expectativa de queda dos resultados.'],
+      ['P/L alto','Pode refletir expectativa de crescimento, maior qualidade percebida ou simplesmente um preço elevado.'],
+      ['Quando o lucro é negativo','P/L negativo perde grande parte da utilidade econômica e deve ser interpretado com cautela.']
+    ]
+  },
+  pvp:{
+    title:'P/VP',
+    intro:'P/VP compara o preço da ação com o valor patrimonial por ação.',
+    sections:[
+      ['O que significa','P/VP 1 indica, matematicamente, que o mercado está precificando a ação aproximadamente pelo valor contábil do patrimônio por ação.'],
+      ['Abaixo de 1','Não significa automaticamente oportunidade. O mercado pode estar atribuindo desconto ao patrimônio por baixa rentabilidade, riscos ou qualidade dos ativos.'],
+      ['Acima de 1','Pode refletir expectativa de que a empresa gere retorno acima do valor contábil de seu patrimônio.'],
+      ['Onde costuma ser mais útil','É especialmente relevante em negócios nos quais o patrimônio contábil tem forte relação com a atividade econômica, mas sua utilidade varia entre setores.']
+    ]
+  },
+  dy:{
+    title:'DY — Dividend Yield',
+    intro:'Dividend Yield relaciona os proventos distribuídos ao acionista com o preço da ação.',
+    sections:[
+      ['Como é interpretado','Um DY de 6% indica que os proventos considerados no cálculo representam aproximadamente 6% do preço usado como referência.'],
+      ['DY alto não é garantia','Dividendos podem variar. Distribuições extraordinárias ou queda forte da cotação podem elevar o indicador temporariamente.'],
+      ['O que observar junto','Lucros, geração de caixa, endividamento, política de distribuição e capacidade de reinvestimento ajudam a avaliar a sustentabilidade dos dividendos.']
+    ]
+  },
+  ebitda:{
+    title:'EBITDA',
+    intro:'EBITDA representa o resultado antes de juros, impostos, depreciação e amortização.',
+    sections:[
+      ['Para que serve','É usado como uma aproximação do desempenho operacional antes de efeitos financeiros, tributários e de itens contábeis de depreciação e amortização.'],
+      ['O que ele não é','EBITDA não é fluxo de caixa. A empresa ainda precisa investir, pagar impostos, juros, capital de giro e outras obrigações.'],
+      ['Como usar','É comum comparar EBITDA ao longo do tempo ou utilizar EV/EBITDA para comparar empresas do mesmo setor.']
+    ]
+  },
+  'margem-ebit':{
+    title:'Margem EBIT',
+    intro:'Margem EBIT mostra quanto do faturamento permanece como resultado operacional antes do resultado financeiro e dos impostos sobre o lucro.',
+    sections:[
+      ['Cálculo conceitual','Margem EBIT = EBIT ÷ Receita líquida. Quanto maior a margem, maior a parcela da receita convertida em resultado operacional, mantendo-se as demais condições.'],
+      ['Como interpretar','Observe a evolução ao longo do tempo e compare com empresas semelhantes. Margens estruturalmente diferentes são comuns entre setores.'],
+      ['Por que pode mudar','Preços, custos, despesas operacionais, escala, mix de produtos, eficiência e ciclos econômicos podem alterar a margem EBIT.']
+    ]
+  }
+}
+
+function openEducationTopic(topic){
+  if(!accessValidated){showLogin('Faça login para acessar a área exclusiva.');return}
+  const item=educationTopics[topic]
+  if(!item)return
+  document.querySelector('.nav-item[data-page="education"]')?.click()
+  const content=$('educationContent')
+  if(!content)return
+  content.innerHTML='<div class="education-article-head"><h2>'+esc(item.title)+'</h2><p>'+esc(item.intro)+'</p></div>'+
+    '<div class="education-article-sections">'+item.sections.map(([title,body])=>'<article class="education-article-card"><h3>'+esc(title)+'</h3><p>'+esc(body)+'</p></article>').join('')+'</div>'+
+    '<p class="education-disclaimer">Conteúdo educacional e informativo. Não constitui recomendação de compra ou venda de ativos.</p>'
+  $('pageTitle').textContent=item.title.toUpperCase()
+  window.scrollTo({top:0,behavior:'smooth'})
+}
+
+document.querySelectorAll('[data-education-topic]').forEach(btn=>btn.addEventListener('click',()=>openEducationTopic(btn.dataset.educationTopic)))
+$('educationBackBtn')?.addEventListener('click',()=>document.querySelector('.nav-item[data-page="overview"]')?.click())
+
 document.querySelectorAll('[data-header-page]').forEach(link=>link.addEventListener('click',()=>{
   document.querySelector('.nav-item[data-page="'+link.dataset.headerPage+'"]')?.click()
 }))
 
 document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click',async()=>{
+  if(!accessValidated){showLogin('Faça login para acessar a área exclusiva.');return}
   if(btn.id==='adminNav'&&currentRole!=='admin')return
   const previousPage=document.querySelector('.nav-item.active')?.dataset.page||null
   if(btn.dataset.page==='company'&&previousPage&&previousPage!=='company'){
@@ -232,7 +358,7 @@ document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click'
   }
   document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));btn.classList.add('active')
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(btn.dataset.page+'Page')?.classList.add('active')
-  const pageTitles={overview:'PÁGINA INICIAL',selection:'',analysis:'',company:'ANALISAR EMPRESA',compare:'',watch:'MINHA LISTA',alerts:'MEUS ALERTAS',strategies:'',method:'METODOLOGIA',admin:'ADMINISTRAÇÃO'}
+  const pageTitles={overview:'PÁGINA INICIAL',selection:'',analysis:'',company:'ANALISAR EMPRESA',compare:'',watch:'MINHA LISTA',alerts:'MEUS ALERTAS',strategies:'',education:'AXIVA EDUCAÇÃO',method:'METODOLOGIA',admin:'ADMINISTRAÇÃO'}
   const pageTitle=pageTitles[btn.dataset.page]
   $('pageTitle').textContent=pageTitle!==undefined?pageTitle:btn.textContent.trim()
   if(btn.dataset.page==='admin')await loadAdminUsers()
