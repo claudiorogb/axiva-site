@@ -247,8 +247,7 @@ function educationCard(topic,compact=false){
   const m=educationMeta[topic],item=educationTopics[topic]
   if(!m||!item)return ''
   return '<button type="button" class="axedu-card'+(compact?' axedu-card-compact':'')+'" data-education-topic="'+topic+'">'+
-    '<span class="axedu-card-top"><span class="axedu-icon">'+m.icon+'</span><span class="axedu-arrow">↗</span></span>'+
-    '<span class="axedu-card-category">'+m.category+'</span>'+
+    '<span class="axedu-card-top"><span class="axedu-icon">'+m.icon+'</span></span>'+
     '<strong>'+esc(m.title)+'</strong>'+
     '<span class="axedu-card-description">'+esc(m.description)+'</span>'+
     '<span class="axedu-card-meta">'+m.minutes+' min de leitura <i></i> '+m.level+'</span>'+
@@ -259,7 +258,7 @@ function featuredEducationCard(){
   const topic='analisar-acao',m=educationMeta[topic]
   return '<button type="button" class="axedu-featured" data-education-topic="'+topic+'">'+
     '<span class="axedu-featured-copy">'+
-      '<span class="axedu-featured-tags"><b>Comece por aqui</b><em>'+m.category+'</em></span>'+
+      '<span class="axedu-featured-tags"><b>Comece por aqui</b></span>'+
       '<strong>'+m.title+'</strong>'+
       '<span class="axedu-featured-desc">'+m.description+'</span>'+
       '<span class="axedu-featured-stats"><span><small>Jornada</small><b>11 etapas</b></span><span><small>Leitura</small><b>'+m.minutes+' min</b></span><span><small>Nível</small><b>'+m.level+'</b></span></span>'+
@@ -287,7 +286,7 @@ function renderEducationLibrary(filter=educationFilter){
   content.innerHTML=
     '<div class="axedu-library">'+
       '<button type="button" class="axedu-back" data-education-overview>← Voltar para Página Inicial</button>'+
-      '<header class="axedu-library-head"><p class="axedu-kicker">Biblioteca</p><h2>AXIVA Educação</h2><p>Aprenda a interpretar os principais indicadores e conceitos usados na análise de ações.</p>'+
+      '<header class="axedu-library-head"><h2>AXIVA Educação</h2><p>Aprenda a interpretar os principais indicadores e conceitos usados na análise de ações.</p>'+
         '<dl><div><dt>Conteúdos</dt><dd>'+educationOrder.length+'</dd></div><div><dt>Temas</dt><dd>'+(educationCategories.length-1)+'</dd></div><div><dt>Leitura total</dt><dd>'+total+' min</dd></div></dl>'+
       '</header>'+
       '<div class="axedu-filters">'+educationCategories.map(f=>'<button type="button" data-education-filter="'+f+'" class="'+(f===filter?'active':'')+'">'+f+' <span>'+educationOrder.filter(t=>f==='Todos'||educationMeta[t].category===f).length+'</span></button>').join('')+'</div>'+
@@ -314,7 +313,7 @@ function openEducationTopic(topic){
       '<details class="axedu-mobile-toc"><summary>'+(isJourney?'Sua jornada':'Nesta página')+'</summary><div>'+item.toc+'</div></details>'+
       '<div class="axedu-article-grid">'+
         '<article class="axedu-article-main">'+
-          '<header class="axedu-article-head"><p class="axedu-kicker">'+m.category+'</p><h2>'+esc(item.title)+'</h2><p>'+esc(item.intro)+'</p>'+
+          '<header class="axedu-article-head"><h2>'+esc(item.title)+'</h2><p>'+esc(item.intro)+'</p>'+
             '<ul><li>◷ Leitura: '+m.minutes+' min</li><li>◉ Nível '+m.level.toLowerCase()+'</li>'+(isJourney?'<li>≡ 11 etapas</li>':'')+'</ul>'+
           '</header>'+
           '<div class="axedu-article-body">'+item.article+'</div>'+
