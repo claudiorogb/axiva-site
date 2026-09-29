@@ -65,6 +65,14 @@
     {
       "source": "/sobre",
       "destination": "/sobre/index.html"
+    },
+    {
+      "source": "/crm/sobre",
+      "destination": "/crm/sobre/index.html"
+    },
+    {
+      "source": "/invest/sobre",
+      "destination": "/invest/sobre/index.html"
     }
   ],
   "headers": [
