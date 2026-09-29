@@ -33,6 +33,34 @@
     {
       "source": "/crm/como-organizar-leads",
       "destination": "/crm/como-organizar-leads/index.html"
+    },
+    {
+      "source": "/invest/como-analisar-uma-acao",
+      "destination": "/invest/como-analisar-uma-acao/index.html"
+    },
+    {
+      "source": "/invest/valuation",
+      "destination": "/invest/valuation/index.html"
+    },
+    {
+      "source": "/invest/preco-justo-de-uma-acao",
+      "destination": "/invest/preco-justo-de-uma-acao/index.html"
+    },
+    {
+      "source": "/invest/roic",
+      "destination": "/invest/roic/index.html"
+    },
+    {
+      "source": "/invest/roe",
+      "destination": "/invest/roe/index.html"
+    },
+    {
+      "source": "/invest/pl",
+      "destination": "/invest/pl/index.html"
+    },
+    {
+      "source": "/invest/pvp",
+      "destination": "/invest/pvp/index.html"
     }
   ],
   "headers": [
