@@ -17,6 +17,22 @@
     {
       "source": "/invest",
       "destination": "/invest/index.html"
+    },
+    {
+      "source": "/crm/funil-de-vendas",
+      "destination": "/crm/funil-de-vendas/index.html"
+    },
+    {
+      "source": "/crm/prospeccao-b2b",
+      "destination": "/crm/prospeccao-b2b/index.html"
+    },
+    {
+      "source": "/crm/follow-up-comercial",
+      "destination": "/crm/follow-up-comercial/index.html"
+    },
+    {
+      "source": "/crm/como-organizar-leads",
+      "destination": "/crm/como-organizar-leads/index.html"
     }
   ],
   "headers": [
