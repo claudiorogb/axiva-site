@@ -327,15 +327,10 @@ function openEducationTopic(topic){
   window.scrollTo({top:0,behavior:'smooth'})
 }
 
-renderEducationHomePreview()
 
 document.querySelector('.nav-item[data-page="education"]')?.addEventListener('click',()=>renderEducationLibrary())
 document.querySelectorAll('[data-education-topic]').forEach(btn=>btn.addEventListener('click',()=>openEducationTopic(btn.dataset.educationTopic)))
 
-$('educationHomePreview')?.addEventListener('click',e=>{
-  const topic=e.target.closest('[data-education-topic]')
-  if(topic)openEducationTopic(topic.dataset.educationTopic)
-})
 
 $('educationContent')?.addEventListener('click',e=>{
   const topic=e.target.closest('[data-education-topic]')
