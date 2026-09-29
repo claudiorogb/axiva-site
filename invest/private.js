@@ -238,7 +238,7 @@ function openEducationTopic(topic){
     '<div class="education-guide-hero"><h2>'+item.title+'</h2><p>'+item.intro+'</p></div>'+
     '<div class="education-guide-layout"><aside class="education-guide-toc ig-toc">'+item.toc+'</aside><article class="education-guide-article">'+item.article+'</article></div>'+
     '<p class="education-disclaimer">Conteúdo educacional e informativo. Não constitui recomendação de compra ou venda de ativos.</p>'
-  $('pageTitle').textContent=item.title.toUpperCase()
+  $('pageTitle').textContent=''
   window.scrollTo({top:0,behavior:'smooth'})
 }
 
@@ -265,7 +265,7 @@ document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click'
   }
   document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));btn.classList.add('active')
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(btn.dataset.page+'Page')?.classList.add('active')
-  const pageTitles={overview:'PÁGINA INICIAL',selection:'',analysis:'',company:'ANALISAR EMPRESA',compare:'',watch:'MINHA LISTA',alerts:'MEUS ALERTAS',strategies:'',education:'AXIVA EDUCAÇÃO',method:'METODOLOGIA',admin:'ADMINISTRAÇÃO'}
+  const pageTitles={overview:'PÁGINA INICIAL',selection:'',analysis:'',company:'ANALISAR EMPRESA',compare:'',watch:'MINHA LISTA',alerts:'MEUS ALERTAS',strategies:'',education:'',method:'METODOLOGIA',admin:'ADMINISTRAÇÃO'}
   const pageTitle=pageTitles[btn.dataset.page]
   $('pageTitle').textContent=pageTitle!==undefined?pageTitle:btn.textContent.trim()
   if(btn.dataset.page==='admin')await loadAdminUsers()
