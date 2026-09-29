@@ -4,6 +4,7 @@ const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const money=v=>n(v)==null?'—':Number(v).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})
 const num=(v,d=2)=>n(v)==null?'—':Number(v).toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d})
 const pct=v=>n(v)==null?'—':(Number(v)*100).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1})+'%'
+const pct2=v=>n(v)==null?'—':(Number(v)*100).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%'
 const fraction=v=>{const x=n(v);return x==null?null:x/100}
 const signPct=v=>n(v)==null?'—':(Number(v)*100).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1,signDisplay:'always'})+' p.p.'
 const median=values=>{const a=values.map(n).filter(v=>v!=null).sort((a,b)=>a-b);if(!a.length)return null;const m=Math.floor(a.length/2);return a.length%2?a[m]:(a[m-1]+a[m])/2}
@@ -573,8 +574,11 @@ function renderWatch(){
   const el=$('watchlistContent')
   if(!watchData.length){el.innerHTML='<div class="empty-state">Sua lista está vazia. Adicione uma empresa para começar.</div>';return}
   el.innerHTML=watchData.map(r=>{
-    const day=n(r.day_change_pct)
-    return '<div class="watch-row"><div><b>'+esc(r.ticker)+'</b><span>'+esc(r.company_name||'')+'</span></div><div><span>Cotação</span><b>'+money(r.current_price)+'</b></div><div><span>Variação no dia</span><b class="watch-change '+(day>0?'change-pos':day<0?'change-neg':'')+'">'+(day==null?'—':pct(day))+'</b></div><div><span>Desconto</span><b>'+pct(r.discount_pct)+'</b></div><div class="compact-actions"><button class="mini-btn secondary" data-watch-open="'+esc(r.ticker)+'">Analisar</button><button class="mini-btn danger" data-watch-remove="'+esc(r.ticker)+'">Remover</button></div></div>'
+    const day=n(r.day_change_pct),discount=n(r.discount_pct)
+    const discountLabel=discount!=null&&discount<0?'Ágio':'Desconto'
+    const discountClass=discount>0?'change-pos':discount<0?'change-neg':''
+    const discountValue=discount==null?'—':pct(Math.abs(discount))
+    return '<div class="watch-row"><div><b>'+esc(r.ticker)+'</b><span>'+esc(r.company_name||'')+'</span></div><div><span>Cotação</span><b>'+money(r.current_price)+'</b></div><div><span>Variação no dia</span><b class="watch-change '+(day>0?'change-pos':day<0?'change-neg':'')+'">'+(day==null?'—':pct2(day))+'</b></div><div><span>'+discountLabel+'</span><b class="'+discountClass+'">'+discountValue+'</b></div><div class="compact-actions"><button class="mini-btn secondary" data-watch-open="'+esc(r.ticker)+'">Analisar</button><button class="mini-btn danger" data-watch-remove="'+esc(r.ticker)+'">Remover</button></div></div>'
   }).join('')
   el.querySelectorAll('[data-watch-open]').forEach(b=>b.addEventListener('click',()=>openCompany(b.dataset.watchOpen)))
   el.querySelectorAll('[data-watch-remove]').forEach(b=>b.addEventListener('click',()=>removeWatch(b.dataset.watchRemove)))
