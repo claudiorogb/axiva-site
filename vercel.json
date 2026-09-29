@@ -61,6 +61,10 @@
     {
       "source": "/invest/pvp",
       "destination": "/invest/pvp/index.html"
+    },
+    {
+      "source": "/sobre",
+      "destination": "/sobre/index.html"
     }
   ],
   "headers": [
