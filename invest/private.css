@@ -994,3 +994,10 @@ body:has(#educationPage.active) .topbar-title{display:none}
   .axedu-article-body .ig-section h2{font-size:23px}
   .axedu-article-body .ig-section p,.axedu-article-body .ig-section li{font-size:13px}
 }
+
+
+/* Limpeza visual: sem rótulos verdes e sem setas nos cards da AXIVA Educação */
+.axedu-card-category,.axedu-arrow,.axedu-featured-tags em{display:none!important}
+.axedu-card-top{justify-content:flex-start!important}
+.axedu-library-head h2{margin-top:0}
+.axedu-article-head h2{margin-top:0}
