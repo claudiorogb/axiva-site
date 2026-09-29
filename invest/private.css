@@ -1189,3 +1189,7 @@ body:has(#educationPage.active) .topbar-title{display:none}
   .sidebar nav::-webkit-scrollbar-thumb{background:#45657e;border-radius:999px}
   .sidebar nav::-webkit-scrollbar-thumb:hover{background:#62849d}
 }
+
+
+/* Itens auxiliares/administrativos do menu só aparecem quando a lógica autorizar. */
+.sidebar .nav-item.hidden{display:none!important}
