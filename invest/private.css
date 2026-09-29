@@ -853,3 +853,144 @@ body:has(#educationPage.active) .topbar-title{display:none}
   #educationPage .education-guide-hero h2{font-size:26px}
   #educationPage .education-guide-hero p{font-size:13px}
 }
+
+
+
+/* AXIVA Educação — integração do redesign v0 */
+.axedu-home-preview,.axedu-page,.axedu-page *{font-family:Inter,Arial,Helvetica,sans-serif}
+.axedu-home-preview{margin-top:34px;padding-top:26px;border-top:1px solid #dfe6ec}
+.axedu-section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:22px;margin-bottom:24px}
+.axedu-section-head>div{max-width:760px}
+.axedu-kicker{margin:0!important;color:#008576!important;font-size:10px!important;font-weight:800!important;letter-spacing:.14em!important;text-transform:uppercase}
+.axedu-section-head h2{margin:7px 0 8px;font-size:29px;line-height:1.12;letter-spacing:-.02em}
+.axedu-section-head p{margin:0;color:#587086;font-size:13px;line-height:1.55}
+.axedu-library-link{border:0;background:transparent;color:#0b2946;font:inherit;font-size:12px;font-weight:800;cursor:pointer;padding:9px 0;white-space:nowrap}
+.axedu-library-link:hover{color:#008576}
+
+.axedu-featured{width:100%;display:grid;grid-template-columns:1.15fr 1fr;overflow:hidden;border:1px solid #bce5dc;border-radius:22px;background:#e6f7f4;text-align:left;color:#0b192c;cursor:pointer;padding:0;transition:.22s ease;min-height:300px}
+.axedu-featured:hover{transform:translateY(-2px);border-color:#7bcfc0;box-shadow:0 18px 44px -26px rgba(11,25,44,.45)}
+.axedu-featured-copy{display:flex;flex-direction:column;padding:30px 34px}
+.axedu-featured-tags{display:flex;align-items:center;gap:9px}
+.axedu-featured-tags b{border-radius:999px;background:#0b2946;color:#fff;padding:5px 10px;font-size:10px}
+.axedu-featured-tags em{font-style:normal;color:#008576;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.axedu-featured-copy>strong{margin-top:18px;font-size:30px;line-height:1.14;letter-spacing:-.025em}
+.axedu-featured-desc{max-width:520px;margin-top:10px;color:#486278;font-size:14px;line-height:1.65}
+.axedu-featured-stats{display:flex;gap:28px;flex-wrap:wrap;margin-top:24px}
+.axedu-featured-stats span{display:grid;gap:2px}
+.axedu-featured-stats small{color:#6c7f90;font-size:10px}
+.axedu-featured-stats b{font-size:12px}
+.axedu-featured-cta{margin-top:auto;padding-top:24px;color:#0b2946;font-size:12px;font-weight:800}
+.axedu-featured-art{position:relative;min-height:250px;background:linear-gradient(145deg,#e7faf6 0%,#f7fbfa 55%,#dff4ef 100%);overflow:hidden}
+.axedu-ring{position:absolute;border:18px solid #133755;border-radius:50%;opacity:.9}
+.axedu-ring.r1{width:118px;height:118px;left:32%;top:24%}
+.axedu-ring.r2{width:168px;height:168px;left:38%;top:18%;border-color:rgba(0,168,143,.18)}
+.axedu-bar{position:absolute;bottom:18%;width:34px;background:linear-gradient(#82cbbb,#0b2946);border-radius:3px 3px 0 0;transform:skewY(-13deg)}
+.axedu-bar.b1{height:74px;left:48%}.axedu-bar.b2{height:115px;left:60%}.axedu-bar.b3{height:154px;left:72%}
+.axedu-line{position:absolute;width:160px;height:3px;background:#00a88f;left:25%;top:62%;transform:rotate(-44deg);transform-origin:left center}
+
+.axedu-home-mini-grid,.axedu-library-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+.axedu-card{appearance:none;width:100%;height:100%;display:flex;flex-direction:column;align-items:stretch;border:1px solid #d7e1e8;background:#fff;border-radius:16px;padding:18px;text-align:left;color:#0b192c;cursor:pointer;transition:.2s ease}
+.axedu-card:hover{transform:translateY(-2px);border-color:#8fcfc6;box-shadow:0 12px 30px -22px rgba(11,25,44,.5)}
+.axedu-card-top{display:flex;align-items:center;justify-content:space-between}
+.axedu-icon{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:#0b2946;color:#dff7f4;font-size:14px;font-weight:800}
+.axedu-arrow{color:#7c8e9e;font-size:15px}
+.axedu-card-category{margin-top:18px;color:#008576;font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.axedu-card>strong{margin-top:6px;font-size:16px;line-height:1.3}
+.axedu-card-description{margin-top:6px;color:#64788b;font-size:12px;line-height:1.55}
+.axedu-card-meta{display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:18px;color:#738596;font-size:10px}
+.axedu-card-meta i{width:3px;height:3px;border-radius:50%;background:#c3ced7}
+.axedu-card-compact{min-height:175px}
+
+.axedu-content{width:100%;min-width:0}
+.axedu-library,.axedu-article{max-width:1180px;margin:0 auto;padding-bottom:50px}
+.axedu-back{border:0;background:transparent;color:#5f7386;font:inherit;font-size:12px;cursor:pointer;padding:6px 0 10px}
+.axedu-back:hover{color:#008576}
+.axedu-library-head{max-width:760px;margin-top:12px}
+.axedu-library-head h2{margin:8px 0 10px;font-size:44px;line-height:1.08;letter-spacing:-.035em}
+.axedu-library-head>p:not(.axedu-kicker){margin:0;color:#5d7285;font-size:16px;line-height:1.65}
+.axedu-library-head dl{display:flex;flex-wrap:wrap;gap:34px;margin:26px 0 0;padding-top:18px;border-top:1px solid #dfe6ec}
+.axedu-library-head dl div{display:grid;gap:3px}
+.axedu-library-head dt{color:#728493;font-size:10px}
+.axedu-library-head dd{margin:0;font-size:20px;font-weight:800}
+.axedu-filters{display:flex;gap:7px;flex-wrap:wrap;margin-top:34px}
+.axedu-filters button{border:1px solid #d8e2e9;background:#fff;border-radius:999px;padding:8px 12px;color:#4e6478;font:inherit;font-size:11px;cursor:pointer}
+.axedu-filters button span{margin-left:5px;color:#8797a5;font-size:9px}
+.axedu-filters button.active{background:#0b2946;color:#fff;border-color:#0b2946}
+.axedu-filters button.active span{color:#bdd0de}
+.axedu-library-list{margin-top:24px}
+.axedu-library-list>.axedu-featured+.axedu-library-grid{margin-top:16px}
+.axedu-empty{padding:34px;border:1px dashed #cbd8e1;border-radius:14px;color:#718494;text-align:center;font-size:12px}
+.axedu-disclaimer{display:flex;gap:11px;align-items:flex-start;max-width:780px;margin-top:34px;padding:13px 15px;border-radius:12px;background:#eef3f5;color:#607484}
+.axedu-disclaimer>b{display:grid;place-items:center;flex:0 0 20px;width:20px;height:20px;border:1px solid #94a6b5;border-radius:50%;font-size:11px}
+.axedu-disclaimer p{margin:0;font-size:10px;line-height:1.55}
+.axedu-disclaimer strong{color:#334c62}
+
+.axedu-article{max-width:1160px}
+.axedu-article-grid{display:grid;grid-template-columns:minmax(0,780px) 220px;gap:66px;align-items:start}
+.axedu-article-main{min-width:0}
+.axedu-article-head{padding:18px 0 30px;border-bottom:1px solid #dfe6ec}
+.axedu-article-head h2{margin:9px 0 13px;font-size:42px;line-height:1.08;letter-spacing:-.035em}
+.axedu-article-head>p:not(.axedu-kicker){margin:0;color:#576f83;font-size:16px;line-height:1.7}
+.axedu-article-head ul{display:flex;gap:18px;flex-wrap:wrap;margin:20px 0 0;padding:0;list-style:none;color:#768898;font-size:10px}
+.axedu-article-body{margin-top:36px}
+.axedu-article-toc{position:sticky;top:84px;padding-top:76px;border-left:1px solid #dfe6ec;padding-left:16px}
+.axedu-article-toc strong{display:block;margin-bottom:10px;color:#6d7f90;font-size:9px;letter-spacing:.12em;text-transform:uppercase}
+.axedu-article-toc a{display:block;padding:6px 0;color:#6a7d8e;text-decoration:none;font-size:10px;line-height:1.45}
+.axedu-article-toc a:hover{color:#008576}
+.axedu-mobile-toc{display:none}
+.axedu-article-body .ig-section{margin:0 0 46px;padding:0 0 46px;border-bottom:1px solid #e0e7ed}
+.axedu-article-body .ig-section:last-child{border-bottom:0}
+.axedu-article-body .ig-section h2{margin:0 0 18px;color:#0b192c;font-size:27px;line-height:1.18;letter-spacing:-.02em}
+.axedu-article-body .ig-section h3{margin:24px 0 9px;color:#0b2946;font-size:16px}
+.axedu-article-body .ig-section p,.axedu-article-body .ig-section li{color:#445e73;font-size:14px;line-height:1.8}
+.axedu-article-body .ig-section p{margin:0 0 14px}
+.axedu-article-body .ig-section ul,.axedu-article-body .ig-section ol{padding-left:22px}
+.axedu-article-body .ig-callout{margin:20px 0;padding:18px 20px;background:#e9f7f4;border:1px solid #c8e7e1;border-radius:14px}
+.axedu-article-body .ig-formula{margin:18px 0;padding:16px 18px;background:#0b2946;color:#fff;border-radius:11px;font-family:Inter,Arial,sans-serif;font-size:13px;line-height:1.65}
+.axedu-article-body .ig-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.axedu-article-body .ig-card{padding:17px;border:1px solid #dce5ec;border-radius:13px;background:#fff}
+.axedu-article-body .ig-related{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.axedu-article-body .ig-related a{display:block;padding:15px;border:1px solid #dce5ec;border-radius:12px;background:#fff;text-decoration:none}
+.axedu-article-body .ig-related b{display:block;color:#0b192c}
+.axedu-article-body .ig-related span{display:block;margin-top:4px;color:#64798c;font-size:11px;line-height:1.5}
+.axedu-article-body table{width:100%;border-collapse:collapse}
+.axedu-article-body th,.axedu-article-body td{padding:9px 10px;border-bottom:1px solid #e1e8ed;text-align:left;font-size:11px}
+.axedu-article-body th{color:#5f7488;font-size:9px;text-transform:uppercase;letter-spacing:.06em}
+.axedu-article-body .ig-closing{padding:22px;border-radius:15px;background:#0b2946}
+.axedu-article-body .ig-closing h2,.axedu-article-body .ig-closing p{color:#fff}
+.axedu-article-body .ig-btn{display:inline-flex;padding:8px 12px;border-radius:8px;background:#00a88f;color:#fff!important;text-decoration:none!important;font-size:11px;font-weight:800}
+
+@media(max-width:1050px){
+  .axedu-featured{grid-template-columns:1fr}
+  .axedu-featured-art{min-height:180px}
+  .axedu-article-grid{grid-template-columns:minmax(0,1fr)}
+  .axedu-article-toc{display:none}
+  .axedu-mobile-toc{display:block;margin:10px 0 18px;border:1px solid #d8e2e9;border-radius:11px;background:#fff}
+  .axedu-mobile-toc summary{padding:10px 12px;color:#536a7f;font-size:11px;font-weight:800;cursor:pointer}
+  .axedu-mobile-toc>div{padding:0 12px 10px}
+  .axedu-mobile-toc strong{display:none}
+  .axedu-mobile-toc a{display:block;padding:7px 0;color:#64798c;text-decoration:none;font-size:11px}
+}
+@media(max-width:800px){
+  .axedu-home-mini-grid,.axedu-library-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .axedu-section-head{align-items:flex-start;flex-direction:column}
+  .axedu-library-head h2{font-size:36px}
+  .axedu-article-head h2{font-size:34px}
+}
+@media(max-width:540px){
+  .axedu-home-mini-grid,.axedu-library-grid{grid-template-columns:1fr}
+  .axedu-featured-copy{padding:23px 20px}
+  .axedu-featured-copy>strong{font-size:25px}
+  .axedu-featured-stats{gap:18px}
+  .axedu-featured-art{min-height:150px}
+  .axedu-library-head h2{font-size:31px}
+  .axedu-library-head>p:not(.axedu-kicker){font-size:14px}
+  .axedu-library-head dl{gap:22px}
+  .axedu-filters{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}
+  .axedu-filters button{flex:0 0 auto}
+  .axedu-article-head h2{font-size:30px}
+  .axedu-article-head>p:not(.axedu-kicker){font-size:14px}
+  .axedu-article-body .ig-grid,.axedu-article-body .ig-related{grid-template-columns:1fr}
+  .axedu-article-body .ig-section h2{font-size:23px}
+  .axedu-article-body .ig-section p,.axedu-article-body .ig-section li{font-size:13px}
+}
