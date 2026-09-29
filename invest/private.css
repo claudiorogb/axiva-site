@@ -713,3 +713,27 @@ button,input,select{font-family:inherit}
     width:100%;
   }
 }
+
+
+/* AXIVA Educação */
+.education-home-section{margin-top:30px;padding-top:24px;border-top:1px solid #dce6ed}
+.education-home-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:14px}
+.education-home-head h2{margin:0 0 5px;font-size:22px}
+.education-home-head p{margin:0;color:#60758a;font-size:12px;line-height:1.5}
+.education-home-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
+.education-home-btn{appearance:none;border:1px solid #cddce5;background:#fff;color:#173a56;border-radius:10px;padding:12px 10px;min-height:48px;font:inherit;font-size:11px;font-weight:850;text-align:left;cursor:pointer;transition:border-color .15s ease,background .15s ease,transform .15s ease}
+.education-home-btn:hover{background:#effaf8;border-color:#83cfca;transform:translateY(-1px)}
+.education-home-btn:focus-visible{outline:3px solid rgba(15,170,166,.22);outline-offset:2px}
+.education-page-toolbar{margin-bottom:14px}
+.education-page-content{max-width:1100px}
+.education-article-head{background:#f0fbfa;border:1px solid #cde8e5;border-radius:16px;padding:22px 24px;margin-bottom:14px}
+.education-article-head h2{margin:0 0 8px;font-size:27px}
+.education-article-head p{margin:0;color:#4e687d;font-size:14px;line-height:1.7}
+.education-article-sections{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.education-article-card{background:#fff;border:1px solid #dce5ec;border-radius:14px;padding:18px 20px}
+.education-article-card h3{margin:0 0 8px;font-size:16px;color:#0b2946}
+.education-article-card p{margin:0;color:#5b7185;font-size:13px;line-height:1.7}
+.education-disclaimer{margin:16px 2px 0;color:#748697;font-size:10px;line-height:1.5}
+@media(max-width:1100px){.education-home-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){.education-home-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.education-article-sections{grid-template-columns:1fr}.education-article-head{padding:18px}.education-article-head h2{font-size:23px}}
+@media(max-width:430px){.education-home-grid{grid-template-columns:1fr}.education-home-btn{text-align:center}.education-page-toolbar .mini-btn{width:100%}}
