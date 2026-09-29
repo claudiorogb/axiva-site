@@ -1,0 +1,34 @@
+.about-page{background:#f7f9fb;color:#102238}
+.about-page .about-logo{width:auto;height:50px;max-width:280px;object-fit:contain;display:block}
+.about-hero{background:linear-gradient(135deg,#07111f 0%,#0c2945 72%,#0d3946 100%);color:#fff}
+.about-hero-inner{max-width:980px;padding-top:82px;padding-bottom:72px}
+.about-hero h1{margin:0;font-size:clamp(46px,7vw,76px);line-height:1.02;letter-spacing:-.045em}
+.about-hero p{max-width:860px;margin:24px 0 0;color:#c7d5e3;font-size:20px;line-height:1.7}
+.about-layout{max-width:920px;padding-top:64px;padding-bottom:90px}
+.about-article section{margin:0 0 54px;padding:0 0 54px;border-bottom:1px solid #dce5ec}
+.about-article section:last-child{border-bottom:0}
+.about-article h2{margin:0 0 20px;color:#07182d;font-size:clamp(31px,4vw,44px);line-height:1.13;letter-spacing:-.033em}
+.about-article h3{margin:30px 0 10px;color:#0b6f6d;font-size:22px;line-height:1.3}
+.about-article p,.about-article li{color:#455c73;font-size:17px;line-height:1.8}
+.about-article p{margin:0 0 17px}
+.about-article a:not(.btn){color:#0b6f6d;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.about-cards{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:28px}
+.about-card{display:block;padding:28px;border:1px solid #dbe5ed;border-radius:18px;background:#fff;text-decoration:none!important;box-shadow:0 12px 30px rgba(15,39,64,.05);transition:transform .18s ease,border-color .18s ease}
+.about-card:hover{transform:translateY(-2px);border-color:#9bc9c7}
+.about-card h3{margin:0 0 12px;color:#07182d}
+.about-card p{margin:0 0 18px;font-size:16px}
+.about-card span{color:#0b6f6d;font-size:14px;font-weight:700}
+.about-closing{padding:36px!important;border:0!important;border-radius:22px;background:linear-gradient(135deg,#0b2743,#0a1c2f);color:#fff}
+.about-closing h2,.about-closing p{color:#fff}
+.about-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.about-closing .btn-secondary{background:#fff;color:#0a2035;border-color:#fff}
+@media(max-width:720px){
+  .about-hero-inner{padding-top:58px;padding-bottom:50px}
+  .about-hero h1{font-size:44px}
+  .about-hero p{font-size:18px}
+  .about-layout{padding-top:44px;padding-bottom:64px}
+  .about-article section{margin-bottom:40px;padding-bottom:40px}
+  .about-article p,.about-article li{font-size:16px;line-height:1.72}
+  .about-cards{grid-template-columns:1fr}
+  .about-closing{padding:26px!important}
+}
