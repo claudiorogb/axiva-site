@@ -1231,3 +1231,45 @@ body:has(#educationPage.active) .topbar-title{display:none}
     padding:4px 4px!important;
   }
 }
+
+
+
+/* Correção mobile: menu lateral horizontal totalmente rolável */
+@media(max-width:700px){
+  .sidebar{
+    overflow:visible!important;
+  }
+  .sidebar nav{
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    overscroll-behavior-x:contain;
+    touch-action:pan-x!important;
+    gap:6px!important;
+    padding:4px 28px 8px 0!important;
+    margin:10px 0 0!important;
+    scrollbar-width:none!important;
+    scroll-padding-right:28px;
+  }
+  .sidebar nav::-webkit-scrollbar{
+    display:none!important;
+    height:0!important;
+  }
+  .sidebar .nav-item{
+    flex:0 0 auto!important;
+    width:auto!important;
+    max-width:none!important;
+    min-width:max-content!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    padding:9px 12px!important;
+  }
+  .sidebar .nav-item:last-of-type{
+    margin-right:28px!important;
+  }
+}
