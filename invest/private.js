@@ -10,6 +10,38 @@ let recoveryMode=new URLSearchParams(location.hash.slice(1)).get('type')==='reco
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}})
 window.axivaSupabase=supabase
 
+const INVEST_LOGIN_GUARD_KEY='axiva_invest_login_guard_v1'
+const INVEST_LOGIN_MAX_ATTEMPTS=5
+const INVEST_LOGIN_LOCK_MS=15*60*1000
+
+function readInvestLoginGuard(){
+  try{
+    const parsed=JSON.parse(localStorage.getItem(INVEST_LOGIN_GUARD_KEY)||'{}')
+    return {attempts:Number(parsed.attempts||0),blockedUntil:Number(parsed.blockedUntil||0)}
+  }catch{return {attempts:0,blockedUntil:0}}
+}
+function investLoginBlockMessage(){
+  const guard=readInvestLoginGuard()
+  if(!guard.blockedUntil||guard.blockedUntil<=Date.now()){
+    if(guard.blockedUntil)localStorage.removeItem(INVEST_LOGIN_GUARD_KEY)
+    return ''
+  }
+  const minutes=Math.max(1,Math.ceil((guard.blockedUntil-Date.now())/60000))
+  return `Muitas tentativas de acesso. Tente novamente em ${minutes} minuto${minutes===1?'':'s'}.`
+}
+function recordInvestLoginFailure(){
+  const current=readInvestLoginGuard()
+  const attempts=current.attempts+1
+  if(attempts>=INVEST_LOGIN_MAX_ATTEMPTS){
+    localStorage.setItem(INVEST_LOGIN_GUARD_KEY,JSON.stringify({attempts:0,blockedUntil:Date.now()+INVEST_LOGIN_LOCK_MS}))
+    return investLoginBlockMessage()
+  }
+  localStorage.setItem(INVEST_LOGIN_GUARD_KEY,JSON.stringify({attempts,blockedUntil:0}))
+  const remaining=INVEST_LOGIN_MAX_ATTEMPTS-attempts
+  return `E-mail ou senha inválidos. Restam ${remaining} tentativa${remaining===1?'':'s'} antes do bloqueio temporário.`
+}
+function clearInvestLoginGuard(){try{localStorage.removeItem(INVEST_LOGIN_GUARD_KEY)}catch{}}
+
 const $=id=>document.getElementById(id)
 const loginView=$('loginView'),appView=$('appView'),loginForm=$('loginForm'),loginMessage=$('loginMessage')
 const emailInput=$('email'),passwordInput=$('password'),userEmail=$('userEmail'),accessChip=$('accessChip')
@@ -278,7 +310,17 @@ async function adminAction(action,email){
   catch(e){$('adminMessage').textContent='Não foi possível concluir a alteração.'}
 }
 
-loginForm.addEventListener('submit',async e=>{e.preventDefault();loginMessage.textContent='Entrando...';const {error}=await supabase.auth.signInWithPassword({email:emailInput.value.trim(),password:passwordInput.value});if(error){loginMessage.textContent='E-mail ou senha inválidos.';return}loginMessage.textContent='';await loadPrivateArea()})
+loginForm.addEventListener('submit',async e=>{
+  e.preventDefault()
+  const blocked=investLoginBlockMessage()
+  if(blocked){loginMessage.textContent=blocked;return}
+  loginMessage.textContent='Entrando...'
+  const {error}=await supabase.auth.signInWithPassword({email:emailInput.value.trim(),password:passwordInput.value})
+  if(error){loginMessage.textContent=recordInvestLoginFailure();return}
+  clearInvestLoginGuard()
+  loginMessage.textContent=''
+  await loadPrivateArea()
+})
 
 $('firstAccessBtn').addEventListener('click',async()=>{
   const email=emailInput.value.trim().toLowerCase(),password=passwordInput.value
