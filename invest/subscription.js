@@ -1,0 +1,81 @@
+// Área do assinante: "Minha assinatura" (ver plano e cancelar).
+// Regras: desistência em até 7 dias após o pagamento = reembolso integral e fim do acesso;
+// depois disso, no Mensal encerra as próximas cobranças (acesso até o fim do mês pago);
+// no Anual as 12 parcelas continuam e a renovação é encerrada ao fim da fidelidade.
+const API='https://zbtijblvkzkeposvkfob.supabase.co/functions/v1/invest-subscription'
+const KEY='sb_publishable_1hWexWrd_y-m36-DaXF5Hw_p33Ginm_'
+const $=id=>document.getElementById(id)
+const fmtDate=v=>{if(!v)return '';const m=String(v).match(/^(\d{4})-(\d{2})-(\d{2})/);if(m&&String(v).length<=10)return `${m[3]}/${m[2]}/${m[1]}`;const d=new Date(v);return isNaN(d)?'':d.toLocaleDateString('pt-BR',{timeZone:'America/Sao_Paulo'})}
+const money=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c])
+
+async function call(action){
+  const supabase=window.axivaSupabase
+  const {data:{session}}=await supabase.auth.getSession()
+  if(!session)throw new Error('Sua sessão expirou. Entre novamente.')
+  const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json',apikey:KEY,Authorization:`Bearer ${session.access_token}`},body:JSON.stringify({action})})
+  const d=await r.json().catch(()=>({}))
+  if(!r.ok||d.error)throw new Error(d.error||'Não foi possível consultar sua assinatura agora.')
+  return d
+}
+
+function render(s){
+  const box=$('subscriptionContent')
+  $('subscriptionStatus').textContent=''
+  if(!s){
+    box.innerHTML='<p>Não encontramos uma assinatura contratada pelo site para este e-mail. Se o seu acesso foi liberado pela equipe AXIVA, fale com a gente para alterações.</p>'
+    return
+  }
+  const plan=s.plan==='annual'?'Plano Anual (12x de R$ 11,88)':'Plano Mensal (R$ 12,98 por mês)'
+  const statusText={
+    active:'Ativa',
+    cancel_scheduled:`Cancelamento agendado: a renovação será encerrada em ${fmtDate(s.cancelEffectiveOn)}.`,
+    cancelled:`Cancelada. Você tem acesso até ${fmtDate(s.accessUntil)}.`,
+    refunded:'Cancelada com reembolso integral.',
+    refund_pending:'Cancelada. O reembolso integral está sendo processado.'
+  }[s.status]||s.status
+  let rows=`<p><strong>${esc(plan)}</strong></p>
+    <p>Forma de pagamento: cartão de crédito</p>
+    <p>Situação: ${esc(statusText)}</p>
+    ${s.firstPaidAt?`<p>Assinado em: ${fmtDate(s.firstPaidAt)}</p>`:''}
+    ${s.status==='active'&&s.accessUntil?`<p>Período pago até: ${fmtDate(s.accessUntil)}</p>`:''}
+    ${s.plan==='annual'&&s.fidelityUntil?`<p>Fidelidade até: ${fmtDate(s.fidelityUntil)}</p>`:''}`
+  if(s.status==='active'){
+    const label=s.refundable?'Cancelar e receber reembolso':(s.plan==='annual'&&s.fidelityUntil?'Cancelar renovação':'Cancelar assinatura')
+    const note=s.refundable?'Você está dentro do prazo de 7 dias: ao cancelar, devolvemos 100% do valor pago e o acesso é encerrado.':(s.plan==='annual'&&s.fidelityUntil?`Seu plano anual tem fidelidade até ${fmtDate(s.fidelityUntil)}. Ao cancelar, as parcelas até lá continuam e a renovação é encerrada nessa data.`:'Ao cancelar, as próximas cobranças são encerradas e você continua com acesso até o fim do período já pago.')
+    rows+=`<p class="micro-note">${esc(note)}</p><button id="subscriptionCancelBtn" class="secondary" type="button">${esc(label)}</button>`
+  }
+  box.innerHTML=rows
+  $('subscriptionCancelBtn')?.addEventListener('click',()=>cancel(s))
+}
+
+async function load(){
+  $('subscriptionStatus').textContent='Carregando sua assinatura...'
+  $('subscriptionContent').innerHTML='';$('subscriptionMessage').textContent=''
+  try{const d=await call('status');render(d.subscription)}
+  catch(e){$('subscriptionStatus').textContent=e.message}
+}
+
+async function cancel(s){
+  const question=s.refundable
+    ?'Tem certeza que deseja cancelar sua assinatura?\n\nComo você está dentro do prazo de 7 dias, o valor pago será devolvido integralmente e o seu acesso será encerrado agora.'
+    :(s.plan==='annual'&&s.fidelityUntil
+      ?`Tem certeza que deseja cancelar a renovação do seu plano anual?\n\nAs parcelas até ${fmtDate(s.fidelityUntil)} continuam e o acesso segue normalmente até lá.`
+      :'Tem certeza que deseja cancelar sua assinatura?\n\nAs próximas cobranças serão encerradas e você continua com acesso até o fim do período já pago.')
+  if(!window.confirm(question))return
+  const btn=$('subscriptionCancelBtn');if(btn){btn.disabled=true;btn.textContent='Cancelando...'}
+  try{
+    const d=await call('cancel')
+    render(d.subscription)
+    $('subscriptionMessage').textContent=d.refunded?'Assinatura cancelada e reembolso solicitado ao cartão. O estorno aparece na fatura conforme o prazo da operadora.'
+      :d.refundPending?'Assinatura cancelada. Seu reembolso integral será processado e você será avisado por e-mail.'
+      :d.scheduled?'Cancelamento da renovação agendado.'
+      :'Assinatura cancelada. Não haverá novas cobranças.'
+    if(d.refunded||d.refundPending)setTimeout(async()=>{await window.axivaSupabase.auth.signOut();location.reload()},8000)
+  }catch(e){
+    $('subscriptionMessage').textContent=e.message
+    if(btn){btn.disabled=false;btn.textContent='Tentar novamente'}
+  }
+}
+
+document.querySelector('.nav-item[data-page="subscription"]')?.addEventListener('click',()=>{setTimeout(load,0)})

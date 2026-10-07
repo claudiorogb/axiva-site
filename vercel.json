@@ -19,6 +19,10 @@
       "destination": "/invest/index.html"
     },
     {
+      "source": "/invest/assinar",
+      "destination": "/invest/assinar/index.html"
+    },
+    {
       "source": "/crm/funil-de-vendas",
       "destination": "/crm/funil-de-vendas/index.html"
     },

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assinar AXIVA Invest</title>
+<meta name="robots" content="noindex,follow">
+<link rel="icon" href="/favicon-axiva-black.jpg" type="image/jpeg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+  :root { --navy:#08243f; --navy2:#071b31; --teal:#2cbab9; --teal2:#61d5d3; --ink:#0b192c; --muted:#5b6f86; --line:#d8e2ec; --bg:#f4f7fa; --err:#b42318; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:Inter,Arial,sans-serif; background:var(--bg); color:var(--ink); }
+  header { background:var(--navy2); padding:16px 20px; }
+  header a { color:#fff; text-decoration:none; font-weight:800; letter-spacing:.5px; }
+  header span { color:var(--teal); }
+  main { max-width:980px; margin:0 auto; padding:28px 16px 60px; display:grid; gap:20px; grid-template-columns:1fr; }
+  @media (min-width:860px) { main { grid-template-columns:340px 1fr; align-items:start; } }
+  .card { background:#fff; border:1px solid var(--line); border-radius:18px; padding:24px; }
+  .plan { background:var(--navy); color:#fff; border:1px solid var(--teal); }
+  .eyebrow { font-size:12px; font-weight:800; letter-spacing:1px; color:var(--teal); text-transform:uppercase; }
+  h1 { font-size:24px; margin:6px 0 16px; }
+  h2 { font-size:22px; margin:6px 0 4px; }
+  .price { font-size:40px; font-weight:800; margin:8px 0 2px; }
+  .muted { color:var(--muted); font-size:14px; line-height:1.5; }
+  .plan .muted { color:#c7d6e6; }
+  .switch { display:flex; gap:8px; margin:14px 0 18px; }
+  .switch button { flex:1; border:1px solid var(--teal); background:transparent; color:#fff; border-radius:10px; padding:9px; font-weight:700; cursor:pointer; font-family:inherit; }
+  .switch button.on { background:var(--teal); color:#000; }
+  ul.rules { padding-left:18px; margin:14px 0 0; font-size:14px; line-height:1.6; color:#dbe7f2; }
+  label { display:block; font-size:14px; font-weight:600; margin:14px 0 6px; }
+  input[type=text], input[type=email], input[type=tel] { width:100%; padding:12px 13px; border:1px solid var(--line); border-radius:10px; font-size:16px; font-family:inherit; }
+  input:focus { outline:2px solid var(--teal); border-color:var(--teal); }
+  .check { display:flex; gap:10px; align-items:flex-start; margin-top:18px; font-size:14px; line-height:1.5; }
+  .check input { margin-top:3px; width:18px; height:18px; flex:none; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; width:100%; min-height:52px; margin-top:20px; border:0; border-radius:14px; background:linear-gradient(90deg,var(--teal),var(--teal2)); color:#000; font-weight:800; font-size:16px; cursor:pointer; text-decoration:none; font-family:inherit; }
+  .btn[disabled] { opacity:.6; cursor:wait; }
+  .btn.secondary { background:#fff; border:1px solid var(--line); color:var(--ink); }
+  .error { color:var(--err); background:#fef3f2; border:1px solid #fecdca; border-radius:10px; padding:10px 12px; font-size:14px; margin-top:14px; }
+  .ok { color:#067647; background:#ecfdf3; border:1px solid #abefc6; border-radius:10px; padding:12px 14px; font-size:15px; margin-top:14px; line-height:1.5; }
+  .secure { display:flex; gap:8px; align-items:center; justify-content:center; margin-top:12px; font-size:13px; color:var(--muted); }
+  a.link { color:#0e7c7b; }
+  .hidden { display:none !important; }
+  .spinner { width:28px; height:28px; border:3px solid var(--line); border-top-color:var(--teal); border-radius:50%; animation:spin .9s linear infinite; margin:10px auto; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+</style>
+</head>
+<body>
+<header><a href="/invest">AXIVA <span>INVEST</span></a></header>
+<main>
+  <aside class="card plan" id="planCard">
+    <div class="eyebrow">Seu plano</div>
+    <div class="switch" role="group" aria-label="Escolha o plano">
+      <button type="button" data-plan="mensal">Mensal</button>
+      <button type="button" data-plan="anual">Anual</button>
+    </div>
+    <h2 id="planName">Plano Mensal</h2>
+    <div class="price" id="planPrice">R$ 12,98</div>
+    <div class="muted" id="planSub">por mês no cartão de crédito</div>
+    <ul class="rules" id="planRules"></ul>
+  </aside>
+
+  <section class="card" id="formCard">
+    <div class="eyebrow">Cadastro</div>
+    <h1>Seus dados para a assinatura</h1>
+    <p class="muted">Use o e-mail que você vai usar para entrar no AXIVA Invest. Depois do pagamento, enviaremos para ele o link para você definir sua senha.</p>
+    <form id="form" novalidate>
+      <label for="name">Nome completo</label>
+      <input type="text" id="name" autocomplete="name" maxlength="100" required>
+      <label for="cpf">CPF</label>
+      <input type="text" id="cpf" inputmode="numeric" autocomplete="off" maxlength="14" placeholder="000.000.000-00" required>
+      <label for="phone">Telefone (com DDD)</label>
+      <input type="tel" id="phone" inputmode="numeric" autocomplete="tel" maxlength="15" placeholder="(11) 99999-9999" required>
+      <label for="email">E-mail</label>
+      <input type="email" id="email" autocomplete="email" maxlength="120" required>
+      <div class="check">
+        <input type="checkbox" id="terms">
+        <label for="terms" style="margin:0;font-weight:400">Li e aceito os <a class="link" href="/termos" target="_blank" rel="noopener">Termos de Uso</a> e a <a class="link" href="/privacidade" target="_blank" rel="noopener">Política de Privacidade</a>, incluindo as regras de cancelamento deste plano.</label>
+      </div>
+      <div class="error hidden" id="err" role="alert"></div>
+      <button class="btn" type="submit" id="submit">Ir para pagamento</button>
+      <div class="secure">Pagamento seguro com cartão de crédito, processado pelo Asaas.</div>
+    </form>
+  </section>
+
+  <section class="card hidden" id="returnCard" aria-live="polite">
+    <div class="eyebrow">Pagamento</div>
+    <h1 id="retTitle">Confirmando seu pagamento…</h1>
+    <div class="spinner" id="retSpin"></div>
+    <p class="muted" id="retText">Assim que o pagamento for confirmado, enviaremos para o seu e-mail o link para definir sua senha de acesso.</p>
+    <a class="btn hidden" id="retLogin" href="/invest/private">Ir para o login</a>
+    <a class="btn secondary hidden" id="retRetry" href="/invest/assinar">Tentar novamente</a>
+  </section>
+</main>
+<script>
+(function () {
+  var API = 'https://lhnzpxjjfalxmlkjysor.supabase.co/functions/v1/invest-billing';
+  var PLANS = {
+    mensal: { id: 'monthly', name: 'Plano Mensal', price: 'R$ 12,98', sub: 'por mês no cartão de crédito', rules: [
+      'Cobrança automática todo mês no cartão.',
+      'Desistência em até 7 dias após o pagamento: devolvemos 100% do valor.',
+      'Depois disso, você pode cancelar a renovação a qualquer momento; o acesso continua até o fim do mês já pago.'
+    ] },
+    anual: { id: 'annual', name: 'Plano Anual', price: 'R$ 11,88', sub: 'por mês no cartão de crédito, 12x (fidelidade de 12 meses)', rules: [
+      'Cobrança automática de R$ 11,88 por mês no cartão, com fidelidade de 12 meses.',
+      'Desistência em até 7 dias após o pagamento: devolvemos 100% do valor.',
+      'Depois disso, as 12 parcelas do período contratado continuam; você pode cancelar a renovação para depois dos 12 meses.'
+    ] }
+  };
+  var qs = new URLSearchParams(location.search);
+  var plan = PLANS[qs.get('plano')] ? qs.get('plano') : 'mensal';
+  var $ = function (id) { return document.getElementById(id); };
+
+  function renderPlan() {
+    var p = PLANS[plan];
+    $('planName').textContent = p.name;
+    $('planPrice').textContent = p.price;
+    $('planSub').textContent = p.sub;
+    $('planRules').innerHTML = '';
+    p.rules.forEach(function (r) { var li = document.createElement('li'); li.textContent = r; $('planRules').appendChild(li); });
+    document.querySelectorAll('.switch button').forEach(function (b) { b.classList.toggle('on', b.dataset.plan === plan); });
+  }
+  document.querySelectorAll('.switch button').forEach(function (b) {
+    b.addEventListener('click', function () { plan = b.dataset.plan; renderPlan(); history.replaceState(null, '', '?plano=' + plan); });
+  });
+  renderPlan();
+
+  var digits = function (v) { return String(v || '').replace(/\D/g, ''); };
+  $('cpf').addEventListener('input', function (e) {
+    var d = digits(e.target.value).slice(0, 11);
+    e.target.value = d.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+  });
+  $('phone').addEventListener('input', function (e) {
+    var d = digits(e.target.value).slice(0, 11);
+    e.target.value = d.length > 10 ? d.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3') : d.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3').replace(/[-\s(]+$/, '');
+  });
+  function validCpf(c) {
+    if (!/^\d{11}$/.test(c) || /^(\d)\1{10}$/.test(c)) return false;
+    var calc = function (len) { var s = 0; for (var i = 0; i < len; i++) s += Number(c[i]) * (len + 1 - i); var r = (s * 10) % 11; return r === 10 ? 0 : r; };
+    return calc(9) === Number(c[9]) && calc(10) === Number(c[10]);
+  }
+  function showError(msg) { $('err').textContent = msg; $('err').classList.remove('hidden'); }
+
+  $('form').addEventListener('submit', async function (ev) {
+    ev.preventDefault();
+    $('err').classList.add('hidden');
+    var name = $('name').value.trim().replace(/\s+/g, ' ');
+    var cpf = digits($('cpf').value), phone = digits($('phone').value), email = $('email').value.trim().toLowerCase();
+    if (name.length < 5 || name.indexOf(' ') < 0) return showError('Informe seu nome completo.');
+    if (!validCpf(cpf)) return showError('CPF inválido. Confira os números.');
+    if (phone.length < 10) return showError('Informe um telefone com DDD.');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showError('Informe um e-mail válido.');
+    if (!$('terms').checked) return showError('Para continuar, aceite os Termos de Uso.');
+    var btn = $('submit'); btn.disabled = true; btn.textContent = 'Gerando pagamento…';
+    try {
+      var r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'start', plan: PLANS[plan].id, name: name, cpf: cpf, phone: phone, email: email }) });
+      var data = await r.json().catch(function () { return {}; });
+      if (!data.ok || !data.checkoutUrl) throw new Error(data.error || 'Não foi possível gerar o pagamento agora. Tente novamente.');
+      try { sessionStorage.setItem('axiva_invest_email', email); } catch (e) {}
+      location.assign(data.checkoutUrl);
+    } catch (e) {
+      showError(e.message || 'Não foi possível gerar o pagamento agora. Tente novamente.');
+      btn.disabled = false; btn.textContent = 'Ir para pagamento';
+    }
+  });
+
+  // Volta do checkout do Asaas.
+  var orderId = qs.get('pedido'), token = qs.get('t'), ret = qs.get('retorno');
+  if (orderId && token) {
+    $('formCard').classList.add('hidden'); $('planCard').classList.add('hidden'); $('returnCard').classList.remove('hidden');
+    var email = ''; try { email = sessionStorage.getItem('axiva_invest_email') || ''; } catch (e) {}
+    if (ret === 'cancelado' || ret === 'expirado') {
+      $('retSpin').classList.add('hidden');
+      $('retTitle').textContent = ret === 'expirado' ? 'O link de pagamento expirou' : 'Pagamento não concluído';
+      $('retText').textContent = 'Nenhuma cobrança foi feita. Você pode tentar novamente quando quiser.';
+      $('retRetry').classList.remove('hidden');
+      return;
+    }
+    var tries = 0;
+    var done = function () {
+      $('retSpin').classList.add('hidden');
+      $('retTitle').textContent = 'Pagamento confirmado!';
+      $('retText').textContent = 'Sua assinatura do AXIVA Invest está ativa. Enviamos para ' + (email || 'o seu e-mail') + ' o link para você definir sua senha. Depois, é só entrar com seu e-mail e a senha escolhida. Se não encontrar o e-mail, confira a caixa de spam.';
+      $('retLogin').classList.remove('hidden');
+    };
+    var poll = async function () {
+      tries++;
+      try {
+        var r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'status', orderId: orderId, token: token }) });
+        var d = await r.json();
+        if (d && d.paid) return done();
+      } catch (e) {}
+      if (tries < 40) return setTimeout(poll, 4000);
+      $('retSpin').classList.add('hidden');
+      $('retTitle').textContent = 'Pagamento em análise';
+      $('retText').textContent = 'O Asaas ainda está confirmando o seu pagamento. Assim que for aprovado, você receberá no seu e-mail o link para definir sua senha. Não é preciso pagar de novo.';
+      $('retLogin').classList.remove('hidden');
+    };
+    poll();
+  }
+})();
+</script>
+</body>
+</html>

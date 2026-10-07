@@ -116,7 +116,7 @@ async function loadPrivateArea(){
     }
     currentRole=me.access?.role||'subscriber'
     const plan=me.access?.plan||'assinante'
-    accessChip.textContent=currentRole==='admin'?'Administrador':`Plano ${plan==='annual'?'anual':plan}`
+    accessChip.textContent=currentRole==='admin'?'Administrador':`Plano ${({annual:'anual',monthly:'mensal',quarterly:'trimestral',semiannual:'semestral'})[plan]||plan}`
     $('adminNav').classList.toggle('hidden',currentRole!=='admin')
     accessValidated=true
     showApp()
@@ -482,7 +482,7 @@ document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click'
   }
   document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));btn.classList.add('active')
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(btn.dataset.page+'Page')?.classList.add('active')
-  const pageTitles={overview:'PÁGINA INICIAL',selection:'',analysis:'',company:'ANALISAR EMPRESA',compare:'',watch:'MINHA LISTA',alerts:'MEUS ALERTAS',strategies:'',education:'',method:'METODOLOGIA',admin:'ADMINISTRAÇÃO'}
+  const pageTitles={overview:'PÁGINA INICIAL',selection:'',analysis:'',company:'ANALISAR EMPRESA',compare:'',watch:'MINHA LISTA',alerts:'MEUS ALERTAS',strategies:'',education:'',method:'METODOLOGIA',subscription:'MINHA ASSINATURA',admin:'ADMINISTRAÇÃO'}
   const pageTitle=pageTitles[btn.dataset.page]
   $('pageTitle').textContent=pageTitle!==undefined?pageTitle:btn.textContent.trim()
   if(btn.dataset.page==='admin')await loadAdminUsers()
