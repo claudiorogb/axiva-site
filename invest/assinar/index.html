@@ -79,6 +79,10 @@
         <input type="checkbox" id="terms">
         <label for="terms" style="margin:0;font-weight:400">Li e aceito os <a class="link" href="/invest/termos" target="_blank" rel="noopener">Termos de Uso</a> e a <a class="link" href="/invest/privacidade" target="_blank" rel="noopener">Política de Privacidade</a>, incluindo as regras de cancelamento deste plano.</label>
       </div>
+      <div class="check">
+        <input type="checkbox" id="renewal">
+        <label for="renewal" style="margin:0;font-weight:400">Li e concordo: <strong>a assinatura renova automaticamente até você cancelar.</strong> Você pode cancelar a qualquer momento em Minha assinatura, na área do assinante.</label>
+      </div>
       <div class="error hidden" id="err" role="alert"></div>
       <button class="btn" type="submit" id="submit">Ir para pagamento</button>
       <div class="secure">Pagamento seguro com cartão de crédito, processado pelo Asaas.</div>
@@ -99,14 +103,15 @@
   var API = 'https://lhnzpxjjfalxmlkjysor.supabase.co/functions/v1/invest-billing';
   var PLANS = {
     mensal: { id: 'monthly', name: 'Plano Mensal', price: 'R$ 12,98', sub: 'por mês no cartão de crédito', rules: [
-      'Cobrança automática todo mês no cartão.',
+      'Renovação automática todo mês no cartão, até você cancelar.',
       'Desistência em até 7 dias após o pagamento: devolvemos 100% do valor.',
       'Depois disso, você pode cancelar a renovação a qualquer momento; o acesso continua até o fim do mês já pago.'
     ] },
     anual: { id: 'annual', name: 'Plano Anual', price: 'R$ 11,88', sub: 'por mês no cartão de crédito, 12x (fidelidade de 12 meses)', rules: [
       'Cobrança automática de R$ 11,88 por mês no cartão, com fidelidade de 12 meses.',
+      'Ao completar 12 meses, o plano renova automaticamente por mais 12 meses. Avisamos por e-mail 30 dias antes.',
       'Desistência em até 7 dias após o pagamento: devolvemos 100% do valor.',
-      'Depois disso, as 12 parcelas do período contratado continuam; você pode cancelar a renovação para depois dos 12 meses.'
+      'Depois disso, as parcelas do período de 12 meses continuam; você pode cancelar a renovação a qualquer momento e ela é encerrada ao fim do período.'
     ] }
   };
   var qs = new URLSearchParams(location.search);
@@ -155,6 +160,7 @@
     if (phone.length < 10) return showError('Informe um telefone com DDD.');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showError('Informe um e-mail válido.');
     if (!$('terms').checked) return showError('Para continuar, aceite os Termos de Uso.');
+    if (!$('renewal').checked) return showError('Para continuar, confirme que leu sobre a renovação automática.');
     var btn = $('submit'); btn.disabled = true; btn.textContent = 'Gerando pagamento…';
     try {
       var r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'start', plan: PLANS[plan].id, name: name, cpf: cpf, phone: phone, email: email }) });
