@@ -45,7 +45,8 @@ function render(s){
     <p>Situação: ${esc(statusText)}</p>
     ${s.firstPaidAt?`<p>Assinado em: ${fmtDate(s.firstPaidAt)}</p>`:''}
     ${s.status==='active'&&s.accessUntil?`<p>Período pago até: ${fmtDate(s.accessUntil)}</p>`:''}
-    ${s.plan==='annual'&&s.fidelityUntil?`<p>Fidelidade até: ${fmtDate(s.fidelityUntil)}</p>`:''}`
+    ${s.plan==='annual'&&s.fidelityUntil?`<p>Período de 12 meses até: ${fmtDate(s.fidelityUntil)}</p>`:''}
+    ${s.plan==='annual'&&s.fidelityUntil&&s.status==='active'?`<p class="micro-note">Renovação automática por mais 12 meses em ${fmtDate(s.fidelityUntil)}. Para não renovar, cancele até o dia anterior.</p>`:''}`
   if(['cancelled','refunded','refund_pending'].includes(s.status)){
     if(s.purgeOn)rows+=`<p class="micro-note">Depois do fim do acesso, sua conta e seus dados (lista, alertas e estratégias) ficam guardados por 30 dias, até ${fmtDate(s.purgeOn)}, e então são apagados definitivamente.</p>`
     rows+=`<a class="sub-renew" href="${esc(renewUrl(s))}">Renovar plano</a>`
@@ -55,7 +56,7 @@ function render(s){
   }
   if(s.status==='active'){
     const label=s.refundable?'Cancelar e receber reembolso':(s.plan==='annual'&&s.fidelityUntil?'Cancelar renovação':'Cancelar assinatura')
-    const note=s.refundable?'Você está dentro do prazo de 7 dias: ao cancelar, devolvemos 100% do valor pago e o acesso é encerrado.':(s.plan==='annual'&&s.fidelityUntil?`Seu plano anual tem fidelidade até ${fmtDate(s.fidelityUntil)}. Ao cancelar, as parcelas até lá continuam e a renovação é encerrada nessa data.`:'Ao cancelar, as próximas cobranças são encerradas e você continua com acesso até o fim do período já pago.')
+    const note=s.refundable?'Você está dentro do prazo de 7 dias: ao cancelar, devolvemos 100% do valor pago e o acesso é encerrado.':(s.plan==='annual'&&s.fidelityUntil?`Seu plano anual tem fidelidade até ${fmtDate(s.fidelityUntil)}. Ao cancelar, as parcelas até lá continuam e a assinatura é encerrada nessa data, sem renovar.`:'Ao cancelar, as próximas cobranças são encerradas e você continua com acesso até o fim do período já pago.')
     rows+=`<p class="micro-note">${esc(note)}</p><button id="subscriptionCancelBtn" class="secondary" type="button">${esc(label)}</button>`
   }
   box.innerHTML=rows
