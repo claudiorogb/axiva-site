@@ -522,5 +522,13 @@ document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click'
   if(btn.dataset.page==='admin')await loadAdminUsers()
 }))
 
+// Link do e-mail "Defina sua senha" (?token_hash=...&type=recovery): valida o código aqui mesmo,
+// sem depender do redirecionamento do Supabase.
+const recoveryHash=new URLSearchParams(location.search).get('token_hash')
+if(recoveryHash&&recoveryMode){
+  const {error}=await supabase.auth.verifyOtp({token_hash:recoveryHash,type:'recovery'})
+  history.replaceState(null,'',location.pathname+'?type=recovery')
+  if(error){await supabase.auth.signOut().catch(()=>{})}
+}
 const {data:{session}}=await supabase.auth.getSession()
 if(recoveryMode){if(session)showResetView();else showLogin('Link inválido ou expirado. Solicite uma nova recuperação de senha.')}else if(session)await loadPrivateArea();else showLogin()
