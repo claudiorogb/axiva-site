@@ -77,7 +77,7 @@
       <input type="email" id="email" autocomplete="email" maxlength="120" required>
       <div class="check">
         <input type="checkbox" id="terms">
-        <label for="terms" style="margin:0;font-weight:400">Li e aceito os <a class="link" href="/termos" target="_blank" rel="noopener">Termos de Uso</a> e a <a class="link" href="/privacidade" target="_blank" rel="noopener">Política de Privacidade</a>, incluindo as regras de cancelamento deste plano.</label>
+        <label for="terms" style="margin:0;font-weight:400">Li e aceito os <a class="link" href="/invest/termos" target="_blank" rel="noopener">Termos de Uso</a> e a <a class="link" href="/invest/privacidade" target="_blank" rel="noopener">Política de Privacidade</a>, incluindo as regras de cancelamento deste plano.</label>
       </div>
       <div class="error hidden" id="err" role="alert"></div>
       <button class="btn" type="submit" id="submit">Ir para pagamento</button>
@@ -126,6 +126,8 @@
     b.addEventListener('click', function () { plan = b.dataset.plan; renderPlan(); history.replaceState(null, '', '?plano=' + plan); });
   });
   renderPlan();
+  // Renovação vinda da área do assinante: e-mail já preenchido.
+  if (qs.get('email')) $('email').value = String(qs.get('email')).slice(0, 120);
 
   var digits = function (v) { return String(v || '').replace(/\D/g, ''); };
   $('cpf').addEventListener('input', function (e) {

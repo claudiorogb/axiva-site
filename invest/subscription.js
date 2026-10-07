@@ -2,12 +2,18 @@
 // Regras: desistência em até 7 dias após o pagamento = reembolso integral e fim do acesso;
 // depois disso, no Mensal encerra as próximas cobranças (acesso até o fim do mês pago);
 // no Anual as 12 parcelas continuam e a renovação é encerrada ao fim da fidelidade.
+// Após o fim do acesso de uma assinatura cancelada, a conta fica guardada por 30 dias e depois é apagada.
 const API='https://zbtijblvkzkeposvkfob.supabase.co/functions/v1/invest-subscription'
 const KEY='sb_publishable_1hWexWrd_y-m36-DaXF5Hw_p33Ginm_'
 const $=id=>document.getElementById(id)
 const fmtDate=v=>{if(!v)return '';const m=String(v).match(/^(\d{4})-(\d{2})-(\d{2})/);if(m&&String(v).length<=10)return `${m[3]}/${m[2]}/${m[1]}`;const d=new Date(v);return isNaN(d)?'':d.toLocaleDateString('pt-BR',{timeZone:'America/Sao_Paulo'})}
 const money=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c])
+
+function renewUrl(s){
+  const email=window.axivaUserEmail||document.getElementById('userEmail')?.textContent||''
+  return `/invest/assinar?plano=${s?.plan==='annual'?'anual':'mensal'}&email=${encodeURIComponent(email.trim())}`
+}
 
 async function call(action){
   const supabase=window.axivaSupabase
@@ -40,6 +46,13 @@ function render(s){
     ${s.firstPaidAt?`<p>Assinado em: ${fmtDate(s.firstPaidAt)}</p>`:''}
     ${s.status==='active'&&s.accessUntil?`<p>Período pago até: ${fmtDate(s.accessUntil)}</p>`:''}
     ${s.plan==='annual'&&s.fidelityUntil?`<p>Fidelidade até: ${fmtDate(s.fidelityUntil)}</p>`:''}`
+  if(['cancelled','refunded','refund_pending'].includes(s.status)){
+    if(s.purgeOn)rows+=`<p class="micro-note">Depois do fim do acesso, sua conta e seus dados (lista, alertas e estratégias) ficam guardados por 30 dias, até ${fmtDate(s.purgeOn)}, e então são apagados definitivamente.</p>`
+    rows+=`<a class="sub-renew" href="${esc(renewUrl(s))}">Renovar plano</a>`
+  }
+  if(s.status==='cancel_scheduled'){
+    rows+=`<p class="micro-note">Mudou de ideia? Você pode manter sua assinatura e ela seguirá renovando normalmente.</p><button id="subscriptionResumeBtn" class="sub-renew" type="button">Manter minha assinatura</button>`
+  }
   if(s.status==='active'){
     const label=s.refundable?'Cancelar e receber reembolso':(s.plan==='annual'&&s.fidelityUntil?'Cancelar renovação':'Cancelar assinatura')
     const note=s.refundable?'Você está dentro do prazo de 7 dias: ao cancelar, devolvemos 100% do valor pago e o acesso é encerrado.':(s.plan==='annual'&&s.fidelityUntil?`Seu plano anual tem fidelidade até ${fmtDate(s.fidelityUntil)}. Ao cancelar, as parcelas até lá continuam e a renovação é encerrada nessa data.`:'Ao cancelar, as próximas cobranças são encerradas e você continua com acesso até o fim do período já pago.')
@@ -47,6 +60,7 @@ function render(s){
   }
   box.innerHTML=rows
   $('subscriptionCancelBtn')?.addEventListener('click',()=>cancel(s))
+  $('subscriptionResumeBtn')?.addEventListener('click',resume)
 }
 
 async function load(){
@@ -78,4 +92,34 @@ async function cancel(s){
   }
 }
 
+async function resume(){
+  const btn=$('subscriptionResumeBtn');if(btn){btn.disabled=true;btn.textContent='Salvando...'}
+  try{const d=await call('resume');render(d.subscription);$('subscriptionMessage').textContent='Pronto! Sua assinatura continua ativa.';showTopBanner(d.subscription)}
+  catch(e){$('subscriptionMessage').textContent=e.message;if(btn){btn.disabled=false;btn.textContent='Manter minha assinatura'}}
+}
+
+// Aviso no topo da área logada para quem cancelou e ainda está no período pago.
+function showTopBanner(s){
+  let el=$('subscriptionTopBanner')
+  const show=s&&['cancelled','refunded','refund_pending'].includes(s.status)&&s.accessUntil&&new Date(s.accessUntil).getTime()>Date.now()
+  if(!show){el?.remove();return}
+  if(!el){
+    el=document.createElement('div');el.id='subscriptionTopBanner';el.className='sub-banner'
+    const main=document.querySelector('#appView .main');const first=main?.querySelector('.page')
+    if(!main)return
+    main.insertBefore(el,first||null)
+  }
+  el.innerHTML=`<span>Sua assinatura foi cancelada. Você tem acesso até ${esc(fmtDate(s.accessUntil))}.</span><a href="${esc(renewUrl(s))}">Renovar plano</a>`
+}
+
 document.querySelector('.nav-item[data-page="subscription"]')?.addEventListener('click',()=>{setTimeout(load,0)})
+
+// Ao entrar na área logada, verifica a situação da assinatura uma vez para exibir o aviso.
+let checked=false
+const watcher=setInterval(async()=>{
+  const app=document.getElementById('appView')
+  if(checked||!app||app.classList.contains('hidden'))return
+  checked=true;clearInterval(watcher)
+  try{const d=await call('status');showTopBanner(d.subscription)}catch{}
+},1000)
+setTimeout(()=>clearInterval(watcher),60000)
