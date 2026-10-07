@@ -57,8 +57,8 @@ const pct=v=>v==null?'—':(Number(v)*100).toLocaleString('pt-BR',{minimumFracti
 const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))
 const n=v=>{if(v===null||v===undefined||v==='')return null;const x=Number(v);return Number.isFinite(x)?x:null}
 
-function showLogin(msg=''){accessValidated=false;loginView.classList.remove('hidden');appView.classList.add('hidden');$('resetView').classList.add('hidden');loginMessage.textContent=msg}
-function showApp(){if(recoveryMode){showResetView();return}if(!accessValidated){showLogin('Faça login para acessar a área exclusiva.');return}loginView.classList.add('hidden');$('resetView').classList.add('hidden');appView.classList.remove('hidden')}
+function showLogin(msg=''){accessValidated=false;$('endedView')?.classList.add('hidden');loginView.classList.remove('hidden');appView.classList.add('hidden');$('resetView').classList.add('hidden');loginMessage.textContent=msg}
+function showApp(){if(recoveryMode){showResetView();return}if(!accessValidated){showLogin('Faça login para acessar a área exclusiva.');return}loginView.classList.add('hidden');$('resetView').classList.add('hidden');$('endedView')?.classList.add('hidden');appView.classList.remove('hidden')}
 function showResetView(){loginView.classList.add('hidden');appView.classList.add('hidden');$('resetView').classList.remove('hidden')}
 // O link de recuperação cria uma sessão temporária; não significa que a senha já foi alterada.
 supabase.auth.onAuthStateChange((event)=>{
@@ -116,16 +116,50 @@ async function loadPrivateArea(){
     }
     currentRole=me.access?.role||'subscriber'
     const plan=me.access?.plan||'assinante'
-    accessChip.textContent=currentRole==='admin'?'Administrador':`Plano ${plan==='annual'?'anual':plan}`
+    accessChip.textContent=currentRole==='admin'?'Administrador':`Plano ${({annual:'anual',monthly:'mensal',quarterly:'trimestral',semiannual:'semestral'})[plan]||plan}`
     $('adminNav').classList.toggle('hidden',currentRole!=='admin')
     accessValidated=true
     showApp()
     await Promise.all([loadSelection(),loadAnalysisData(),loadOverviewStrategies(),loadOverviewMarket()])
   }catch(e){
+    // Assinatura encerrada: a conta continua logada só para ver a situação e renovar o plano.
+    if(e.status===403&&await showEndedView())return
     await supabase.auth.signOut()
     showLogin(e.status===403?'Sua conta existe, mas o acesso à área exclusiva não está ativo.':'Não foi possível validar seu acesso. Tente novamente.')
   }
 }
+
+const SUBSCRIPTION_API=`${SUPABASE_URL}/functions/v1/invest-subscription`
+const brDay=v=>v?new Date(v).toLocaleDateString('pt-BR',{timeZone:'America/Sao_Paulo'}):''
+// Tela para quem cancelou (ou teve o acesso encerrado): mostra até quando os dados ficam guardados,
+// avisa nos 5 dias antes da exclusão e oferece "Renovar plano".
+async function showEndedView(){
+  try{
+    const {data:{session}}=await supabase.auth.getSession()
+    if(!session)return false
+    const r=await fetch(SUBSCRIPTION_API,{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPABASE_KEY,Authorization:`Bearer ${session.access_token}`},body:JSON.stringify({action:'status'})})
+    const d=await r.json().catch(()=>({}))
+    const s=d?.subscription||null
+    const email=session.user?.email||''
+    const plano=s?.plan==='annual'?'anual':'mensal'
+    $('endedRenew').href=`/invest/assinar?plano=${plano}&email=${encodeURIComponent(email)}`
+    if(s?.purgeOn){
+      $('endedText').textContent=`Sua lista, alertas e estratégias ficam guardados até ${brDay(s.purgeOn)}. Renove seu plano para voltar a acessar normalmente, com tudo como estava.`
+      const days=Math.ceil((new Date(s.purgeOn).getTime()-Date.now())/86400000)
+      if(days<=5&&days>=0){
+        $('endedBanner').textContent=`Atenção: ${days<=1?'falta 1 dia':`faltam ${days} dias`} para sua conta e todos os seus dados serem apagados definitivamente (em ${brDay(s.purgeOn)}). Renove seu plano para mantê-los.`
+        $('endedBanner').classList.remove('hidden')
+      }
+    }else{
+      $('endedText').textContent='Seu acesso à área exclusiva não está ativo no momento. Renove seu plano para voltar a acessar.'
+    }
+    accessValidated=false
+    loginView.classList.add('hidden');appView.classList.add('hidden');$('resetView').classList.add('hidden')
+    $('endedView').classList.remove('hidden')
+    return true
+  }catch{return false}
+}
+$('endedLogout').addEventListener('click',async()=>{$('endedView').classList.add('hidden');await supabase.auth.signOut()})
 
 
 function renderOverviewHighlights(rows){
@@ -482,7 +516,7 @@ document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click'
   }
   document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));btn.classList.add('active')
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(btn.dataset.page+'Page')?.classList.add('active')
-  const pageTitles={overview:'PÁGINA INICIAL',selection:'',analysis:'',company:'ANALISAR EMPRESA',compare:'',watch:'MINHA LISTA',alerts:'MEUS ALERTAS',strategies:'',education:'',method:'METODOLOGIA',admin:'ADMINISTRAÇÃO'}
+  const pageTitles={overview:'PÁGINA INICIAL',selection:'',analysis:'',company:'ANALISAR EMPRESA',compare:'',watch:'MINHA LISTA',alerts:'MEUS ALERTAS',strategies:'',education:'',method:'METODOLOGIA',subscription:'MINHA ASSINATURA',admin:'ADMINISTRAÇÃO'}
   const pageTitle=pageTitles[btn.dataset.page]
   $('pageTitle').textContent=pageTitle!==undefined?pageTitle:btn.textContent.trim()
   if(btn.dataset.page==='admin')await loadAdminUsers()

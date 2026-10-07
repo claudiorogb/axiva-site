@@ -19,6 +19,18 @@
       "destination": "/invest/index.html"
     },
     {
+      "source": "/invest/assinar",
+      "destination": "/invest/assinar/index.html"
+    },
+    {
+      "source": "/invest/privacidade",
+      "destination": "/invest/privacidade/index.html"
+    },
+    {
+      "source": "/invest/termos",
+      "destination": "/invest/termos/index.html"
+    },
+    {
       "source": "/crm/funil-de-vendas",
       "destination": "/crm/funil-de-vendas/index.html"
     },
