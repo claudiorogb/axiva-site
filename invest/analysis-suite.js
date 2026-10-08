@@ -93,7 +93,7 @@ function setRange(id,value){
 }
 function suiteDefaults(){
   setRange('pPl',35);setRange('pPvp',13.5);setRange('pRoe',0);setRange('pRoic',0);setRange('pDy',0)
-  ;['privateTicker','advSector','advQuality','advDiscount','advGrowth','advDebt','advPrice','advEbit','advNet','advCurrentRatio','naturalQuery'].forEach(id=>{if($(id))$(id).value=''})
+  ;['privateTicker','advSector','advQuality','advDiscount','advGrowth','advDebt','advDebtEbitda','advPrice','advEbit','advNet','advCurrentRatio','naturalQuery'].forEach(id=>{if($(id))$(id).value=''})
   document.querySelectorAll('.chip-btn').forEach(x=>x.classList.remove('active'))
 }
 function filterState(){
@@ -109,6 +109,7 @@ function filterState(){
     min_discount:fraction($('advDiscount')?.value),
     min_revenue_growth_5y:fraction($('advGrowth')?.value),
     max_net_debt_to_equity:n($('advDebt')?.value),
+    max_net_debt_to_ebitda:n($('advDebtEbitda')?.value),
     max_price:n($('advPrice')?.value),
     min_ebit_margin:fraction($('advEbit')?.value),
     min_net_margin:fraction($('advNet')?.value),
@@ -126,7 +127,7 @@ function rowMatches(r,c){
   const tests=[
     ['max_pl','pl','max'],['max_pvp','pvp','max'],['min_roe','roe','min'],['min_roic','roic','min'],['min_dy','dividend_yield','min'],
     ['min_quality','quality_score','min'],['min_discount','discount_pct','min'],['min_revenue_growth_5y','revenue_growth_5y','min'],
-    ['max_net_debt_to_equity','net_debt_to_equity','max'],['max_price','current_price','max'],['min_ebit_margin','ebit_margin','min'],
+    ['max_net_debt_to_equity','net_debt_to_equity','max'],['max_net_debt_to_ebitda','net_debt_to_ebitda','lt'],['max_price','current_price','max'],['min_ebit_margin','ebit_margin','min'],
     ['min_net_margin','net_margin','min'],['min_current_ratio','current_ratio','min']
   ]
   for(const [ck,rk,dir] of tests){
@@ -134,6 +135,7 @@ function rowMatches(r,c){
     const rv=n(r[rk]);if(rv==null)return false
     if(dir==='min'&&rv<c[ck])return false
     if(dir==='max'&&rv>c[ck])return false
+    if(dir==='lt'&&rv>=c[ck])return false
   }
   return true
 }
@@ -150,6 +152,7 @@ function criteriaPills(c){
   if(c.min_discount!=null)labels.push(['Desconto','≥ '+pct(c.min_discount)])
   if(c.min_revenue_growth_5y!=null)labels.push(['Cresc. 5a','≥ '+pct(c.min_revenue_growth_5y)])
   if(c.max_net_debt_to_equity!=null)labels.push(['Dív./PL','≤ '+num(c.max_net_debt_to_equity,1)])
+  if(c.max_net_debt_to_ebitda!=null)labels.push(['Dív. Líq./EBITDA','< '+num(c.max_net_debt_to_ebitda,1)])
   if(c.max_price!=null)labels.push(['Preço','≤ '+money(c.max_price)])
   if(c.min_ebit_margin!=null)labels.push(['Margem EBIT','≥ '+pct(c.min_ebit_margin)])
   if(c.min_net_margin!=null)labels.push(['Margem líquida','≥ '+pct(c.min_net_margin)])
@@ -302,7 +305,7 @@ $('strategyQuickConfirm')?.addEventListener('click',async()=>{
   const name=String($('strategyQuickName')?.value||'').trim()
   if(name.length<2){toast('Informe um nome para a estratégia.');return}
   const fs=filterState()
-  const body={action:'create',name,sector:fs.sector||null,max_pl:isActiveValue('max_pl',fs.max_pl)?fs.max_pl:null,max_pvp:isActiveValue('max_pvp',fs.max_pvp)?fs.max_pvp:null,min_roe:isActiveValue('min_roe',fs.min_roe)?fs.min_roe:null,min_roic:isActiveValue('min_roic',fs.min_roic)?fs.min_roic:null,min_dy:isActiveValue('min_dy',fs.min_dy)?fs.min_dy:null,min_quality:fs.min_quality,min_discount:fs.min_discount,min_revenue_growth_5y:fs.min_revenue_growth_5y,max_net_debt_to_equity:fs.max_net_debt_to_equity,max_price:fs.max_price,min_ebit_margin:fs.min_ebit_margin,min_net_margin:fs.min_net_margin,min_current_ratio:fs.min_current_ratio}
+  const body={action:'create',name,sector:fs.sector||null,max_pl:isActiveValue('max_pl',fs.max_pl)?fs.max_pl:null,max_pvp:isActiveValue('max_pvp',fs.max_pvp)?fs.max_pvp:null,min_roe:isActiveValue('min_roe',fs.min_roe)?fs.min_roe:null,min_roic:isActiveValue('min_roic',fs.min_roic)?fs.min_roic:null,min_dy:isActiveValue('min_dy',fs.min_dy)?fs.min_dy:null,min_quality:fs.min_quality,min_discount:fs.min_discount,min_revenue_growth_5y:fs.min_revenue_growth_5y,max_net_debt_to_equity:fs.max_net_debt_to_equity,max_net_debt_to_ebitda:fs.max_net_debt_to_ebitda,max_price:fs.max_price,min_ebit_margin:fs.min_ebit_margin,min_net_margin:fs.min_net_margin,min_current_ratio:fs.min_current_ratio}
   try{
     await api('user-strategies',{method:'POST',body})
     toast('Estratégia salva.')
@@ -383,7 +386,8 @@ function companyFundamentalsPanel(r){
     ['Margem líquida',pct(r.net_margin)],
     ['P/L',num(r.pl)],
     ['P/VP',num(r.pvp)],
-    ['DY',pct(r.dividend_yield)]
+    ['DY',pct(r.dividend_yield)],
+    ['Dívida Líq./EBITDA',num(r.net_debt_to_ebitda)]
   ]
   return '<div class="fundamentals-grid">'+items.map(([label,value])=>'<div class="fundamental-item"><span>'+esc(label)+'</span><strong>'+value+'</strong></div>').join('')+'</div>'
 }
@@ -503,6 +507,7 @@ async function renderCompany(r){
       metric('ROE',pct(data.roe),'setor: '+pct(sector.roe.median),'Retorno sobre patrimônio líquido.')+
       metric('DY',pct(data.dividend_yield),'média do setor: '+pct(sector.dy.mean),'Dividend Yield com base nos dados fundamentalistas atuais.')+
       metric('Preço Graham',money(data.graham_price),'referência de Graham','Estimativa de valor baseada na fórmula de Benjamin Graham quando LPA e VPA válidos estão disponíveis.')+
+      metric('Dívida Líq./EBITDA',num(data.net_debt_to_ebitda),'limite estratégico: abaixo de 3','Indicador de alavancagem. N/D significa que a métrica não está disponível ou não é aplicável, como em bancos.')+
     '</div>'+
     '<div class="insight-grid"><article class="insight-card"><h3>Resumo</h3><p class="auto-summary">'+esc(autoSummary(data))+'</p><div class="result-action-bar"><button class="mini-btn secondary" id="companyExportInline">Exportar análise</button><button class="mini-btn secondary" id="companyAddWatchInline">Adicionar à minha lista</button></div></article><article class="insight-card"><h3>Margem de segurança</h3>'+safetyPanel(data)+'</article></div>'+
     '<div class="insight-grid company-analysis-main"><div class="company-analysis-left"><article class="insight-card"><h3>Fundamentos da empresa</h3>'+companyFundamentalsPanel(data)+'</article><article class="insight-card"><h3>Resumo</h3>'+companySummaryPanel(data)+'</article><article class="insight-card"><h3>Empresa x setor</h3>'+sectorPanel(data)+'</article></div><article class="insight-card company-quality-card"><h3>Qualidade: como a nota foi formada</h3><div class="quality-breakdown">'+qualityBreakdown(data)+'</div></article></div>'+
