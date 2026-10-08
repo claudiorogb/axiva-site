@@ -32,7 +32,7 @@ function render(s){
     box.innerHTML='<p>Não encontramos uma assinatura contratada pelo site para este e-mail. Se o seu acesso foi liberado pela equipe AXIVA, fale com a gente para alterações.</p>'
     return
   }
-  const plan=s.plan==='annual'?'Plano Anual (12x de R$ 11,88)':'Plano Mensal (R$ 12,98 por mês)'
+  const plan=s.plan==='annual'?`Plano Anual (${money(s.value||20.83)} por mês, 12 meses)`:`Plano Mensal (${money(s.value||24.90)} por mês)`
   const statusText={
     active:'Ativa',
     cancel_scheduled:`Cancelamento agendado: a renovação será encerrada em ${fmtDate(s.cancelEffectiveOn)}.`,

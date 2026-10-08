@@ -57,7 +57,7 @@
       <button type="button" data-plan="anual">Anual</button>
     </div>
     <h2 id="planName">Plano Mensal</h2>
-    <div class="price" id="planPrice">R$ 12,98</div>
+    <div class="price" id="planPrice">R$ 24,90</div>
     <div class="muted" id="planSub">por mês no cartão de crédito</div>
     <ul class="rules" id="planRules"></ul>
   </aside>
@@ -102,13 +102,13 @@
 (function () {
   var API = 'https://lhnzpxjjfalxmlkjysor.supabase.co/functions/v1/invest-billing';
   var PLANS = {
-    mensal: { id: 'monthly', name: 'Plano Mensal', price: 'R$ 12,98', sub: 'por mês no cartão de crédito', rules: [
+    mensal: { id: 'monthly', name: 'Plano Mensal', price: 'R$ 24,90', sub: 'por mês no cartão de crédito', rules: [
       'Renovação automática todo mês no cartão, até você cancelar.',
       'Desistência em até 7 dias após o pagamento: devolvemos 100% do valor.',
       'Depois disso, você pode cancelar a renovação a qualquer momento; o acesso continua até o fim do mês já pago.'
     ] },
-    anual: { id: 'annual', name: 'Plano Anual', price: 'R$ 11,88', sub: 'por mês no cartão de crédito, 12x (fidelidade de 12 meses)', rules: [
-      'Cobrança automática de R$ 11,88 por mês no cartão, com fidelidade de 12 meses.',
+    anual: { id: 'annual', name: 'Plano Anual', price: 'R$ 20,83', sub: 'por mês no cartão de crédito, 12x (fidelidade de 12 meses)', rules: [
+      'Cobrança automática de R$ 20,83 por mês no cartão, com fidelidade de 12 meses.',
       'Ao completar 12 meses, o plano renova automaticamente por mais 12 meses. Avisamos por e-mail 30 dias antes.',
       'Desistência em até 7 dias após o pagamento: devolvemos 100% do valor.',
       'Depois disso, as parcelas do período de 12 meses continuam; você pode cancelar a renovação a qualquer momento e ela é encerrada ao fim do período.'
