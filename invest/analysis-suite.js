@@ -372,7 +372,7 @@ function qualityBreakdown(r){
     const debtScore=debt==null?null:debt<0?15:debt<=.30?13:debt<=.60?10:debt<=1?6:debt<=1.5?3:0
     const ebitdaScore=debtEbitda==null?null:debtEbitda<=1?15:debtEbitda<=1.5?13:debtEbitda<=2?10:debtEbitda<=2.5?7:debtEbitda<=3?4:debtEbitda<=4?2:0
     const leverageScore=debtScore!=null&&ebitdaScore!=null?(debtScore+ebitdaScore)/2:debtScore??ebitdaScore??0
-    push('Alavancagem (Dívida Líq./PL + Dívida Líq./EBITDA)',leverageScore)
+    push('Dívida Liq/EBITDA <3',leverageScore)
     push('Liquidez corrente',cr==null||cr<.80?0:cr<=1?3:cr<=1.30?6:cr<=2?10:8)
   }
 
