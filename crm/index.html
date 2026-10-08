@@ -40,11 +40,14 @@
     .crm-browser-bar i:nth-child(3) { background: #19c3b5; }
     .crm-browser-bar span { margin-left: 12px; padding: 4px 12px; overflow: hidden; border-radius: 6px; background: #07182d; color: #9fb0c3; font-size: 11px; white-space: nowrap; text-overflow: ellipsis; }
     .crm-browser img { display: block; width: 100%; height: auto; }
-    .crm-shot { position: relative; margin: 8px 0 34px; }
+    .crm-shot { position: relative; margin: 32px 0 34px; }
     .crm-shot::before { content: ""; position: absolute; inset: 40px 0 -24px; border-radius: 24px; background: rgba(0,168,143,.10); filter: blur(28px); }
     .crm-shot .crm-browser { position: relative; }
     .insights-shot { margin: 0 0 34px; }
     .ai-assistant-card.has-chat { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .ai-assistant-card.has-chat .ai-assistant-roles { gap: 5px; }
+    .ai-assistant-card.has-chat .ai-assistant-roles span { gap: 5px; padding: 6px 9px; font-size: .78rem; white-space: nowrap; }
+    .ai-assistant-card.has-chat .ai-assistant-roles span::before { width: 6px; height: 6px; flex-basis: 6px; }
     .ai-assistant-card.has-chat .ai-assistant-logo { justify-content: flex-start; margin-bottom: 22px; }
     .ai-chat { padding: 16px; border-radius: 12px; background: #07182d; color: #e8eef5; box-shadow: 0 24px 60px rgba(11,25,44,.22); font-size: 13px; }
     .ai-chat-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid #1f3348; }
