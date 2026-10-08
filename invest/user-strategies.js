@@ -35,6 +35,7 @@ const defs=[
   {key:'min_net_margin',id:'sNet',label:'Margem líquida mínima',min:-50,max:80,step:.5,value:8,suffix:'%',mode:'percent'},
   {key:'min_current_ratio',id:'sCurrent',label:'Liquidez corrente mínima',min:0,max:5,step:.1,value:1.2,suffix:'',mode:'number'},
   {key:'max_net_debt_to_equity',id:'sDebt',label:'Dívida líquida / PL máxima',min:-3,max:5,step:.1,value:1,suffix:'',mode:'number'},
+  {key:'max_net_debt_to_ebitda',id:'sDebtEbitda',label:'Dívida Líq./EBITDA deve ser menor que',min:-5,max:20,step:.1,value:3,suffix:'x',mode:'number'},
   {key:'min_revenue_growth_5y',id:'sGrowth',label:'Crescimento da receita 5 anos mínimo',min:-50,max:100,step:.5,value:5,suffix:'%',mode:'percent'},
   {key:'max_price',id:'sPrice',label:'Preço máximo',min:0,max:300,step:1,value:30,suffix:'',mode:'money'},
   {key:'min_discount',id:'sTargetGap',label:'Ágio / deságio vs Preço-alvo AXIVA',min:-100,max:100,step:1,value:0,suffix:'%',mode:'percent',help:'Valor positivo representa o percentual de desconto desejado em relação ao Preço-alvo AXIVA.'},
@@ -105,6 +106,7 @@ function criteria(s){
   if(s.min_net_margin!=null)parts.push(`Margem líquida ≥ ${pct(s.min_net_margin)}`)
   if(s.min_current_ratio!=null)parts.push(`Liquidez corrente ≥ ${num(s.min_current_ratio)}`)
   if(s.max_net_debt_to_equity!=null)parts.push(`Dív./PL ≤ ${num(s.max_net_debt_to_equity)}`)
+  if(s.max_net_debt_to_ebitda!=null)parts.push(`Dívida Líq./EBITDA < ${num(s.max_net_debt_to_ebitda)}x`)
   if(s.min_revenue_growth_5y!=null)parts.push(`Cresc. receita 5a ≥ ${pct(s.min_revenue_growth_5y)}`)
   if(s.max_price!=null)parts.push(`Preço ≤ ${money(s.max_price)}`)
   if(s.min_discount!=null)parts.push(`Preço-alvo AXIVA: diferença ≥ ${pct(s.min_discount)}`)
