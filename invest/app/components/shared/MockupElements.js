@@ -30,7 +30,7 @@ export function MiniLineChart({ values, positive, className = '' }) {
     const last = values[values.length - 1];
     const tone = positive ?? last >= first;
     const color = tone ? '#00A88F' : '#EF4444';
-    return (React.createElement("svg", { viewBox: "0 0 150 40", className: className, preserveAspectRatio: "none" },
+    return (React.createElement("svg", { viewBox: "0 0 150 40", width: "100%", className: className, preserveAspectRatio: "none" },
         React.createElement("polyline", { points: points, fill: "none", stroke: color, strokeWidth: "2.5", strokeLinecap: "round", strokeLinejoin: "round" }),
         React.createElement("polygon", { points: `${points} 150,40 0,40`, fill: color, opacity: "0.1" })));
 }
