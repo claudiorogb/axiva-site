@@ -92,6 +92,8 @@
     <section class="member-block"><h3>As ações selecionadas pela metodologia são uma recomendação de compra?</h3>
       <p>Não. Nossa seleção é uma ferramenta de análise e comparação, criada para identificar empresas que apresentam uma combinação favorável dentro da metodologia aplicada pela AXIVA.</p>
       <p>A presença ou a posição de uma empresa não constitui recomendação ou indicação de compra ou venda de ações. A decisão de investimento é de responsabilidade do próprio investidor.</p></section>
+    <section class="member-block"><h3>Como posso falar com a AXIVA?</h3>
+      <p>Você pode enviar um e-mail para <a href="mailto:contato@axiva.com.br">contato@axiva.com.br</a> ou chamar no WhatsApp <a href="https://wa.me/5511921335619" target="_blank" rel="noopener">11 92133-5619</a> (esse WhatsApp não recebe ligações).</p></section>
   </div>`;
   admin.before(faq);
 
