@@ -390,7 +390,7 @@ function companyFundamentalsPanel(r){
     ['P/L',num(r.pl)],
     ['P/VP',num(r.pvp)],
     ['DY',pct(r.dividend_yield)],
-    ['Dívida Líq./EBITDA',num(r.net_debt_to_ebitda)]
+    ['Dívida Líq./EBITDA',n(r.net_debt_to_ebitda)==null?'—':num(r.net_debt_to_ebitda)+'x']
   ]
   return '<div class="fundamentals-grid">'+items.map(([label,value])=>'<div class="fundamental-item"><span>'+esc(label)+'</span><strong>'+value+'</strong></div>').join('')+'</div>'
 }
@@ -510,7 +510,7 @@ async function renderCompany(r){
       metric('ROE',pct(data.roe),'setor: '+pct(sector.roe.median),'Retorno sobre patrimônio líquido.')+
       metric('DY',pct(data.dividend_yield),'média do setor: '+pct(sector.dy.mean),'Dividend Yield com base nos dados fundamentalistas atuais.')+
       metric('Preço Graham',money(data.graham_price),'referência de Graham','Estimativa de valor baseada na fórmula de Benjamin Graham quando LPA e VPA válidos estão disponíveis.')+
-      metric('Dívida Líq./EBITDA',num(data.net_debt_to_ebitda),'limite estratégico: abaixo de 3','Indicador de alavancagem. N/D significa que a métrica não está disponível ou não é aplicável, como em bancos.')+
+      metric('Dívida Líq./EBITDA',n(data.net_debt_to_ebitda)==null?'—':num(data.net_debt_to_ebitda)+'x','limite estratégico: abaixo de 3','Indicador de alavancagem. N/D significa que a métrica não está disponível ou não é aplicável, como em bancos.')+
     '</div>'+
     '<div class="insight-grid"><article class="insight-card"><h3>Resumo</h3><p class="auto-summary">'+esc(autoSummary(data))+'</p><div class="result-action-bar"><button class="mini-btn secondary" id="companyExportInline">Exportar análise</button><button class="mini-btn secondary" id="companyAddWatchInline">Adicionar à minha lista</button></div></article><article class="insight-card"><h3>Margem de segurança</h3>'+safetyPanel(data)+'</article></div>'+
     '<div class="insight-grid company-analysis-main"><div class="company-analysis-left"><article class="insight-card"><h3>Fundamentos da empresa</h3>'+companyFundamentalsPanel(data)+'</article><article class="insight-card"><h3>Resumo</h3>'+companySummaryPanel(data)+'</article><article class="insight-card"><h3>Empresa x setor</h3>'+sectorPanel(data)+'</article></div><article class="insight-card company-quality-card"><h3>Qualidade: como a nota foi formada</h3><div class="quality-breakdown">'+qualityBreakdown(data)+'</div></article></div>'+
