@@ -10,37 +10,24 @@ let recoveryMode=new URLSearchParams(location.hash.slice(1)).get('type')==='reco
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}})
 window.axivaSupabase=supabase
 
-const INVEST_LOGIN_GUARD_KEY='axiva_invest_login_guard_v1'
-const INVEST_LOGIN_MAX_ATTEMPTS=5
-const INVEST_LOGIN_LOCK_MS=15*60*1000
-
-function readInvestLoginGuard(){
+// Limite de 5 tentativas controlado no servidor (invest-login). Ao atingir o limite, é preciso redefinir a senha.
+const INVEST_LOGIN_API=`${SUPABASE_URL}/functions/v1/invest-login`
+try{localStorage.removeItem('axiva_invest_login_guard_v1')}catch{}
+async function investLogin(email,password){
   try{
-    const parsed=JSON.parse(localStorage.getItem(INVEST_LOGIN_GUARD_KEY)||'{}')
-    return {attempts:Number(parsed.attempts||0),blockedUntil:Number(parsed.blockedUntil||0)}
-  }catch{return {attempts:0,blockedUntil:0}}
+    const r=await fetch(INVEST_LOGIN_API,{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPABASE_KEY},body:JSON.stringify({action:'login',email,password})})
+    const data=await r.json().catch(()=>({}))
+    if(data?.ok&&data.session?.access_token){
+      const {error}=await supabase.auth.setSession(data.session)
+      if(error)return {error:'Não foi possível entrar agora. Tente novamente em instantes.'}
+      return {ok:true}
+    }
+    return {error:data?.error||'Não foi possível entrar agora. Tente novamente em instantes.'}
+  }catch{return {error:'Não foi possível entrar agora. Tente novamente em instantes.'}}
 }
-function investLoginBlockMessage(){
-  const guard=readInvestLoginGuard()
-  if(!guard.blockedUntil||guard.blockedUntil<=Date.now()){
-    if(guard.blockedUntil)localStorage.removeItem(INVEST_LOGIN_GUARD_KEY)
-    return ''
-  }
-  const minutes=Math.max(1,Math.ceil((guard.blockedUntil-Date.now())/60000))
-  return `Muitas tentativas de acesso. Tente novamente em ${minutes} minuto${minutes===1?'':'s'}.`
+async function resetInvestLoginAttempts(accessToken){
+  try{await fetch(INVEST_LOGIN_API,{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPABASE_KEY,Authorization:`Bearer ${accessToken}`},body:JSON.stringify({action:'reset'})})}catch{}
 }
-function recordInvestLoginFailure(){
-  const current=readInvestLoginGuard()
-  const attempts=current.attempts+1
-  if(attempts>=INVEST_LOGIN_MAX_ATTEMPTS){
-    localStorage.setItem(INVEST_LOGIN_GUARD_KEY,JSON.stringify({attempts:0,blockedUntil:Date.now()+INVEST_LOGIN_LOCK_MS}))
-    return investLoginBlockMessage()
-  }
-  localStorage.setItem(INVEST_LOGIN_GUARD_KEY,JSON.stringify({attempts,blockedUntil:0}))
-  const remaining=INVEST_LOGIN_MAX_ATTEMPTS-attempts
-  return `E-mail ou senha inválidos. Restam ${remaining} tentativa${remaining===1?'':'s'} antes do bloqueio temporário.`
-}
-function clearInvestLoginGuard(){try{localStorage.removeItem(INVEST_LOGIN_GUARD_KEY)}catch{}}
 
 const $=id=>document.getElementById(id)
 const loginView=$('loginView'),appView=$('appView'),loginForm=$('loginForm'),loginMessage=$('loginMessage')
@@ -77,6 +64,7 @@ $('resetForm').addEventListener('submit',async e=>{
     if(!session){message.textContent='O link expirou. Solicite uma nova recuperação de senha.';return}
     const {error}=await supabase.auth.updateUser({password:pass})
     if(error){message.textContent='Não foi possível alterar a senha. Confira os requisitos ou solicite um novo link.';return}
+    await resetInvestLoginAttempts(session.access_token)
     await supabase.auth.signOut()
     recoveryMode=false
     $('resetForm').reset()
@@ -346,12 +334,9 @@ async function adminAction(action,email){
 
 loginForm.addEventListener('submit',async e=>{
   e.preventDefault()
-  const blocked=investLoginBlockMessage()
-  if(blocked){loginMessage.textContent=blocked;return}
   loginMessage.textContent='Entrando...'
-  const {error}=await supabase.auth.signInWithPassword({email:emailInput.value.trim(),password:passwordInput.value})
-  if(error){loginMessage.textContent=recordInvestLoginFailure();return}
-  clearInvestLoginGuard()
+  const result=await investLogin(emailInput.value.trim(),passwordInput.value)
+  if(!result.ok){loginMessage.textContent=result.error;return}
   loginMessage.textContent=''
   await loadPrivateArea()
 })
