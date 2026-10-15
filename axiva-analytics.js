@@ -4,7 +4,8 @@
  * O Google Analytics só é carregado depois que o visitante clica em "Aceitar".
  * A escolha fica salva no navegador (localStorage), então o aviso não aparece de novo.
  *
- * Incluído apenas nas páginas públicas. Na página /invest/private (login + área do assinante),
+ * Incluído em todas as páginas públicas (o site não tem cabeçalho compartilhado: toda página nova
+ * precisa da linha <script src="/axiva-analytics.js?v=2" defer></script> antes de </head>). Na página /invest/private (login + área do assinante),
  * use data-mode="login": mede só a tela de login e para de medir assim que a área privada abre.
  */
 (function () {
@@ -94,7 +95,7 @@
     box.setAttribute('aria-label', 'Aviso de cookies');
     box.innerHTML =
       '<p>Usamos cookies do Google Analytics para entender como o site é usado e melhorá-lo. ' +
-      'Você pode aceitar ou recusar. <a href="' + (location.pathname.indexOf('/invest') === 0 ? '/invest/privacidade' : '/privacidade') + '">Política de Privacidade</a></p>' +
+      'Você pode aceitar ou recusar. <a href="/privacidade#cookies">Política de Privacidade</a></p>' +
       '<div class="axc-btns"><button type="button" class="axc-no">Recusar</button>' +
       '<button type="button" class="axc-yes">Aceitar</button></div>';
     document.body.appendChild(box);
@@ -116,6 +117,12 @@
       hideIfPrivate();
     }
   }
+
+  // Usado pelo link "Alterar minha escolha de cookies" da Política de Privacidade.
+  window.axivaCookieReset = function () {
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    location.reload();
+  };
 
   function init() {
     var choice = getChoice();
