@@ -102,7 +102,7 @@
     box.setAttribute('aria-live', 'polite');
     box.setAttribute('aria-label', 'Aviso de cookies');
     box.innerHTML =
-      '<p>Usamos cookies do Google Analytics para entender como o site é usado e melhorá-lo. ' +
+      '<p>Usamos cookies para entender como o site é usado e melhorá-lo. ' +
       'Você pode aceitar ou recusar. <a href="/privacidade#cookies">Política de Privacidade</a></p>' +
       '<div class="axc-btns"><button type="button" class="axc-no">Recusar</button>' +
       '<button type="button" class="axc-yes">Aceitar</button></div>';
