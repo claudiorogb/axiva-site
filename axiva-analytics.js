@@ -2,7 +2,8 @@
  * AXIVA — Aviso de cookies (LGPD) + Google Analytics 4 (G-8VW4GCQGYD).
  *
  * O Google Analytics só é carregado depois que o visitante clica em "Aceitar".
- * A escolha fica salva no navegador (localStorage), então o aviso não aparece de novo.
+ * A escolha fica no cookie axiva_cookie_consent (1 ano, domínio .axiva.com.br), compartilhado
+ * com o CRM (crm.axiva.com.br): quem respondeu em um não é perguntado de novo no outro.
  *
  * Incluído em todas as páginas públicas (o site não tem cabeçalho compartilhado: toda página nova
  * precisa da linha <script src="/axiva-analytics.js?v=2" defer></script> antes de </head>). Na página /invest/private (login + área do assinante),
@@ -11,12 +12,19 @@
 (function () {
   'use strict';
   var GA_ID = 'G-8VW4GCQGYD';
-  var KEY = 'axiva_cookie_consent_v1';
+  var COOKIE = 'axiva_cookie_consent'; // valores: accepted | declined (mesmo formato do CRM)
   var script = document.currentScript;
   var loginMode = !!(script && script.getAttribute('data-mode') === 'login');
 
-  function getChoice() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
-  function setChoice(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
+  function writeCookie(v, maxAge) {
+    var domain = /(^|\.)axiva\.com\.br$/.test(location.hostname) ? '; domain=.axiva.com.br' : '';
+    document.cookie = COOKIE + '=' + v + '; max-age=' + maxAge + '; path=/; SameSite=Lax' + domain + (location.protocol === 'https:' ? '; Secure' : '');
+  }
+  function setChoice(v) { writeCookie(v, 31536000); }
+  function getChoice() {
+    var m = document.cookie.match(new RegExp('(?:^|; )' + COOKIE + '=([^;]*)'));
+    return m ? m[1] : null;
+  }
 
   // Endereço enviado ao Analytics sem dados sensíveis (e-mail, tokens, pedido etc.):
   // mantém só parâmetros de campanha e o plano escolhido.
@@ -104,7 +112,7 @@
       setChoice('accepted'); box.remove(); start();
     });
     box.querySelector('.axc-no').addEventListener('click', function () {
-      setChoice('rejected'); box.remove();
+      setChoice('declined'); box.remove();
     });
     // Modo login: o aviso não aparece dentro da área privada.
     if (loginMode) {
@@ -120,14 +128,14 @@
 
   // Usado pelo link "Alterar minha escolha de cookies" da Política de Privacidade.
   window.axivaCookieReset = function () {
-    try { localStorage.removeItem(KEY); } catch (e) {}
+    writeCookie('', 0);
     location.reload();
   };
 
   function init() {
     var choice = getChoice();
     if (choice === 'accepted') start();
-    else if (choice !== 'rejected') showBanner();
+    else if (choice !== 'declined') showBanner();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
