@@ -54,3 +54,12 @@ test('vercel.json: SW sem cache longo e regras anteriores preservadas', () => {
   assert.equal(vercel.cleanUrls, true)
   assert.ok(vercel.rewrites.some((r) => r.source === '/invest'))
 })
+
+test('Invest: botão Voltar volta à tela anterior e só guarda nomes de telas', () => {
+  const back = readFileSync('invest/pwa/back-nav.js', 'utf8')
+  assert.match(html, /<script src="\/invest\/pwa\/back-nav\.js" defer><\/script>/)
+  assert.match(back, /\.nav-item\[data-page\]/)
+  assert.match(back, /popstate/)
+  assert.match(back, /pushState\(\{ axivaInvestPage: page, prev: previous \}/)
+  assert.doesNotMatch(back, /localStorage|sessionStorage|supabase|token|email|session/i)
+})
