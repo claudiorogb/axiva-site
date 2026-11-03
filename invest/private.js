@@ -492,6 +492,7 @@ document.querySelectorAll('[data-header-page]').forEach(link=>link.addEventListe
 }))
 
 document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click',async()=>{
+  if(btn.hasAttribute('data-axiva-install'))return // "Instalar no celular" não é uma página
   if(!accessValidated){showLogin('Faça login para acessar a área exclusiva.');return}
   if(btn.id==='adminNav'&&currentRole!=='admin')return
   const previousPage=document.querySelector('.nav-item.active')?.dataset.page||null
