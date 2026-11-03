@@ -7,6 +7,7 @@ const swFull = readFileSync('invest/sw.js', 'utf8')
 const sw = swFull.replace(/\/\*[\s\S]*?\*\//g, '')
 const install = readFileSync('invest/pwa/pwa-install.js', 'utf8')
 const html = readFileSync('invest/private.html', 'utf8')
+const priv = readFileSync('invest/private.js', 'utf8')
 const vercel = JSON.parse(readFileSync('vercel.json', 'utf8'))
 
 test('manifesto do Invest: nome, escopo restrito a /invest/ e cores da marca', () => {
@@ -28,14 +29,22 @@ test('service worker só usa tela offline e nunca guarda dados da conta', () => 
   assert.equal((sw.match(/addAll/g) || []).length, 1)
 })
 
-test('aviso de instalação não usa HTML dinâmico', () => {
+test('instalação só por item de menu, restrita a celular/tablet, sem HTML dinâmico', () => {
   assert.doesNotMatch(install, /innerHTML|outerHTML|insertAdjacentHTML|eval\(|new Function|document\.write/)
+  assert.match(install, /function canShow\(\) \{ return \(isIos \|\| isAndroid\) && !installed \}/)
+  assert.doesNotMatch(install, /axiva-pwa-x|snooze|position:fixed;left:12px/)
+})
+
+test('menu do Invest: linha "Instalar Invest no celular" escondida por padrão e fora da navegação de páginas', () => {
+  assert.match(html, /<button id="installAppBtn" type="button" class="nav-item hidden" data-axiva-install>[\s\S]*?Instalar Invest no celular/)
+  assert.doesNotMatch(html, /installAppBtn[^>]*data-page/)
+  assert.match(priv, /if\(btn\.hasAttribute\('data-axiva-install'\)\)return/)
 })
 
 test('private.html liga o PWA sem remover o que já existia', () => {
   assert.match(html, /<link rel="manifest" href="\/invest\/manifest\.webmanifest">/)
   assert.match(html, /data-sw="\/invest\/sw\.js" data-scope="\/invest\/"/)
-  assert.match(html, /\/invest\/private\.js\?v=29/)
+  assert.match(html, /\/invest\/private\.js\?v=30/)
   assert.match(html, /axiva-analytics\.js\?v=2" data-mode="login"/)
 })
 
