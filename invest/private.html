@@ -373,6 +373,12 @@
           <button type="submit">Liberar acesso</button>
           <div id="adminMessage" class="message"></div>
         </form>
+        <form id="appLinkForm" class="admin-card">
+          <h3>Enviar link do app por e-mail</h3>
+          <label>E-mail de quem vai receber<input id="appLinkEmail" type="email" required placeholder="cliente@email.com" autocomplete="off"></label>
+          <button type="submit" id="appLinkBtn">Enviar link do app</button>
+          <div id="appLinkMessage" class="message"></div>
+        </form>
         <div class="admin-card admin-list-card"><div class="admin-list-head"><h3>Usuários e acessos</h3><button id="refreshUsersBtn" class="secondary">Atualizar</button></div><div id="adminUsersStatus" class="status">Carregando usuários...</div><div id="adminUsers"></div></div>
       </div>
     </section>
@@ -380,7 +386,7 @@
 </div>
 <script src="/invest/member-content.js?v=5"></script>
 <script src="/invest/education-content.js?v=1"></script>
-<script type="module" src="/invest/private.js?v=30"></script>
+<script type="module" src="/invest/private.js?v=31"></script>
 <script type="module" src="/invest/subscription.js?v=4"></script>
 <script type="module" src="/invest/selection-details.js?v=3"></script>
 <script type="module" src="/invest/user-strategies.js?v=4"></script>
