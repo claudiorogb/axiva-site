@@ -44,7 +44,7 @@ test('menu do Invest: linha "Instalar Invest no celular" escondida por padrão e
 test('private.html liga o PWA sem remover o que já existia', () => {
   assert.match(html, /<link rel="manifest" href="\/invest\/manifest\.webmanifest">/)
   assert.match(html, /data-sw="\/invest\/sw\.js" data-scope="\/invest\/"/)
-  assert.match(html, /\/invest\/private\.js\?v=30/)
+  assert.match(html, /\/invest\/private\.js\?v=31/)
   assert.match(html, /axiva-analytics\.js\?v=2" data-mode="login"/)
 })
 

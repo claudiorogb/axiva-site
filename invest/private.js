@@ -364,6 +364,28 @@ $('privateAnalyzeBtn').addEventListener('click',()=>window.axivaSuiteApplyFilter
 $('privateResetBtn').addEventListener('click',()=>window.axivaSuiteResetFilters?window.axivaSuiteResetFilters():resetPrivateFilters())
 $('privateTicker').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();window.axivaSuiteApplyFilters?window.axivaSuiteApplyFilters():applyPrivateFilters()}})
 $('refreshUsersBtn').addEventListener('click',loadAdminUsers)
+$('appLinkForm').addEventListener('submit',async e=>{
+  e.preventDefault()
+  const email=$('appLinkEmail').value.trim().toLowerCase(),btn=$('appLinkBtn'),msg=$('appLinkMessage')
+  btn.disabled=true;msg.textContent='Enviando...'
+  try{
+    const {data:{session}}=await supabase.auth.getSession()
+    if(!session?.access_token)throw new Error('Sessão expirada. Entre novamente.')
+    const response=await fetch(`${SUPABASE_URL}/functions/v1/invest-send-app-link`,{
+      method:'POST',
+      headers:{Authorization:`Bearer ${session.access_token}`,apikey:SUPABASE_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({email}),
+      cache:'no-store'
+    })
+    if(!response.ok){
+      const detail=await response.json().catch(()=>({}))
+      throw new Error(detail.error==='invalid_email'?'Informe um e-mail válido.':'Não foi possível enviar o e-mail agora.')
+    }
+    msg.textContent=`Link enviado para ${email}.`
+    $('appLinkForm').reset()
+  }catch(err){msg.textContent=err.message||'Não foi possível enviar o e-mail.'}
+  finally{btn.disabled=false}
+})
 $('adminUserForm').addEventListener('submit',async e=>{e.preventDefault();const email=$('adminEmail').value.trim().toLowerCase(),role=$('adminRole').value,plan=$('adminPlan').value,ends=$('adminEnds').value;$('adminMessage').textContent='Liberando acesso...';try{await callPrivate('admin-users',{method:'POST',body:{action:'add',email,role,plan,ends_at:ends?`${ends}T23:59:59`:null}});$('adminMessage').textContent='Acesso liberado. O usuário já pode criar o primeiro acesso com este e-mail.';$('adminUserForm').reset();await loadAdminUsers()}catch(e){$('adminMessage').textContent='Não foi possível liberar o acesso.'}})
 
 $('selectionMethodLink').addEventListener('click',e=>{e.preventDefault();document.querySelector('.nav-item[data-page="method"]')?.click()})
