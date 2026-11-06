@@ -445,7 +445,6 @@ function educationCard(topic,compact=false){
   const m=educationMeta[topic],item=educationTopics[topic]
   if(!m||!item)return ''
   return '<button type="button" class="axedu-card'+(compact?' axedu-card-compact':'')+'" data-education-topic="'+topic+'">'+
-    '<span class="axedu-card-top"><span class="axedu-icon">'+m.icon+'</span></span>'+
     '<strong>'+esc(m.title)+'</strong>'+
     '<span class="axedu-card-description">'+esc(m.description)+'</span>'+
     '<span class="axedu-card-meta">'+m.minutes+' min de leitura <i></i> '+m.level+'</span>'+
