@@ -23,6 +23,10 @@
       "destination": "/invest/assinar/index.html"
     },
     {
+      "source": "/invest/instalar",
+      "destination": "/invest/instalar/index.html"
+    },
+    {
       "source": "/invest/privacidade",
       "destination": "/invest/privacidade/index.html"
     },
