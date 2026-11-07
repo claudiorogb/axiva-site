@@ -1324,3 +1324,30 @@ body:has(#educationPage.active) .topbar-title{display:none}
     padding:9px 12px!important;
   }
 }
+
+/* Administração: três blocos de largura total, um abaixo do outro, com campos na horizontal. */
+.admin-layout{display:flex;flex-direction:column;gap:16px}
+.admin-layout>.admin-card{width:100%}
+#adminUserForm,#appLinkForm{display:grid;gap:0 12px;align-items:end}
+#adminUserForm h3,#appLinkForm h3,#adminUserForm .message,#appLinkForm .message{grid-column:1/-1}
+#adminUserForm{grid-template-columns:minmax(0,2fr) minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr) auto}
+#adminUserForm .admin-fields{display:contents}
+#appLinkForm{grid-template-columns:minmax(0,1fr) auto}
+#adminUserForm button[type=submit],#appLinkForm button[type=submit]{height:44px;margin-bottom:13px;white-space:nowrap}
+#adminUserForm .message:empty,#appLinkForm .message:empty{display:none}
+.admin-list-card .user-row{grid-template-columns:minmax(0,1fr) auto auto}
+.admin-list-card .user-actions{flex-wrap:nowrap;justify-content:flex-end;align-items:end}
+.admin-list-card .plan-editor-group{flex-wrap:nowrap}
+.admin-list-card .user-actions button{white-space:nowrap}
+@media(max-width:1000px){
+  #adminUserForm{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #adminUserForm button[type=submit]{grid-column:1/-1}
+  .admin-list-card .user-row{grid-template-columns:1fr}
+  .admin-list-card .user-actions{flex-wrap:wrap;justify-content:flex-start}
+  .admin-list-card .plan-editor-group{flex-wrap:wrap}
+}
+@media(max-width:600px){
+  #adminUserForm,#appLinkForm{grid-template-columns:1fr}
+  #adminUserForm .admin-fields{display:contents}
+}
+@media(max-width:1000px){.admin-list-card .user-row>div:nth-child(2){justify-self:start}}
